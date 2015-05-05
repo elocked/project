@@ -1,0 +1,39 @@
+
+DROP TABLE IF EXISTS cadenas;
+CREATE TABLE cadenas (
+   	IDcadenas INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    Dispo INT,
+    Longitude INT,
+    Latitude INT,
+    CleNFC VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL
+     );
+
+
+
+DROP TABLE IF EXISTS personne;
+CREATE TABLE personne (
+   	IDpersonne INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    Nom VARCHAR(255),
+    Prenom VARCHAR(255),
+    Mail VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+    Numtel INT,
+    Note INT,
+    Mdp VARCHAR(255) NOT NULL,
+    UNIQUE(
+    	Mail),
+    NumCB INT,
+    IDcadenas INT,
+    FOREIGN KEY (IDcadenas) REFERENCES cadenas(IDcadenas)
+    );
+
+    
+
+DROP TABLE IF EXISTS emprunt;
+CREATE TABLE emprunt (
+   	 IDpersonne INT,
+   	FOREIGN KEY (IDpersonne) REFERENCES personne(IDpersonne),
+   	IDcadenas INT,
+    FOREIGN KEY (IDcadenas) REFERENCES cadenas(IDcadenas),
+    Heuredebut DATETIME,
+    Heurefin DATETIME
+     );
