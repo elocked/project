@@ -87,7 +87,24 @@ apres la ligne<br/>
 				<!-- Fin Espace du bas -->
 			</td>
 			<td width="100%" valign="top">
-				abcd
+				<!--PARTIE CENTRALE A COMPLETER POUR CHAQUE FEUILLE-->
+				ICI !!! <br/>
+				<form action='cible.php' method="POST">
+        <p>
+        <label>Nom : <input type="text" name="nom" value ="<?php if (isset($_GET['nom'])){echo $_GET['nom'];} ?>"/></label><br/>
+        <br/>
+        <label>Prenom : <input type="text" name="prenom" value="<?php if (isset($_GET['prenom'])){echo $_GET['prenom'];} ?>"/></label><br/>
+        <br/>
+        <label>Mail : <input type="text" name="mail" value="<?php if (isset($_GET['mail'])){echo $_GET['mail'];} ?>"/></label><br/>
+        <br/>
+        <label>Mot de passe : <input type="password" name="mdp" value="<?php if (isset($_GET['mdp'])){echo $_GET['mdp'];} ?>"/></label><br/>
+        <br/>
+        <label>Numero de telephone : <input type="text" name="numtel"value="<?php if (isset($_GET['numtel'])){echo $_GET['numtel'];} ?>" /></label><br/>
+        <br/>
+        <label>Numero CB : <input type="text" name="numcb"  value ="<?php if (isset($_GET['numcb'])){echo $_GET['numcb'];} ?>"/></label><br/>
+        </p>
+        <p><input type="submit" name="valider" value="Envoyer" /></p>
+    </form>
 			</td>
 		</tr>
 	</table>

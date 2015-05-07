@@ -15,7 +15,7 @@
      
  
 <p>Bonjour <?php echo htmlspecialchars($_POST['prenom']) ?></p>
-<p><a href="inscription.php">revenir sur la page precedente</a></p>
+<p><a href="index.php">revenir sur la page precedente</a></p>
 
 
 <?php
