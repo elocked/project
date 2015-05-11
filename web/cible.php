@@ -1,3 +1,11 @@
+
+<?php 
+session_start();
+?>
+
+
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,8 +22,9 @@
  
      
  
-<p>Bonjour <?php echo htmlspecialchars($_POST['prenom']) ?></p>
-<p><a href="index.php">revenir sur la page precedente</a></p>
+<p>Bonjour <?php $_SESSION['prenom']= htmlspecialchars($_POST['prenom']) ;
+                 echo $_SESSION['prenom'];?></p>
+<p><a href="index.php">revenir sur la page d'accueil</a></p>
 
 
 <?php
@@ -97,9 +106,13 @@
     ?>
     <br/>
     <?php
-    echo $compteur;
 
-    //requete 
+    $_SESSION['nom']=$nom ;
+    $_SESSION['mail']=$mail;
+    $_SESSION['numtel']=$numtel ;
+    $_SESSION['mdp']=$mdp ;
+    $_SESSION['numcb']=$numcb ;
+        //requete 
     if($compteur==0){
     $req = $bdd->prepare('INSERT INTO personne(nom, prenom, mail, numtel, note, mdp,numcb) VALUES(:nom, :prenom, :mail, :numtel, NULL, :mdp, :numcb)');
     $req->execute(array(

@@ -3,6 +3,8 @@
 session_start();
 ?>
 
+
+
 <!DOCTYPE html> 
 <html>
 <head>
@@ -94,25 +96,22 @@ apres la ligne<br/>
 			<td width="100%" valign="top">
 				<!--PARTIE CENTRALE A COMPLETER POUR CHAQUE FEUILLE-->
 				ICI !!! <br/>
-
-				  <form action='index_post.php' method="POST">
-       				 <p>
-       				<label>Mail : <input type="email" name="mail" value="<?php if (isset($_SESSION['mail'])){echo $_SESSION['mail'];}
-       				else echo ''; ?>"/></label><br/>
-        			<br/>
-        			<label>Mot de passe : <input type="password" name="mdp" value="<?php if (isset($_SESSION['mdp'])){echo $_SESSION['mdp'];} 
-        			else echo '';?>"/></label><br/>
-        			<br/>
-        	        <p><input type="submit" name="valider" value="Envoyer" /></p> 
-             
-   				 	</form>				
-				<?php   if(isset($_SESSION['prenom'])) { echo 'Bonjour '.$_SESSION['prenom'];}
-
-						else echo 'Veuillez vous identifier, si ce n\'est pas déjà fait, dirigez vous sur ce lien : <a href=\formulaire.php\>Inscription';?></a><br/>
-
-					<p><input type="submit" name="deconnecter" value="Déconnecter" onclick="<?php session_destroy();?>"/></p>
-
-
+			<form action='cible.php' method="POST">
+        <p>
+        <label>Nom : <input type="text" name="nom" value ="<?php if (isset($_SESSION['nom'])){echo $_SESSION['nom'];} ?>"/></label><br/>
+        <br/>
+        <label>Prénom : <input type="text" name="prenom" value="<?php if (isset($_SESSION['prenom'])){echo $_SESSION['prenom'];} ?>"/></label><br/>
+        <br/>
+        <label>Mail : <input type="email" name="mail" value="<?php if (isset($_SESSION['mail'])){echo $_SESSION['mail'];} ?>"/></label><br/>
+        <br/>
+        <label>Mot de passe : <input type="password" name="mdp" value="<?php if (isset($_SESSION['mdp'])){echo $_SESSION['mdp'];} ?>"/></label><br/>
+        <br/>
+        <label>Numéro de téléphone : <input type="tel" name="numtel"value="<?php if (isset($_SESSION['numtel'])){echo $_SESSION['numtel'];} ?>" /></label><br/>
+        <br/>
+        <label>Numéro CB : <input type="text" name="numcb"  value ="<?php if (isset($_SESSION['numcb'])){echo $_SESSION['numcb'];} ?>"/></label><br/>
+        </p>
+        <p><input type="submit" name="valider" value="Envoyer" /></p>
+        	</form>
 			</td>
 		</tr>
 	</table>
