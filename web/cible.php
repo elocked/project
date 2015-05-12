@@ -24,7 +24,7 @@ session_start();
  
 <p>Bonjour <?php $_SESSION['prenom']= htmlspecialchars($_POST['prenom']) ;
                  echo $_SESSION['prenom'];?></p>
-<p><a href="index.php">revenir sur la page d'accueil</a></p>
+<p><a href="index.php" onclick="<?php session_destroy();?>">revenir sur la page d'accueil</a></p>
 
 
 <?php
@@ -40,10 +40,12 @@ session_start();
 
     //recuperation des données
     $compteur=0;
-    $mdp=$_POST['mdp'];
-    $prenom=$_POST['prenom'];
-    $nom=$_POST['nom'];
+    $mdp=htmlspecialchars($_POST['mdp']);
+    $prenom=htmlspecialchars($_POST['prenom']);
+    $nom=htmlspecialchars($_POST['nom']);
     
+    $hashed_mdp=password_hash($mdp,PASSWORD_BCRYPT);
+
     /*if (isset($_POST['nom']))
     {
         $nom=htmlspecialchars($_POST['nom']);
@@ -96,6 +98,7 @@ session_start();
     if (preg_match("#^([0-9]{13,16})$#", htmlspecialchars($_POST['numcb'])))
     {
         $numcb=$_POST['numcb'];
+        $hashed_numcb=password_hash($numcb,PASSWORD_BCRYPT);
     }
     else
     {
@@ -120,10 +123,12 @@ session_start();
     'prenom' => $prenom,
     'mail' => $mail,
     'numtel' => $numtel,
-    'mdp' => $mdp,
-    'numcb' => $numcb
+    'mdp' => $hashed_mdp,
+    'numcb' => $hashed_numcb
     ));//array($_POST['nom'])
     }
+
+    //session_destroy();
     ?>
   
     <p>Merci !<p>

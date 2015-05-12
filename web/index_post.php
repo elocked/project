@@ -24,15 +24,15 @@ session_start();
     if(isset($mail) AND isset($mdp) AND !empty($mail) AND !empty($mdp))
     {
          
-        $req = $bdd -> query('SELECT prenom, mail, mdp FROM personne WHERE mail ='.$mail);
+        $req = $bdd -> query("SELECT prenom, mail, mdp FROM personne WHERE mail ='$mail'") or die('erreur');
             while ($donnee = $req -> fetch())
         {
-            if ($mail==$donnee['mail'] AND $mdp==$donnee['mdp'] )
+            if ($mail==$donnee['mail'] AND password_verify($mdp,$donnee['mdp']))
             {
                 $_SESSION['prenom'] = $donnee['prenom'];
             }
 
-            elseif ($mail!=$donnee['mail'] OR $mdp!=$donnee['mdp'] )
+            elseif ($mail!=$donnee['mail'] OR password_verify($mdp,$donnee['mdp'])==false)
             {
                 echo '<p><strong> L\'email ou le mot de passe est incorrect </strong></p>';
             }
@@ -44,8 +44,7 @@ session_start();
  
     else echo 'Un des champs est vide, veuillez le remplir !';
  
-     
-        // Puis rediriger vers minichat.php comme ceci :
+        //redirection
     header('Location: index.php');
     ?>
  

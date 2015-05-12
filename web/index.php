@@ -97,18 +97,17 @@ apres la ligne<br/>
 
 				  <form action='index_post.php' method="POST">
        				 <p>
-       				<label>Mail : <input type="email" name="mail" value="<?php if (isset($_SESSION['mail'])){echo $_SESSION['mail'];}
-       				else echo ''; ?>"/></label><br/>
+       				<label>Mail : <input type="email" name="mail"/></label><br/>
         			<br/>
-        			<label>Mot de passe : <input type="password" name="mdp" value="<?php if (isset($_SESSION['mdp'])){echo $_SESSION['mdp'];} 
-        			else echo '';?>"/></label><br/>
+        			<label>Mot de passe : <input type="password" name="mdp" /></label><br/>
         			<br/>
         	        <p><input type="submit" name="valider" value="Envoyer" /></p> 
              
    				 	</form>				
-				<?php   if(isset($_SESSION['prenom'])) { echo 'Bonjour '.$_SESSION['prenom'];}
+				<?php   
+						if(isset($_SESSION['prenom'])) { echo 'Bonjour '.$_SESSION['prenom'];}
 
-						else echo 'Veuillez vous identifier, si ce n\'est pas déjà fait, dirigez vous sur ce lien : <a href=\formulaire.php\>Inscription';?></a><br/>
+						else echo 'Veuillez vous identifier, si ce n\'est pas déjà fait, dirigez vous sur ce lien : <a href=\formulaire.php >Inscription';?></a><br/>
 
 					<p><input type="submit" name="deconnecter" value="Déconnecter" onclick="<?php session_destroy();?>"/></p>
 
