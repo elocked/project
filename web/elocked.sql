@@ -29,11 +29,10 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `cadenas` (
   `idCadenas` int(11) NOT NULL AUTO_INCREMENT,
   `idProprio` int(11) NOT NULL,
-  `idEtat` int(11) NOT NULL,
+  `cleNFC` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idCadenas`),
-  KEY `FK_Cadenas_idProprio` (`idProprio`),
-  KEY `FK_Cadenas_idEtat` (`idEtat`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `FK_Cadenas_idProprio` (`idProprio`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -48,10 +47,8 @@ CREATE TABLE IF NOT EXISTS `emprunt` (
   `FinEmprunt` datetime NOT NULL,
   `Duree` timestamp NOT NULL,
   `idCadenas` int(11) NOT NULL,
-  `idUtilisateur` int(11) NOT NULL,
-  PRIMARY KEY (`idEmprunt`),
-  KEY `FK_Emprunt_idCadenas` (`idCadenas`),
-  KEY `FK_Emprunt_idUtilisateur` (`idUtilisateur`)
+   PRIMARY KEY (`idEmprunt`),
+  KEY `FK_Emprunt_idCadenas` (`idCadenas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -61,12 +58,12 @@ CREATE TABLE IF NOT EXISTS `emprunt` (
 --
 
 CREATE TABLE IF NOT EXISTS `etatcadenas` (
-  `idEtat` int(11) NOT NULL,
+  `idCadenas` int(11) NOT NULL AUTO_INCREMENT,
   `Longitude` float DEFAULT NULL,
   `Latitude` float DEFAULT NULL,
   `Dispo` tinyint(1) NOT NULL,
-  PRIMARY KEY (`idEtat`),
-  KEY `Longitude` (`Longitude`,`Latitude`,`Dispo`)
+  PRIMARY KEY (`idCadenas`),
+  KEY `FK_Cadenas_idCadenas` (`idCadenas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -77,20 +74,16 @@ CREATE TABLE IF NOT EXISTS `etatcadenas` (
 
 CREATE TABLE IF NOT EXISTS `personne` (
   `idPersonne` int(11) NOT NULL AUTO_INCREMENT,
-  `Nom` varchar(20) NOT NULL,
-  `Prenom` varchar(20) NOT NULL,
-  `E_mail` varchar(50) NOT NULL,
-  `Telephone` varchar(34) NOT NULL,
-  `pwd` varchar(255) NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `prenom` varchar(255) NOT NULL,
+  `mail` varchar(255) NOT NULL,
+  `numtel` varchar(255) NOT NULL,
+  `note` varchar(4) DEFAULT NULL,
+  `mdp` varchar(255) NOT NULL,
   `numCB` varchar(255) NOT NULL,
-  `Note` varchar(4) DEFAULT NULL,
   `DateCrea` datetime DEFAULT NULL,
-  `idUtilisateur` int(11) NOT NULL,
-  `idProprio` int(11) NOT NULL,
   PRIMARY KEY (`idPersonne`),
-  UNIQUE KEY `E_mail` (`E_mail`,`Telephone`,`numCB`),
-  KEY `FK_Personne_idUtilisateur` (`idUtilisateur`),
-  KEY `FK_Personne_idProprio` (`idProprio`)
+  UNIQUE KEY `mail` (`mail`,`numtel`,`numCB`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -100,25 +93,12 @@ CREATE TABLE IF NOT EXISTS `personne` (
 --
 
 CREATE TABLE IF NOT EXISTS `proprietaire` (
-  `idProprio` int(11) NOT NULL AUTO_INCREMENT,
-  `idPersonne` int(11) NOT NULL,
-  PRIMARY KEY (`idProprio`),
-  KEY `FK_Proprietaire_idPersonne` (`idPersonne`)
+  `idProprio` int(11) NOT NULL,
+   PRIMARY KEY (`idProprio`),
+  KEY `FK_Proprietaire_idProprio` (`idProprio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `utilisateur`
---
-
-CREATE TABLE IF NOT EXISTS `utilisateur` (
-  `idUtilisateur` int(11) NOT NULL AUTO_INCREMENT,
-  `idPersonne` int(11) NOT NULL,
-  PRIMARY KEY (`idUtilisateur`),
-  KEY `FK_Utilisateur_idPersonne` (`idPersonne`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
+-- ---------------------------------------------------------
 --
 -- Contraintes pour les tables exportées
 --
@@ -126,35 +106,26 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 --
 -- Contraintes pour la table `cadenas`
 --
+
+ALTER TABLE `etatcadenas`
+   ADD CONSTRAINT `FK_Cadenas_idCadenas` FOREIGN KEY (`idCadenas`) REFERENCES `cadenas` (`idCadenas`);
+
 ALTER TABLE `cadenas`
-  ADD CONSTRAINT `FK_Cadenas_idEtat` FOREIGN KEY (`idEtat`) REFERENCES `etatcadenas` (`idEtat`),
   ADD CONSTRAINT `FK_Cadenas_idProprio` FOREIGN KEY (`idProprio`) REFERENCES `proprietaire` (`idProprio`);
 
 --
 -- Contraintes pour la table `emprunt`
 --
 ALTER TABLE `emprunt`
-  ADD CONSTRAINT `FK_Emprunt_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateur` (`idUtilisateur`),
   ADD CONSTRAINT `FK_Emprunt_idCadenas` FOREIGN KEY (`idCadenas`) REFERENCES `cadenas` (`idCadenas`);
-
---
--- Contraintes pour la table `personne`
---
-ALTER TABLE `personne`
-  ADD CONSTRAINT `FK_Personne_idProprio` FOREIGN KEY (`idProprio`) REFERENCES `proprietaire` (`idProprio`),
-  ADD CONSTRAINT `FK_Personne_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateur` (`idUtilisateur`);
 
 --
 -- Contraintes pour la table `proprietaire`
 --
 ALTER TABLE `proprietaire`
-  ADD CONSTRAINT `FK_Proprietaire_idPersonne` FOREIGN KEY (`idPersonne`) REFERENCES `personne` (`idPersonne`);
+  ADD CONSTRAINT `FK_Proprietaire_idProprio` FOREIGN KEY (`idProprio`) REFERENCES `personne` (`idPersonne`);
 
---
--- Contraintes pour la table `utilisateur`
---
-ALTER TABLE `utilisateur`
-  ADD CONSTRAINT `FK_Utilisateur_idPersonne` FOREIGN KEY (`idPersonne`) REFERENCES `personne` (`idPersonne`);
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -117,7 +117,7 @@ session_start();
     $_SESSION['numcb']=$numcb ;
         //requete 
     if($compteur==0){
-    $req = $bdd->prepare('INSERT INTO personne(nom, prenom, mail, numtel, note, mdp,numcb) VALUES(:nom, :prenom, :mail, :numtel, NULL, :mdp, :numcb)');
+    $req = $bdd->prepare('INSERT INTO personne(nom, prenom, mail, numtel, note, mdp, numcb, DateCrea) VALUES(:nom, :prenom, :mail, :numtel, NULL, :mdp, :numcb, NOW())');
     $req->execute(array(
     'nom' => $nom,
     'prenom' => $prenom,

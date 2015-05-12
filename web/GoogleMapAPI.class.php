@@ -1383,4 +1383,5 @@ class GoogleMapAPI {
     
 }
 
+echo 'BONDOUR';
 ?>
