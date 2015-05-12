@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 05 Mai 2015 à 21:18
+-- Généré le :  Mar 12 Mai 2015 à 13:59
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -27,12 +27,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `cadenas` (
-  `IDcadenas` int(11) NOT NULL AUTO_INCREMENT,
-  `Dispo` int(11) DEFAULT NULL,
-  `Longitude` int(11) DEFAULT NULL,
-  `Latitude` int(11) DEFAULT NULL,
-  `CleNFC` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`IDcadenas`)
+  `idCadenas` int(11) NOT NULL AUTO_INCREMENT,
+  `idProprio` int(11) NOT NULL,
+  `idEtat` int(11) NOT NULL,
+  PRIMARY KEY (`idCadenas`),
+  KEY `FK_Cadenas_idProprio` (`idProprio`),
+  KEY `FK_Cadenas_idEtat` (`idEtat`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -42,12 +42,31 @@ CREATE TABLE IF NOT EXISTS `cadenas` (
 --
 
 CREATE TABLE IF NOT EXISTS `emprunt` (
-  `IDpersonne` int(11) DEFAULT NULL,
-  `IDcadenas` int(11) DEFAULT NULL,
-  `Heuredebut` datetime DEFAULT NULL,
-  `Heurefin` datetime DEFAULT NULL,
-  KEY `IDpersonne` (`IDpersonne`),
-  KEY `IDcadenas` (`IDcadenas`)
+  `idEmprunt` int(11) NOT NULL AUTO_INCREMENT,
+  `Demande` datetime NOT NULL,
+  `DebutEmprunt` datetime NOT NULL,
+  `FinEmprunt` datetime NOT NULL,
+  `Duree` timestamp NOT NULL,
+  `idCadenas` int(11) NOT NULL,
+  `idUtilisateur` int(11) NOT NULL,
+  PRIMARY KEY (`idEmprunt`),
+  KEY `FK_Emprunt_idCadenas` (`idCadenas`),
+  KEY `FK_Emprunt_idUtilisateur` (`idUtilisateur`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `etatcadenas`
+--
+
+CREATE TABLE IF NOT EXISTS `etatcadenas` (
+  `idEtat` int(11) NOT NULL,
+  `Longitude` float DEFAULT NULL,
+  `Latitude` float DEFAULT NULL,
+  `Dispo` tinyint(1) NOT NULL,
+  PRIMARY KEY (`idEtat`),
+  KEY `Longitude` (`Longitude`,`Latitude`,`Dispo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -57,18 +76,47 @@ CREATE TABLE IF NOT EXISTS `emprunt` (
 --
 
 CREATE TABLE IF NOT EXISTS `personne` (
-  `IDpersonne` int(11) NOT NULL AUTO_INCREMENT,
-  `Nom` varchar(255) DEFAULT NULL,
-  `Prenom` varchar(255) DEFAULT NULL,
-  `Mail` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `Numtel` int(11) DEFAULT NULL,
-  `Note` int(11) DEFAULT NULL,
-  `Mdp` varchar(255) NOT NULL,
-  `NumCB` int(11) DEFAULT NULL,
-  `IDcadenas` int(11) DEFAULT NULL,
-  PRIMARY KEY (`IDpersonne`),
-  UNIQUE KEY `Mail` (`Mail`),
-  KEY `IDcadenas` (`IDcadenas`)
+  `idPersonne` int(11) NOT NULL AUTO_INCREMENT,
+  `Nom` varchar(20) NOT NULL,
+  `Prenom` varchar(20) NOT NULL,
+  `E_mail` varchar(50) NOT NULL,
+  `Telephone` varchar(34) NOT NULL,
+  `pwd` varchar(255) NOT NULL,
+  `numCB` varchar(255) NOT NULL,
+  `Note` varchar(4) DEFAULT NULL,
+  `DateCrea` datetime DEFAULT NULL,
+  `idUtilisateur` int(11) NOT NULL,
+  `idProprio` int(11) NOT NULL,
+  PRIMARY KEY (`idPersonne`),
+  UNIQUE KEY `E_mail` (`E_mail`,`Telephone`,`numCB`),
+  KEY `FK_Personne_idUtilisateur` (`idUtilisateur`),
+  KEY `FK_Personne_idProprio` (`idProprio`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `proprietaire`
+--
+
+CREATE TABLE IF NOT EXISTS `proprietaire` (
+  `idProprio` int(11) NOT NULL AUTO_INCREMENT,
+  `idPersonne` int(11) NOT NULL,
+  PRIMARY KEY (`idProprio`),
+  KEY `FK_Proprietaire_idPersonne` (`idPersonne`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `utilisateur`
+--
+
+CREATE TABLE IF NOT EXISTS `utilisateur` (
+  `idUtilisateur` int(11) NOT NULL AUTO_INCREMENT,
+  `idPersonne` int(11) NOT NULL,
+  PRIMARY KEY (`idUtilisateur`),
+  KEY `FK_Utilisateur_idPersonne` (`idPersonne`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
@@ -76,17 +124,37 @@ CREATE TABLE IF NOT EXISTS `personne` (
 --
 
 --
+-- Contraintes pour la table `cadenas`
+--
+ALTER TABLE `cadenas`
+  ADD CONSTRAINT `FK_Cadenas_idEtat` FOREIGN KEY (`idEtat`) REFERENCES `etatcadenas` (`idEtat`),
+  ADD CONSTRAINT `FK_Cadenas_idProprio` FOREIGN KEY (`idProprio`) REFERENCES `proprietaire` (`idProprio`);
+
+--
 -- Contraintes pour la table `emprunt`
 --
 ALTER TABLE `emprunt`
-  ADD CONSTRAINT `emprunt_ibfk_1` FOREIGN KEY (`IDpersonne`) REFERENCES `personne` (`IDpersonne`),
-  ADD CONSTRAINT `emprunt_ibfk_2` FOREIGN KEY (`IDcadenas`) REFERENCES `cadenas` (`IDcadenas`);
+  ADD CONSTRAINT `FK_Emprunt_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateur` (`idUtilisateur`),
+  ADD CONSTRAINT `FK_Emprunt_idCadenas` FOREIGN KEY (`idCadenas`) REFERENCES `cadenas` (`idCadenas`);
 
 --
 -- Contraintes pour la table `personne`
 --
 ALTER TABLE `personne`
-  ADD CONSTRAINT `personne_ibfk_1` FOREIGN KEY (`IDcadenas`) REFERENCES `cadenas` (`IDcadenas`);
+  ADD CONSTRAINT `FK_Personne_idProprio` FOREIGN KEY (`idProprio`) REFERENCES `proprietaire` (`idProprio`),
+  ADD CONSTRAINT `FK_Personne_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateur` (`idUtilisateur`);
+
+--
+-- Contraintes pour la table `proprietaire`
+--
+ALTER TABLE `proprietaire`
+  ADD CONSTRAINT `FK_Proprietaire_idPersonne` FOREIGN KEY (`idPersonne`) REFERENCES `personne` (`idPersonne`);
+
+--
+-- Contraintes pour la table `utilisateur`
+--
+ALTER TABLE `utilisateur`
+  ADD CONSTRAINT `FK_Utilisateur_idPersonne` FOREIGN KEY (`idPersonne`) REFERENCES `personne` (`idPersonne`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
