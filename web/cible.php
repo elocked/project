@@ -125,10 +125,9 @@ session_start();
     'numtel' => $numtel,
     'mdp' => $hashed_mdp,
     'numcb' => $hashed_numcb
-    ));//array($_POST['nom'])
+    ));
     }
 
-    //session_destroy();
     ?>
   
     <p>Merci !<p>

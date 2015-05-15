@@ -105,7 +105,8 @@ apres la ligne<br/>
              
    				 	</form>				
 				<?php   
-						if(isset($_SESSION['prenom'])) { echo 'Bonjour '.$_SESSION['prenom'];}
+						if(isset($_SESSION['prenom'])) { $prenom = $_SESSION['prenom'];
+							echo 'Bonjour '.$prenom;}
 
 						else echo 'Veuillez vous identifier, si ce n\'est pas déjà fait, dirigez vous sur ce lien : <a href=\formulaire.php >Inscription';?></a><br/>
 
