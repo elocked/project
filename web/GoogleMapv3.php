@@ -12,11 +12,34 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 		<!-- Inclusion de l'API Google MAPS -->
-		<!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-		<script type="text/javascript">
+
+
+		<?php 
+if(isset($_GET['var1']) AND isset($_GET['var2'])){
+  $latuser=htmlspecialchars($_GET['var1']);
+  $lonuser=htmlspecialchars($_GET['var2']);
+//instruction de la page 
+
+  /*include('GoogleMapAPI.class.php');
+  //require 'C:\Users\Alex\Documents\GitHub\project\web\GoogleMapAPI.class.php';
+  $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+ 
+  $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
+  
+        $K = new GoogleMapAPI();
+        while($donnee=$req -> fetch()){
+          if($donnee==TRUE and !empty($donnee)){
+            echo $donnee['Latitude'].' '.$donnee['Longitude'].'</br>';
+            echo 'distance = '.$K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser).' KM</br>';}
+          else echo 'Pas de velo disponible </br>';
+                           }
+  $req->closecursor();*/?>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
 			function initialiser() {
-				var latlng = new google.maps.LatLng(46.779231, 6.659431);
+				//var lat1= '<?php echo $latuser; ?>';
+				//var lon1= '<?php echo $longuser; ?>';
+				var latlng = new google.maps.LatLng(25,5);
 				//objet contenant des propriétés avec des identificateurs prédéfinis dans Google Maps permettant
 				//de définir des options d'affichage de notre carte
 				var options = {
@@ -29,7 +52,58 @@
 				//dans lequel la carte doit s'afficher et les options
 				var carte = new google.maps.Map(document.getElementById("carte"), options);
 			}
-		</script>
+</script>
+
+<?php}
+else{?>
+
+<script type="text/javascript" >
+if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy : true, timeout:10000, maximumAge:600000});
+else
+  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+   
+function successCallback(position){
+  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
+  top.document.location = "GoogleMapv3.php?var1="+latuser+"&var2="+lonuser; 
+};  
+ 
+function errorCallback(error){
+  switch(error.code){
+    case error.PERMISSION_DENIED:
+      alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+      break;      
+    case error.POSITION_UNAVAILABLE:
+      alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+      break;
+    case error.TIMEOUT:
+      alert("Le service n'a pas répondu à temps");
+      break;
+    }
+};
+<?php } ?>
+
+</script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
+			function initialiser() {
+				//var lat1= '<?php echo $latuser; ?>';
+				//var lon1= '<?php echo $longuser; ?>';
+				var latlng = new google.maps.LatLng(25,5);
+				//objet contenant des propriétés avec des identificateurs prédéfinis dans Google Maps permettant
+				//de définir des options d'affichage de notre carte
+				var options = {
+					center: latlng,
+					zoom: 19,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				
+				//constructeur de la carte qui prend en paramêtre le conteneur HTML
+				//dans lequel la carte doit s'afficher et les options
+				var carte = new google.maps.Map(document.getElementById("carte"), options);
+			}
+</script>
+
 </head>
 
 <body onload="initialiser()">
