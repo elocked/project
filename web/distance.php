@@ -15,17 +15,16 @@ if(isset($_GET['var1']) AND isset($_GET['var2'])){
   //require 'C:\Users\Alex\Documents\GitHub\project\web\GoogleMapAPI.class.php';
   $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
  
-  $req = $bdd -> query("SELECT Longitude, Latitude FROM etatcadenas WHERE Dispo=1 ");
+  $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
   
         $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and !empty($donnee)){
-            echo 'distance = '.$K->geoGetDistance($latuser,$lonuser,$donnee['Latitude'],$donnee['Longitude'],'K').' KM</br>';}
+            echo $donnee['Latitude'].' '.$donnee['Longitude'].'</br>';
+            echo 'distance = '.$K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser).' KM</br>';}
           else echo 'Pas de velo disponible </br>';
                            }
   $req->closecursor();
-  
-  echo 'votre latitude = '.$latuser. '</br>votre longitude = '.$lonuser;
 }
 else{?>
 
@@ -36,7 +35,7 @@ else
   alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
    
 function successCallback(position){
-  var latuser = position.coords.latitude; var lonuser = position.coords.longitude;
+  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
   top.document.location = "distance.php?var1="+latuser+"&var2="+lonuser; 
 };  
  
