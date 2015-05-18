@@ -128,7 +128,7 @@ class GoogleMapAPI {
      *
      * @var boolean
      */
-    var $type_controls = true;
+    var $type_controls = false;
 
     /**
      * default map type (G_NORMAL_MAP/G_SATELLITE_MAP/G_HYBRID_MAP)
@@ -762,7 +762,7 @@ class GoogleMapAPI {
      * @param string $infoWindowAnchorY Y coordinate for info window anchor point
      */
     function createMarkerIcon($iconImage,$iconShadowImage = '',$iconAnchorX = 'x',$iconAnchorY = 'x',$infoWindowAnchorX = 'x',$infoWindowAnchorY = 'x') {
-        $_icon_image_path = strpos($iconImage,'http') === 0 ? $iconImage : $_SERVER['DOCUMENT_ROOT'] . $iconImage;
+        $_icon_image_path = strpos($iconImage,'http://localhost/image/pointeur.png') === 0 ? $iconImage : $_SERVER['localhost'] . $iconImage;
         if(!($_image_info = @getimagesize($_icon_image_path))) {
             die('GoogleMapAPI:createMarkerIcon: Error reading image: ' . $iconImage);   
         }
@@ -838,7 +838,7 @@ class GoogleMapAPI {
     * prints onLoad() without having to manipulate body tag.                                                                     
     * call this after the print map like so...                                                                             
     *      $map->printMap();                                                                                                     
-    *      $map->printOnLoad();                                                                                                  
+    *      $map->print();                                                                                                  
     */                                                                                                                           
     function printOnLoad() {
         echo $this->getOnLoad();
