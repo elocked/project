@@ -66,6 +66,7 @@ function errorCallback(error){
         //constructeur de la carte qui prend en paramêtre le conteneur HTML
         //dans lequel la carte doit s'afficher et les options
         var carte = new google.maps.Map(document.getElementById("carte"), options);
+
         <?php
         $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
@@ -73,17 +74,47 @@ function errorCallback(error){
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-            var marqueur = new google.maps.Marker({
-            position: new google.maps.LatLng('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>'),
-            map: carte
-            });
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>');
+            
          <?php }
           else echo 'Pas de velo disponible </br>';
                            }
         $req->closecursor();
         ?>
 
+        function setmarqueur(latitude , longitude){
+          
+          var image = {
+        url: 'image/marqueur.png',
+        // This marker is 32 pixels wide by 20 pixels tall.
+        size: new google.maps.Size(68, 61),
+        // The origin for this image is 0,0.
+        origin: new google.maps.Point(0,0),
+        // The anchor for this image is the base of the flagpole at 0,32.
+        anchor: new google.maps.Point(16, 20)
+        };
+
+        var shape = {
+        coords: [0 , 0, 32, 15],
+        type: 'rect'
+        };
         
+        var marqueur = new google.maps.Marker({
+            position: new google.maps.LatLng(latitude,longitude),
+            map: carte,
+            icon: image,
+            shape: shape
+            });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: '<a href="reserver.php">reserver</a></br>',
+            size: new google.maps.Size(100, 100)
+            });
+            google.maps.event.addListener(marqueur, 'click', function(){
+            infowindow.open(carte,marqueur);
+            });
+
+      }
 
 
 
