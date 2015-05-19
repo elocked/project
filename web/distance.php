@@ -11,7 +11,7 @@ if(isset($_GET['var1']) AND isset($_GET['var2'])){
 
 //instruction de la page 
 
-  include('GoogleMapAPI.class.php');
+ include('GoogleMapAPI.class.php');
   //require 'C:\Users\Alex\Documents\GitHub\project\web\GoogleMapAPI.class.php';
   $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
  
