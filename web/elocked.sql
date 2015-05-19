@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `etatcadenas` (
   `Dispo` tinyint(1) NOT NULL,
   PRIMARY KEY (`idCadenas`),
   KEY `FK_Cadenas_idCadenas` (`idCadenas`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Contenu de la table `etatcadenas`
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `personne` (
   `DateCrea` datetime DEFAULT NULL,
   PRIMARY KEY (`idPersonne`),
   UNIQUE KEY `mail` (`mail`,`numtel`,`numCB`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Contenu de la table `personne`
