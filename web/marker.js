@@ -148,24 +148,11 @@
 		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 		
 				
-					var images = '<div class="image"><img src="http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-4-292x194.jpg" alt="Image of http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-4-292x194.jpg" /><img src="http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-12-292x194.jpg" alt="Image of http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-12-292x194.jpg" /><a href="#" class="arrow icn left-black-arrow"><span>&lt;</span></a><a href="#" class="arrow icn right-black-arrow"><span>&gt;</span></a></div>';			var marker_html = '<div class="pin public marker_1" data-lat="-31.955945" data-lng="115.856339" data-categories="public">' +
-			'<div class="wrapper">' +
-				'<div class="small">' +
-					'<img src="http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-12-78x59.jpg" alt="" />' +
-				'</div>' +
-				'<div class="large">' +
-					images +
-					'<div class="text">' +
-						'<p class="artist monteserrat"><strong>Reko Rennie</strong> <em>Melbourne</em></p>' +
-						'<p><a target="_blank" href="http://http://rekorennie.com/" title="Visit the website of Reko Rennie for more details">http://rekorennie.com/</a></p>' +
+					var images = '<div class="image"><img src="http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-4-292x194.jpg" alt="Image of http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-4-292x194.jpg" /><img src="http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-12-292x194.jpg" alt="Image of http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-12-292x194.jpg" /><a href="#" class="arrow icn left-black-arrow"><span>&lt;</span></a><a href="#" class="arrow icn right-black-arrow"><span>&gt;</span></a></div>';		
+					var marker_html = '<div class="pin public marker_1" data-lat="-31.955945" data-lng="115.856339" data-categories="public">' +'<div class="wrapper">' +'<div class="small">' +'<img src="http://www.form.net.au/wp-content/uploads/2014/03/PUBLIC_Mollie_Hewitt_0404-12-78x59.jpg" alt="" />' +'</div>' +'<div class="large">' +images +'<div class="text">' +'<p class="artist monteserrat"><strong>Reko Rennie</strong> <em>Melbourne</em></p>' +'<p><a target="_blank" href="http://http://rekorennie.com/" title="Visit the website of Reko Rennie for more details">http://rekorennie.com/</a></p>' +
 						'<p class="title">Pink Kangaroo</p>' +
 						'<p class="description">Reko Rennie is a Kamilaroi/Gamilaraay/Gummaroi man. His art and installations continually explore issues of identity, race, law and justice, land rights, stolen generations, and other issues affecting Aboriginal and Torres Strait Islanders in contemporary society.</p>' +
-					'</div>' +
-					'<a class="icn close" href="#" title="Close">Close</a>' + 
-				'</div>' +
-			'</div>' +
-			'<span></span>' +
-			'</div>';
+						'</div>' +'<a class="icn close" href="#" title="Close">Close</a>' +'</div>' +'</div>' +'<span></span>' +'</div>';
 			
 			var marker_1 = new RichMarker({
 				position: new google.maps.LatLng(-31.955945, 115.856339),

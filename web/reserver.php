@@ -86,16 +86,16 @@ function errorCallback(error){
           
           var image = {
         url: 'image/marqueur.png',
-        // This marker is 32 pixels wide by 20 pixels tall.
+        // This marker is 68 pixels wide by 61 pixels tall.
         size: new google.maps.Size(68, 61),
         // The origin for this image is 0,0.
         origin: new google.maps.Point(0,0),
-        // The anchor for this image is the base of the flagpole at 0,32.
-        anchor: new google.maps.Point(16, 20)
+        // The anchor for this image is the base of the bike at 0,32.
+        anchor: new google.maps.Point(34,61)
         };
 
         var shape = {
-        coords: [0 , 0, 32, 15],
+        coords: [0 , 0, 68, 45],
         type: 'rect'
         };
         
@@ -108,7 +108,8 @@ function errorCallback(error){
 
         var infowindow = new google.maps.InfoWindow({
             content: '<a href="reserver.php">reserver</a></br>',
-            size: new google.maps.Size(100, 100)
+            size: new google.maps.Size(100, 100),
+            position: new google.maps.LatLng(latitude,longitude)
             });
             google.maps.event.addListener(marqueur, 'click', function(){
             infowindow.open(carte,marqueur);
