@@ -10,6 +10,34 @@
 	<meta name="copyright" content="Tous droits reserves">
 	<meta name="subject" content="Projet E3 Cadenas Connecté">
 	<title>E-LOCKED</title>
+	
+	
+	<script type="text/javascript">
+addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
+var ajaxurl = '/wp-admin/admin-ajax.php',
+	pagenow = 'dashboard',
+	typenow = '',
+	adminpage = 'index-php',
+	thousandsSeparator = ',',
+	decimalPoint = '.',
+	isRtl = 0;
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="http://www.hotelmoulin.com/wp-admin/load-styles.php?c=1&amp;dir=ltr&amp;load=dashicons,admin-bar,wp-admin,buttons,wp-auth-check&amp;ver=4.1.5" type="text/css" media="all">
+<link rel="stylesheet" id="toolset-font-awesome-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/font-awesome.min.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
+<link rel="stylesheet" id="thickbox-css" href="http://www.hotelmoulin.com/wp-includes/js/thickbox/thickbox.css?ver=9c87c8c05733cefe4a108603b9c0994b" type="text/css" media="all">
+<link rel="stylesheet" id="wpml-tm-styles-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-translation-management/res/css/style.css?ver=378c91f4296676045fa2ab20ec5fb7bc" type="text/css" media="all">
+<link rel="stylesheet" id="wpml-tm-queue-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-translation-management/res/css/translations-queue.css?ver=378c91f4296676045fa2ab20ec5fb7bc" type="text/css" media="all">
+<link rel="stylesheet" id="installer-admin-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/inc/installer/res/css/admin.css?ver=cdc8b6532f5c06e7f8306b5e9178d8cd" type="text/css" media="all">
+<link rel="stylesheet" id="open-sans-css" href="//fonts.googleapis.com/css?ver=a21ee7abb643eea5891a2a5dde24c135" type="text/css" media="all">
+<link rel="stylesheet" id="colors-css" href="?ver=e8125d7eca939a7bde4880755f8f0229" type="text/css" media="all">
+<!--[if lte IE 7]>
+<link rel='stylesheet' id='ie-css'  href='http://www.hotelmoulin.com/wp-admin/css/ie.min.css?ver=9c87c8c05733cefe4a108603b9c0994b' type='text/css' media='all' />
+<![endif]-->
+<link rel="stylesheet" id="sitepress-style-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/style.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
+<link rel="stylesheet" id="translate-taxonomy-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/taxonomy-translation.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
+<link rel="stylesheet" id="wpml-sticky-links-css-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-sticky-links/res/css/management.css?ver=bbec7b9ac1c4a402d497d61991fa148c" type="text/css" media="all">
+<style type="text/css" media="print">#wpadminbar { display:none; }</style>
 
 </head>
 
@@ -155,45 +183,10 @@
 												</ul>
 					</div>
 					
-					<div class="contextual-help-tabs-wrap">
-						
-							<div id="tab-panel-overview" class="help-tab-content active">
-								<p>Welcome to your WordPress Dashboard! This is the screen you will see when you log in to your site, and gives you access to all the site management features of WordPress. You can get help for any screen by clicking the Help tab in the upper corner.</p>							</div>
-						
-							<div id="tab-panel-help-navigation" class="help-tab-content">
-								<p>The left-hand navigation menu provides links to all of the WordPress administration screens, with submenu items displayed on hover. You can minimize this menu to a narrow icon strip by clicking on the Collapse Menu arrow at the bottom.</p><p>Links in the Toolbar at the top of the screen connect your dashboard and the front end of your site, and provide access to your profile and helpful WordPress information.</p>							</div>
-						
-							<div id="tab-panel-help-layout" class="help-tab-content">
-								<p>You can use the following controls to arrange your Dashboard screen to suit your workflow. This is true on most other administration screens as well.</p><p><strong>Screen Options</strong> - Use the Screen Options tab to choose which Dashboard boxes to show.</p><p><strong>Drag and Drop</strong> - To rearrange the boxes, drag and drop by clicking on the title bar of the selected box and releasing when you see a gray dotted-line rectangle appear in the location you want to place the box.</p><p><strong>Box Controls</strong> - Click the title bar of the box to expand or collapse it. Some boxes added by plugins may have configurable content, and will show a “Configure” link in the title bar if you hover over it.</p>							</div>
-						
-							<div id="tab-panel-help-content" class="help-tab-content">
-								<p>The boxes on your Dashboard screen are:</p><p><strong>At A Glance</strong> - Displays a summary of the content on your site and identifies which theme and version of WordPress you are using.</p><p><strong>Activity</strong> - Shows the upcoming scheduled posts, recently published posts, and the most recent comments on your posts and allows you to moderate them.</p><p><strong>Quick Draft</strong> - Allows you to create a new post and save it as a draft. Also displays links to the 5 most recent draft posts you've started.</p><p><strong>WordPress News</strong> - Latest news from the official WordPress project, the <a href="https://planet.wordpress.org/">WordPress Planet</a>, and popular and recent plugins.</p><p><strong>Welcome</strong> - Shows links for some of the most common tasks when setting up a new site.</p>							</div>
-					</div>
 				</div>
 			</div>
 				<div id="screen-options-wrap" class="hidden" tabindex="-1" aria-label="Screen Options Tab">
-		<form id="adv-settings" action="" method="post">
-					<h5>Show on screen</h5>
-					<div class="metabox-prefs">
-				<label for="dashboard_right_now-hide"><input class="hide-postbox-tog" name="dashboard_right_now-hide" type="checkbox" id="dashboard_right_now-hide" value="dashboard_right_now" checked="checked">At a Glance</label>
-<label for="dashboard_activity-hide"><input class="hide-postbox-tog" name="dashboard_activity-hide" type="checkbox" id="dashboard_activity-hide" value="dashboard_activity" checked="checked">Activity</label>
-<label for="icl_dashboard_widget-hide"><input class="hide-postbox-tog" name="icl_dashboard_widget-hide" type="checkbox" id="icl_dashboard_widget-hide" value="icl_dashboard_widget" checked="checked">Multi-language | WPML 3.1.9.1</label>
-<label for="dashboard_quick_press-hide"><input class="hide-postbox-tog" name="dashboard_quick_press-hide" type="checkbox" id="dashboard_quick_press-hide" value="dashboard_quick_press" checked="checked"><span class="hide-if-no-js">Quick Draft</span> <span class="hide-if-js">Drafts</span></label>
-<label for="dashboard_primary-hide"><input class="hide-postbox-tog" name="dashboard_primary-hide" type="checkbox" id="dashboard_primary-hide" value="dashboard_primary" checked="checked">WordPress News</label>
-<label for="wp_welcome_panel-hide"><input type="checkbox" id="wp_welcome_panel-hide">Welcome</label>
-				<br class="clear">
-			</div>
-					<div><input type="hidden" id="screenoptionnonce" name="screenoptionnonce" value="b42942b2e5"></div>
-		</form>
 		</div>
-				</div>
-				<div id="screen-meta-links">
-					<div id="contextual-help-link-wrap" class="hide-if-no-js screen-meta-toggle">
-			<a href="#contextual-help-wrap" id="contextual-help-link" class="show-settings" aria-controls="contextual-help-wrap" aria-expanded="false">Help</a>
-			</div>
-					<div id="screen-options-link-wrap" class="hide-if-no-js screen-meta-toggle">
-			<a href="#screen-options-wrap" id="show-settings-link" class="show-settings" aria-controls="screen-options-wrap" aria-expanded="false">Screen Options</a>
-			</div>
 				</div>
 			<script type="text/javascript">
 				jQuery('#rs-dismiss-notice').click(function(){
@@ -214,210 +207,17 @@
 					jQuery('.rs-update-notice-wrap').hide();
 				});
 			</script>
-			<div id="icl_als_help_popup" class="icl_cyan_box icl_pop_info"><img class="icl_pop_info_but_close" align="right" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/img/ico-close.png" width="12" height="12" alt="x">This language selector determines which content to display. You can choose items in a specific language or in all languages. To change the language of the WordPress Admin interface, go to <a href="http://www.hotelmoulin.com/wp-admin/profile.php">your profile</a>.</div>
-<div class="wrap">
-	<h2>Dashboard</h2>
-
-
-	<div id="welcome-panel" class="welcome-panel hidden">
-		<input type="hidden" id="welcomepanelnonce" name="welcomepanelnonce" value="b936e03d02">		<a class="welcome-panel-close" href="http://www.hotelmoulin.com/wp-admin/?welcome=0">Dismiss</a>
-			<div class="welcome-panel-content">
-	<h3>Welcome to WordPress!</h3>
-	<p class="about-description">We’ve assembled some links to get you started:</p>
-	<div class="welcome-panel-column-container">
-	<div class="welcome-panel-column">
-					<h4>Get Started</h4>
-			<a class="button button-primary button-hero load-customize hide-if-no-customize" href="http://www.hotelmoulin.com/wp-admin/customize.php">Customize Your Site</a>
-				<a class="button button-primary button-hero hide-if-customize" href="http://www.hotelmoulin.com/wp-admin/themes.php">Customize Your Site</a>
-					<p class="hide-if-no-customize">or, <a href="http://www.hotelmoulin.com/wp-admin/themes.php">change your theme completely</a></p>
-			</div>
-	<div class="welcome-panel-column">
-		<h4>Next Steps</h4>
-		<ul>
-					<li><a href="http://www.hotelmoulin.com/wp-admin/post.php?post=6&amp;action=edit&amp;lang=en" class="welcome-icon welcome-edit-page">Edit your front page</a></li>
-			<li><a href="http://www.hotelmoulin.com/wp-admin/post-new.php?post_type=page" class="welcome-icon welcome-add-page">Add additional pages</a></li>
-					<li><a href="http://www.hotelmoulin.com/" class="welcome-icon welcome-view-site">View your site</a></li>
-		</ul>
-	</div>
-	<div class="welcome-panel-column welcome-panel-last">
-		<h4>More Actions</h4>
-		<ul>
-					<li><div class="welcome-icon welcome-widgets-menus">Manage <a href="http://www.hotelmoulin.com/wp-admin/widgets.php">widgets</a> or <a href="http://www.hotelmoulin.com/wp-admin/nav-menus.php">menus</a></div></li>
-							<li><a href="http://www.hotelmoulin.com/wp-admin/options-discussion.php" class="welcome-icon welcome-comments">Turn comments on or off</a></li>
-					<li><a href="http://codex.wordpress.org/First_Steps_With_WordPress" class="welcome-icon welcome-learn-more">Learn more about getting started</a></li>
-		</ul>
-	</div>
-	</div>
-	</div>
-		</div>
-
-	<div id="dashboard-widgets-wrap">
-	<div id="dashboard-widgets" class="metabox-holder">
-	<div id="postbox-container-1" class="postbox-container">
-	<div id="normal-sortables" class="meta-box-sortables ui-sortable"><div id="dashboard_right_now" class="postbox ">
-<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle ui-sortable-handle"><span>At a Glance</span></h3>
-<div class="inside">
-	<div class="main">
-	<ul>
-	<li class="post-count"><a href="edit.php?post_type=post">2 Posts</a></li><li class="page-count"><a href="edit.php?post_type=page">18 Pages</a></li>	</ul>
-	<p id="wp-version-message">WordPress 4.1.5 running <a href="themes.php">Twenty thirteen Child</a> theme. <a href="http://www.hotelmoulin.com/wp-admin/update-core.php" class="button">Update to 4.2.2</a></p>	</div>
-	</div>
-</div>
-<div id="dashboard_activity" class="postbox ">
-<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle ui-sortable-handle"><span>Activity</span></h3>
-<div class="inside">
-<div id="activity-widget"><div id="published-posts" class="activity-block"><h4>Recently Published</h4><ul><li><span>Feb 18th, 11 h 34 min</span> <a href="http://www.hotelmoulin.com/wp-admin/post.php?post=132&amp;action=edit&amp;lang=en">Montmartre and the Artists</a></li></ul></div></div></div>
-</div>
-</div>	</div>
-	<div id="postbox-container-2" class="postbox-container">
-	<div id="side-sortables" class="meta-box-sortables ui-sortable"><div id="icl_dashboard_widget" class="postbox ">
-<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle ui-sortable-handle"><span>Multi-language | WPML 3.1.9.1</span></h3>
-<div class="inside">
-<p class="updated fade">You haven't set your <a href="admin.php?page=wpml-translation-management/menu/main.php&amp;sm=mcsetup">synchronization preferences</a> for these custom posts: <i>Contact Forms</i>. Default value was selected.</p>    <p>Site languages: <b>EN (default), FR, 한국어&nbsp;<strong style="color:#f00">(hidden)</strong></b> (<a href="admin.php?page=sitepress-multilingual-cms/menu/languages.php">edit</a>)</p>
-
-            
-        
-        <p>13 documents sent to translation.<br>13 are complete, 0 waiting for translation.</p>
-        <p><a href="admin.php?page=wpml-translation-management/menu/main.php" class="button secondary"><strong>Translate content</strong></a></p>
-        
-                    <h5 style="margin: 15px 0 0 0;">Need translation work?</h5>
-
-            <p><a target="_blank" href="http://www.icanlocalize.com/site/">ICanLocalize</a> offers affordable professional translation via a streamlined process.</p>
-
-            <p><a href="http://www.hotelmoulin.com/wp-admin/index.php?icl_ajx_action=quote-get&amp;_icl_nonce=8a4cf47a11&amp;width=772&amp;height=711" class="button secondary thickbox"><strong>Get quote</strong></a>
-                <a href="admin.php?page=wpml-translation-management/menu/main.php&amp;sm=translators&amp;service=icanlocalize" class="button secondary"><strong>Get translators</strong></a>
-            </p>
-                
-                            <div><a href="javascript:void(0)" onclick="jQuery(this).parent().next('.wrapper').slideToggle();" style="display:block; padding:5px; border: 1px solid #eee; margin-bottom:2px; background-color: #F7F7F7;">Content translation</a>
-            </div>
-            <div class="wrapper" style="display:none; padding: 5px 10px; border: 1px solid #eee; border-top: 0px; margin:-11px 0 2px 0;">
-            <p><strong>Your translators</strong></p><ul><li><a href="profile.php"><strong>hotelmoulin-admin</strong></a> - EN to FR</li><li><a href="user-edit.php?user_id=2&amp;wp_http_referer=%2Fwp-admin%2F"><strong>Pierre-Marie Coupry</strong></a> - EN to 한국어, FR</li><li><a href="user-edit.php?user_id=1&amp;wp_http_referer=%2Fwp-admin%2F"><strong>Rent_Flo</strong></a> - EN to 한국어, FR</li></ul><hr>
-                                <p><a href="admin.php?page=wpml-translation-management/menu/main.php&amp;sm=translators&amp;service=icanlocalize"><strong>Add translators from ICanLocalize »</strong></a></p>
-                                
-                <p><a href="admin.php?page=wpml-translation-management/menu/main.php&amp;sm=translators&amp;service=local"><strong>Add your own translators »</strong></a></p>
-                <p><a href="admin.php?page=wpml-translation-management/menu/main.php"><strong>Translate contents »</strong></a></p>
-                
-            </div>
-                
-    <div><a href="javascript:void(0)" onclick="jQuery(this).parent().next('.wrapper').slideToggle();" style="display:block; padding:5px; border: 1px solid #eee; margin-bottom:2px; background-color: #F7F7F7;">Theme and plugins localization</a></div>
-    <div class="wrapper" style="display:none; padding: 5px 10px; border: 1px solid #eee; border-top: 0px; margin:-11px 0 2px 0;"><p>
-            Current configuration<br><strong>Translate by WPML</strong>        </p>
-
-        <p><a class="button secondary" href="admin.php?page=sitepress-multilingual-cms/menu/theme-localization.php">Manage theme and plugins localization</a></p>
-    </div>
-
-
-    <div><a href="javascript:void(0)" onclick="jQuery(this).parent().next('.wrapper').slideToggle();" style="display:block; padding:5px; border: 1px solid #eee; margin-bottom:2px; background-color: #F7F7F7;">Help resources</a></div>
-    <div class="wrapper" style="display:none; padding: 5px 10px; border: 1px solid #eee; border-top: 0px; margin:-11px 0 2px 0;">
-        <p><img src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/img/question1.png" width="16" height="16" style="position: relative; top: 4px;" alt="WPML home page">&nbsp;<a href="https://wpml.org/">WPML home page</a>
-            <br><img src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/img/RO-Mx1-16_tool-wrench.png" width="16" height="16" style="position: relative; top: 4px;" alt="Commercial support">&nbsp;<a href="http://www.hotelmoulin.com/wp-admin/admin.php?page=sitepress-multilingual-cms/menu/support.php">Commercial support</a></p>
-
-    </div>
-
-        
-        <div><a href="javascript:void(0)" onclick="jQuery(this).parent().next('.wrapper').slideToggle();" style="display:block; padding:5px; border: 1px solid #eee; margin-bottom:2px; background-color: #F7F7F7;">Navigation</a></div>
-        
-        <div class="wrapper" style="display:none; padding: 5px 10px; border: 1px solid #eee; border-top: 0; margin:-11px 0 2px 0;">
-        <p>WPML provides advanced menus and navigation to go with your WordPress website, including drop-down menus, breadcrumbs and sidebar navigation.</p>
-        <p><a class="button secondary" href="admin.php?page=wpml-cms-nav/menu/navigation.php">Configure navigation</a></p>    
-        </div>        
-        
-		<div><a href="javascript:void(0)" onclick="jQuery(this).parent().next('.wrapper').slideToggle();" style="display:block; padding:5px; border: 1px solid #eee; margin-bottom:2px; background-color: #F7F7F7;">String translation</a></div>
-		<div class="wrapper" style="display:none; padding: 5px 10px; border: 1px solid #eee; border-top: 0px; margin:-11px 0 2px 0;">
-			<p>String translation allows you to enter translation for texts such as the site's title, tagline, widgets and other text not contained in posts and pages.</p>
-										<p>
-					<b>There are <a href="admin.php?page=wpml-string-translation/menu/string-translation.php&amp;status=0"><b>501</b> strings</a> that need to be updated or translated. </b>
-				</p>
 			
-			<p>
-				<a class="button secondary" href="admin.php?page=wpml-string-translation/menu/string-translation.php">Translate strings</a>
-			</p>
-		</div>
-	        <div>
-            <a href="javascript:void(0)" onclick="jQuery(this).parent().next('.wrapper').slideToggle();" style="display:block; padding:5px; border: 1px solid #eee;
-                margin-bottom:2px; background-color: #F7F7F7;">
-            Translation Analytics      
-            </a>
-        </div>
-        
-        <div class="wrapper" style="display:none; padding: 5px 10px;
-            border: 1px solid #eee; border-top: 0px; margin:-11px 0 2px 0;">
-            <p>
-            WPML Translation Analytics allows you to see the
-                status of your translations and shows you warnings when
-                completion time may not be met based on planned schedule
-                versus actual progress.            </p>
-            <p>
-                <a class="button secondary" href="
-                    admin.php?page=wpml-translation-analytics/menu/main.php">
-                    View Translation Analytics                </a>
-            </p>
-        </div>
-                <div><a href="javascript:void(0)" onclick="jQuery(this).parent().next('.wrapper').slideToggle();" style="display:block; padding:5px; border: 1px solid #eee; margin-bottom:2px; background-color: #F7F7F7;">Sticky links</a></div>
-
-        <div class="wrapper" style="display:none; padding: 5px 10px; border: 1px solid #eee; border-top: 0px; margin:-11px 0 2px 0;"><p>With Sticky Links, WPML can automatically ensure that all links on posts and pages are up-to-date, should their URL change.</p>        
-
-        <p><a class="button secondary" href="admin.php?page=wpml-sticky-links">Configure Sticky Links</a></p>    
-        
-        </div>
-                                     
-        
-    <div class="rss-widget"><p><strong>WPML news</strong></p>
-        <ul>
-                            <li><a class="rsswidget" href="http://feedproxy.google.com/~r/wpml/~3/K5N3G9oAlhM/">This week compatible – Chillout, Okean, Spider, rtMedia Instagram</a> <span class="rss-date">15 May 2015</span></li>
-                            <li><a class="rsswidget" href="http://feedproxy.google.com/~r/wpml/~3/yM3XdieylkY/">This week compatible – HG Restaurant, Reviver, Slider Image</a> <span class="rss-date">8 May 2015</span></li>
-                    </ul>
-    </div>
-</div>
-</div>
-<div id="dashboard_quick_press" class="postbox ">
-<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle ui-sortable-handle"><span><span class="hide-if-no-js">Quick Draft</span> <span class="hide-if-js">Drafts</span></span></h3>
-<div class="inside">
-
-	<form name="post" action="http://www.hotelmoulin.com/wp-admin/post.php" method="post" id="quick-press" class="initial-form hide-if-no-js">
-
-		
-		<div class="input-text-wrap" id="title-wrap">
-			<label class="prompt" for="title" id="title-prompt-text">
-
-				Title			</label>
-			<input type="text" name="post_title" id="title" autocomplete="off">
-		</div>
-
-		<div class="textarea-wrap" id="description-wrap">
-			<label class="prompt" for="content" id="content-prompt-text">What’s on your mind?</label>
-			<textarea name="content" id="content" class="mceEditor" rows="3" cols="15" autocomplete="off"></textarea>
-		</div>
-
-		<p class="submit">
-			<input type="hidden" name="action" id="quickpost-action" value="post-quickdraft-save">
-			<input type="hidden" name="post_ID" value="536">
-			<input type="hidden" name="post_type" value="post">
-			<input type="hidden" id="_wpnonce" name="_wpnonce" value="4c08f6c211"><input type="hidden" name="_wp_http_referer" value="/wp-admin/">			<input type="submit" name="save" id="save-post" class="button button-primary" value="Save Draft">			<br class="clear">
-		</p>
-
-	</form>
-	</div>
-</div>
-<div id="dashboard_primary" class="postbox ">
-<div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle ui-sortable-handle"><span>WordPress News</span></h3>
-<div class="inside">
-<div class="rss-widget"><ul><li><a class="rsswidget" href="https://wordpress.org/news/2015/05/wordpress-4-2-2/">WordPress 4.2.2 Security and Maintenance Release</a> <span class="rss-date">7 May 2015</span><div class="rssSummary">WordPress 4.2.2 is now available. This is a critical security release for all previous versions and we strongly encourage you to update your sites immediately. Version 4.2.2 addresses two security issues: The Genericons icon font package, which is used in a number of popular themes and plugins, contained an HTML file vulnerable to a cross-site […]</div></li></ul></div><div class="rss-widget"><ul><li><a class="rsswidget" href="http://ma.tt/2015/05/how-to-get-yourself-to-do-things/">Matt: How to Get Yourself to Do Things</a></li><li><a class="rsswidget" href="http://wptavern.com/a-wordpress-veterans-take-on-drupalcon-la">WPTavern: A WordPress Veteran’s Take on DrupalCon LA</a></li><li><a class="rsswidget" href="http://wptavern.com/community-translation-and-wapuu-how-japan-is-shaping-wordpress-history">WPTavern: Community, Translation, and Wapuu: How Japan is Shaping WordPress History</a></li></ul></div><div class="rss-widget"><ul><li class="dashboard-news-plugin"><span>Popular Plugin:</span> <a href="https://wordpress.org/plugins/siteorigin-panels/" class="dashboard-news-plugin-link">Page Builder by SiteOrigin</a>&nbsp;<span>(<a href="plugin-install.php?tab=plugin-information&amp;plugin=siteorigin-panels&amp;_wpnonce=e28c06c2e6&amp;TB_iframe=true&amp;width=772&amp;height=711" class="thickbox" title="Page Builder by SiteOrigin">Install</a>)</span></li></ul></div></div>
-</div>
-</div>	</div>
-	<div id="postbox-container-3" class="postbox-container">
-	<div id="column3-sortables" class="meta-box-sortables ui-sortable empty-container"></div>	</div>
-	<div id="postbox-container-4" class="postbox-container">
-	<div id="column4-sortables" class="meta-box-sortables ui-sortable empty-container"></div>	</div>
-</div>
-
-<input type="hidden" id="closedpostboxesnonce" name="closedpostboxesnonce" value="9d55998f3b"><input type="hidden" id="meta-box-order-nonce" name="meta-box-order-nonce" value="c92e2ecf14">	</div><!-- dashboard-widgets-wrap -->
+<div class="wrap">
+	<h2>Map</h2>
+	<!--INTEGRER ICI LA GOOGLE MAP-->
 
 </div><!-- wrap -->
 
 
 </div><!-- wpbody-content -->
 </div><!-- wpbody -->
+
 <div class="clear"></div></div><div id="wp-responsive-overlay" style="display: none;"></div><!-- wpcontent -->
 
 <div id="wpfooter">
