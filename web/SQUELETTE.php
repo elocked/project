@@ -1,6 +1,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
+
+<?php 
+// récupération de la longitude et la latitude de l'utilisateur 
+if(empty($_GET['var1']) AND empty($_GET['var2'])){
+?>
+<script type="text/javascript" >
+if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy : true, timeout:10000, maximumAge:600000});
+else
+  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+   
+function successCallback(position){
+  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
+  top.document.location = "squelette.php?var1="+latuser+"&var2="+lonuser; 
+};  
+ 
+function errorCallback(error){
+  switch(error.code){
+    case error.PERMISSION_DENIED:
+      alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+      break;      
+    case error.POSITION_UNAVAILABLE:
+      alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+      break;
+    case error.TIMEOUT:
+      alert("Le service n'a pas répondu à temps");
+      break;
+    }
+};
+<?php } ?>
+</script>
+
+
 <head>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -38,6 +71,86 @@ var ajaxurl = '/wp-admin/admin-ajax.php',
 <link rel="stylesheet" id="translate-taxonomy-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/taxonomy-translation.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
 <link rel="stylesheet" id="wpml-sticky-links-css-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-sticky-links/res/css/management.css?ver=bbec7b9ac1c4a402d497d61991fa148c" type="text/css" media="all">
 <style type="text/css" media="print">#wpadminbar { display:none; }</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <!-- Inclusion de l'API Google MAPS -->
+    <?php include('GoogleMapAPI.class.php'); ?>
+    <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript">
+      function initialiser() {
+        <?php
+        $latuser=htmlspecialchars($_GET['var1']);
+        $lonuser=htmlspecialchars($_GET['var2']);
+        ?>
+        var latlng = new google.maps.LatLng('<?php echo $latuser ;?>','<?php echo $lonuser; ?>');
+        //objet contenant des propriétés avec des identificateurs prédéfinis dans Google Maps permettant
+        //de définir des options d'affichage de notre carte
+        var options = {
+          center: latlng,
+          zoom: 16,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        //constructeur de la carte qui prend en paramêtre le conteneur HTML
+        //dans lequel la carte doit s'afficher et les options
+        var carte = new google.maps.Map(document.getElementById("carte"), options);
+
+        <?php
+        $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
+        //$K = new GoogleMapAPI();
+        while($donnee=$req -> fetch()){
+          if($donnee==TRUE and isset($donnee)){?>
+            //création du marqueur
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>');
+            
+         <?php }
+          else echo 'Pas de velo disponible </br>';
+                           }
+        $req->closecursor();
+        ?>
+
+        function setmarqueur(latitude , longitude){
+          
+          var image = {
+        url: 'image/marqueur.png',
+        // This marker is 68 pixels wide by 61 pixels tall.
+        size: new google.maps.Size(68, 61),
+        // The origin for this image is 0,0.
+        origin: new google.maps.Point(0,0),
+        // The anchor for this image is the base of the bike at 0,32.
+        anchor: new google.maps.Point(34,61)
+        };
+
+        var shape = {
+        coords: [0 , 0, 68, 45],
+        type: 'rect'
+        };
+        
+        var marqueur = new google.maps.Marker({
+            position: new google.maps.LatLng(latitude,longitude),
+            map: carte,
+            icon: image,
+            shape: shape
+            });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: '<a href="reserver.php">reserver</a></br>',
+            size: new google.maps.Size(100, 100),
+            position: new google.maps.LatLng(latitude,longitude)
+            });
+            google.maps.event.addListener(marqueur, 'click', function(){
+            infowindow.open(carte,marqueur);
+            });
+
+      }
+
+
+
+      }
+    </script>
 
 </head>
 
@@ -91,15 +204,7 @@ var ajaxurl = '/wp-admin/admin-ajax.php',
 	<ul class="wp-submenu wp-submenu-wrap"><li class="wp-submenu-head">Settings</li><li class="wp-first-item"><a href="options-general.php" class="wp-first-item">General</a></li><li><a href="options-writing.php">Writing</a></li><li><a href="options-reading.php">Reading</a></li><li><a href="options-discussion.php">Discussion</a></li><li><a href="options-media.php">Media</a></li><li><a href="options-permalink.php">Permalinks</a></li></ul></li>
 	<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true"><div class="separator"></div></li>
 	<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpseo_dashboard menu-top-first" id="toplevel_page_wpseo_dashboard"><a href="admin.php?page=wpseo_dashboard" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpseo_dashboard menu-top-first" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div>
-<div class="wp-menu-name">SEO</div></a>
-	<ul class="wp-submenu wp-submenu-wrap"><li class="wp-submenu-head">SEO</li><li class="wp-first-item"><a href="admin.php?page=wpseo_dashboard" class="wp-first-item">Dashboard</a></li><li><a href="admin.php?page=wpseo_titles">Titles &amp; Metas</a></li><li><a href="admin.php?page=wpseo_social">Social</a></li><li><a href="admin.php?page=wpseo_xml">XML Sitemaps</a></li><li><a href="admin.php?page=wpseo_permalinks">Permalinks</a></li><li><a href="admin.php?page=wpseo_internal-links">Internal Links</a></li><li><a href="admin.php?page=wpseo_rss">RSS</a></li><li><a href="admin.php?page=wpseo_import">Import &amp; Export</a></li><li><a href="admin.php?page=wpseo_bulk-editor">Bulk Editor</a></li><li><a href="admin.php?page=wpseo_files">Edit Files</a></li><li><a href="admin.php?page=wpseo_licenses"><span style="color:#f18500">Extensions</span></a></li></ul></li>
-	<li class="wp-not-current-submenu menu-top toplevel_page_revslider" id="toplevel_page_revslider">
-	<a href="admin.php?page=revslider" class="wp-not-current-submenu menu-top toplevel_page_revslider"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-update"><br></div><div class="wp-menu-name">Revolution Slider</div></a></li>
-	<li class="wp-not-current-submenu menu-top toplevel_page_themepunch-google-fonts" id="toplevel_page_themepunch-google-fonts">
-	<a href="admin.php?page=themepunch-google-fonts" class="wp-not-current-submenu menu-top toplevel_page_themepunch-google-fonts"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-editor-textcolor"><br></div><div class="wp-menu-name">Punch Fonts</div></a></li>
-	<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_sitepress-multilingual-cms/menu/languages menu-top-last" id="toplevel_page_sitepress-multilingual-cms-menu-languages"><a href="admin.php?page=sitepress-multilingual-cms/menu/languages.php" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_sitepress-multilingual-cms/menu/languages menu-top-last" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before"><img src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/img/icon16.png" alt=""></div><div class="wp-menu-name">WPML</div></a>
-	<ul class="wp-submenu wp-submenu-wrap"><li class="wp-submenu-head">WPML</li><li class="wp-first-item"><a href="admin.php?page=sitepress-multilingual-cms/menu/languages.php" class="wp-first-item">Languages</a></li><li><a href="admin.php?page=wpml-translation-management/menu/main.php">Translation Management</a></li><li><a href="admin.php?page=sitepress-multilingual-cms/menu/theme-localization.php">Theme and plugins localization</a></li><li><a href="admin.php?page=sitepress-multilingual-cms/menu/support.php">Support</a></li><li><a href="admin.php?page=wpml-media">Media translation</a></li><li><a href="admin.php?page=sitepress-multilingual-cms/menu/menus-sync.php">WP Menus Sync</a></li><li><a href="admin.php?page=wpml-cms-nav/menu/navigation.php">Navigation</a></li><li><a href="admin.php?page=wpml-string-translation/menu/string-translation.php">String Translation</a></li><li><a href="admin.php?page=wpml-translation-analytics/menu/main.php">Translation Analytics</a></li><li><a href="admin.php?page=wpml-translation-management/menu/translations-queue.php">Translations</a></li><li><a href="admin.php?page=wpml-sticky-links">Sticky Links</a></li><li><a href="admin.php?page=sitepress-multilingual-cms/menu/taxonomy-translation.php">Taxonomy Translation</a></li></ul></li><li id="collapse-menu" class="hide-if-no-js"><div id="collapse-button"><div></div></div><span>Collapse menu</span></li></ul>
-</div>
+
 <div id="wpcontent">
 
 		<div id="wpadminbar" class="" role="navigation">
@@ -209,7 +314,19 @@ var ajaxurl = '/wp-admin/admin-ajax.php',
 			</script>
 			
 <div class="wrap">
-	<h2>Map</h2>
+	<h2>
+		<table>
+			<tr>
+				<br/>
+			</tr>
+			<tr>
+				Your Map
+			</tr>
+			<tr onload="initialiser()">
+				<div id="carte" style="width:100%; height:500px"></div>
+			</tr>
+		</table>
+	</h2>
 	<!--INTEGRER ICI LA GOOGLE MAP-->
 
 </div><!-- wrap -->
