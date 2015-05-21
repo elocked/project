@@ -34,6 +34,14 @@ function errorCallback(error){
 <?php } ?>
 </script>
 
+
+
+
+
+
+
+
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="author" content="E-LOCKED TEAM">
@@ -120,6 +128,7 @@ function errorCallback(error){
 
 
       }
+      //alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
     </script>
 
 
@@ -129,8 +138,28 @@ function errorCallback(error){
 
 <body onload="initialiser()">
 <style type="text/css">
-
 </style>
+
+<!-- Script de récupération de la résolution du body -->
+<script type="text/javascript">
+if (document.body)
+{
+var larg = (document.body.clientWidth);
+var haut = (document.body.clientHeight);
+}
+
+else
+{
+var larg = (window.innerWidth);
+var haut = (window.innerHeight);
+}
+alert("Cette fenêtre fait " + larg + " de large et "+haut+" de haut");
+</script>
+
+
+
+
+
 
 <table border="0" cellpadding="0" cellspacing="0" width="964" align="center">
 <tr>
