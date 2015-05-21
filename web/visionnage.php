@@ -1,6 +1,37 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
+<?php 
+// récupération de la longitude et la latitude de l'utilisateur 
+if(empty($_GET['var1']) AND empty($_GET['var2'])){
+?>
+<script type="text/javascript" >
+if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy : true, timeout:10000, maximumAge:600000});
+else
+  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+   
+function successCallback(position){
+  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
+  top.document.location = "visionnage.php?var1="+latuser+"&var2="+lonuser; 
+};  
+ 
+function errorCallback(error){
+  switch(error.code){
+    case error.PERMISSION_DENIED:
+      alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+      break;      
+    case error.POSITION_UNAVAILABLE:
+      alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+      break;
+    case error.TIMEOUT:
+      alert("Le service n'a pas répondu à temps");
+      break;
+    }
+};
+<?php } ?>
+</script>
+
 <head>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -12,16 +43,6 @@
 	<title>E-LOCKED</title>
 	
 	
-	<script type="text/javascript">
-addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
-var ajaxurl = '/wp-admin/admin-ajax.php',
-	pagenow = 'dashboard',
-	typenow = '',
-	adminpage = 'index-php',
-	thousandsSeparator = ',',
-	decimalPoint = '.',
-	isRtl = 0;
-</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet" href="http://www.hotelmoulin.com/wp-admin/load-styles.php?c=1&amp;dir=ltr&amp;load=dashicons,admin-bar,wp-admin,buttons,wp-auth-check&amp;ver=4.1.5" type="text/css" media="all">
 <link rel="stylesheet" id="toolset-font-awesome-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/font-awesome.min.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
@@ -37,52 +58,139 @@ var ajaxurl = '/wp-admin/admin-ajax.php',
 <link rel="stylesheet" id="sitepress-style-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/style.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
 <link rel="stylesheet" id="translate-taxonomy-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/taxonomy-translation.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
 <link rel="stylesheet" id="wpml-sticky-links-css-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-sticky-links/res/css/management.css?ver=bbec7b9ac1c4a402d497d61991fa148c" type="text/css" media="all">
-<style type="text/css" media="print">#wpadminbar { display:none; }</style>
+<style>
+      html, body, #carte {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+</style>
+
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <!-- Inclusion de l'API Google MAPS -->
+    <?php include('GoogleMapAPI.class.php'); ?>
+    <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript">
+      function initialiser() {
+        <?php
+        $latuser=htmlspecialchars($_GET['var1']);
+        $lonuser=htmlspecialchars($_GET['var2']);
+        ?>
+        var latlng = new google.maps.LatLng('<?php echo $latuser ;?>','<?php echo $lonuser; ?>');
+        //objet contenant des propriétés avec des identificateurs prédéfinis dans Google Maps permettant
+        //de définir des options d'affichage de notre carte
+        var options = {
+          center: latlng,
+          zoom: 16,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        //constructeur de la carte qui prend en paramêtre le conteneur HTML
+        //dans lequel la carte doit s'afficher et les options
+        var carte = new google.maps.Map(document.getElementById("carte"), options);
+
+        <?php
+        $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
+        //$K = new GoogleMapAPI();
+        while($donnee=$req -> fetch()){
+          if($donnee==TRUE and isset($donnee)){?>
+            //création du marqueur
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>');
+            
+         <?php }
+          else echo 'Pas de velo disponible </br>';
+                           }
+        $req->closecursor();
+        ?>
+
+        function setmarqueur(latitude , longitude){
+          
+          var image = {
+        url: 'image/marqueur.png',
+        // This marker is 68 pixels wide by 61 pixels tall.
+        size: new google.maps.Size(68, 61),
+        // The origin for this image is 0,0.
+        origin: new google.maps.Point(0,0),
+        // The anchor for this image is the base of the bike at 0,32.
+        anchor: new google.maps.Point(34,61)
+        };
+
+        var shape = {
+        coords: [0 , 0, 68, 45],
+        type: 'rect'
+        };
+        
+        var marqueur = new google.maps.Marker({
+            position: new google.maps.LatLng(latitude,longitude),
+            map: carte,
+            icon: image,
+            shape: shape
+            });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: '<a href="reserver.php">reserver</a></br>',
+            size: new google.maps.Size(100, 100),
+            position: new google.maps.LatLng(latitude,longitude)
+            });
+            google.maps.event.addListener(marqueur, 'click', function(){
+            infowindow.open(carte,marqueur);
+            });
+
+      }
+
+
+
+      }
+    </script>
 
 </head>
 
-<body class="whole">
-	<div id="wpwrap">
-<a tabindex="1" href="#wpbody-content" class="screen-reader-shortcut">Skip to main content</a>
+
+<body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu" onload="initialiser()">
+	
+<div id="wpwrap">
 
 <div id="adminmenuback"></div>
 <div id="adminmenuwrap">
 <ul id="adminmenu" role="navigation">
-	
-	<li class="wp-first-item wp-has-submenu wp-has-current-submenu wp-menu-open menu-top menu-top-first menu-icon-dashboard menu-top-last" id="menu-dashboard">
-	<a href="index.php" class="wp-first-item wp-has-submenu wp-has-current-submenu wp-menu-open menu-top menu-top-first menu-icon-dashboard menu-top-last"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-dashboard"><br></div><div class="wp-menu-name">Dashboard</div></a>
-		<ul class="wp-submenu wp-submenu-wrap"><li class="wp-submenu-head">Dashboard</li><li class="wp-first-item current"><a href="index.php" class="wp-first-item current">Home</a></li><li><a href="update-core.php">Updates <span class="update-plugins count-11" title="1 WordPress Update, 7 Plugin Updates, 3 Theme Updates"><span class="update-count">11</span></span></a></li></ul></li>
-	<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true"><div class="separator"></div></li>
-	
+
+<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true"><div class="separator"></div></li>
 	<li class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" id="menu-posts">
 		<a href="edit.php" class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div><div class="wp-menu-name">Posts</div></a>
-		<ul class="wp-submenu wp-submenu-wrap"><li class="wp-submenu-head">Posts</li></ul>
+		<ul class="wp-submenu wp-submenu-wrap">
+		</ul>
 	</li>
 	
 	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
 		<a href="upload.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-media"><br></div><div class="wp-menu-name">Media</div></a>
-		<ul class="wp-submenu wp-submenu-wrap"></ul>
+		<ul class="wp-submenu wp-submenu-wrap">
+		</ul>
 	</li>
 	
 	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
 		<a href="edit.php?post_type=page" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Pages</div></a>
-		<ul class="wp-submenu wp-submenu-wrap"></ul>
+		<ul class="wp-submenu wp-submenu-wrap">
+		</ul>
 	</li>
 	
 	<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
-		<a href="edit-comments.php" class="wp-not-current-submenu menu-top menu-icon-comments"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-comments"><br></div><div class="wp-menu-name">Comments <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div></a>
+	<a href="edit-comments.php" class="wp-not-current-submenu menu-top menu-icon-comments"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-comments"><br></div><div class="wp-menu-name">Comments <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div></a></li>
+	
+	<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" id="toplevel_page_wpcf7"><a href="admin.php?page=wpcf7" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-email"><br></div><div class="wp-menu-name">Contact</div></a>
+		<ul class="wp-submenu wp-submenu-wrap">
+		</ul>
 	</li>
 	
-	<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" id="toplevel_page_wpcf7">
-		<a href="admin.php?page=wpcf7" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-email"><br></div><div class="wp-menu-name">Contact</div></a>
-		<ul class="wp-submenu wp-submenu-wrap"></ul>
-	</li>
-</div>
 
+</ul>
+
+	
+</div>
 <div id="wpcontent">
 
 		<div id="wpadminbar" class="" role="navigation">
-			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
 			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
 				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
 		<li id="wp-admin-bar-menu-toggle"><a class="ab-item" href="#" aria-expanded="false"><span class="ab-icon"></span><span class="screen-reader-text">Menu</span></a>		</li>
@@ -121,108 +229,57 @@ var ajaxurl = '/wp-admin/admin-ajax.php',
 		<li id="wp-admin-bar-WPML_ALS_fr"><a class="ab-item" href="http://www.hotelmoulin.com/wp-admin/index.php?lang=fr&amp;admin_bar=1" title="Show content in: FR"><img class="icl_als_iclflag" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/flags/fr.png" alt="fr" width="18" height="12">&nbsp;FR</a>		</li>
 		<li id="wp-admin-bar-WPML_ALS_ko"><a class="ab-item" href="http://www.hotelmoulin.com/wp-admin/index.php?lang=ko&amp;admin_bar=1" title="Show content in: 한국어"><img class="icl_als_iclflag" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/flags/ko.png" alt="ko" width="18" height="12">&nbsp;한국어</a>		</li>
 		<li id="wp-admin-bar-WPML_ALS_all"><a class="ab-item" href="http://www.hotelmoulin.com/wp-admin/index.php?lang=all" title="Show content in: All languages"><img class="icl_als_iclflag" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/img/icon16.png" alt="all" width="16" height="16">&nbsp;All languages</a>		</li></ul></div>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
-		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" href="http://www.hotelmoulin.com/wp-admin/profile.php" title="My Account">Howdy, hotelmoulin-admin<img alt="" src="http://1.gravatar.com/avatar/7a73b30510c9b67ba688b0d80b6551e8?s=26&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D26&amp;r=G" class="avatar avatar-26 photo" height="26" width="26"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" title="My Account">Howdy, hotelmoulin-admin<img alt="" src="http://1.gravatar.com/avatar/7a73b30510c9b67ba688b0d80b6551e8?s=26&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D26&amp;r=G" class="avatar avatar-26 photo" height="26" width="26"></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
 		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://www.hotelmoulin.com/wp-admin/profile.php"><img alt="" src="http://1.gravatar.com/avatar/7a73b30510c9b67ba688b0d80b6551e8?s=64&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D64&amp;r=G" class="avatar avatar-64 photo" height="64" width="64"><span class="display-name">hotelmoulin-admin</span></a>		</li>
 		<li id="wp-admin-bar-edit-profile"><a class="ab-item" href="http://www.hotelmoulin.com/wp-admin/profile.php">Edit My Profile</a>		</li>
-		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://www.hotelmoulin.com/wp-login.php?action=logout&amp;_wpnonce=76ed5fdd37">Log Out</a>		</li></ul></div>		</li></ul>			</div>
-						<a class="screen-reader-shortcut" href="http://www.hotelmoulin.com/wp-login.php?action=logout&amp;_wpnonce=76ed5fdd37">Log Out</a>
+		<li id="wp-admin-bar-logout"><a class="ab-item" href="http://www.hotelmoulin.com/wp-login.php?action=logout&amp;_wpnonce=d6d52f7c60">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+						<a class="screen-reader-shortcut" href="http://www.hotelmoulin.com/wp-login.php?action=logout&amp;_wpnonce=d6d52f7c60">Log Out</a>
 					</div>
 
 		
-<div id="GMap">
+<div id="wpbody">
 
-<div id="Gmap-content" aria-label="Main content" tabindex="0" style="overflow: hidden;">
+<div id="wpbody-content" aria-label="Main content" tabindex="0" style="overflow: hidden;">
 		<div id="screen-meta" class="metabox-prefs">
-
-			<div id="contextual-help-wrap" class="hidden" tabindex="-1" aria-label="Contextual Help Tab">
-				<div id="contextual-help-back"></div>
-				<div id="contextual-help-columns">
-					<div class="contextual-help-tabs">
-						<ul>
-						
-							<li id="tab-link-overview" class="active">
-								<a href="#tab-panel-overview" aria-controls="tab-panel-overview">
-									Overview								</a>
-							</li>
-						
-							<li id="tab-link-help-navigation">
-								<a href="#tab-panel-help-navigation" aria-controls="tab-panel-help-navigation">
-									Navigation								</a>
-							</li>
-						
-							<li id="tab-link-help-layout">
-								<a href="#tab-panel-help-layout" aria-controls="tab-panel-help-layout">
-									Layout								</a>
-							</li>
-						
-							<li id="tab-link-help-content">
-								<a href="#tab-panel-help-content" aria-controls="tab-panel-help-content">
-									Content								</a>
-							</li>
-												</ul>
-					</div>
-					
-				</div>
-			</div>
-				<div id="screen-options-wrap" class="hidden" tabindex="-1" aria-label="Screen Options Tab">
+		<div id="screen-options-wrap" class="hidden" tabindex="-1" aria-label="Screen Options Tab">
+		
 		</div>
+		</div>
+				<div id="screen-meta-links">
+					<div id="contextual-help-link-wrap" class="hide-if-no-js screen-meta-toggle">
+			<a href="#contextual-help-wrap" id="contextual-help-link" class="show-settings" aria-controls="contextual-help-wrap" aria-expanded="false">Help</a>
+			</div>
+					<div id="screen-options-link-wrap" class="hide-if-no-js screen-meta-toggle">
+			<a href="#screen-options-wrap" id="show-settings-link" class="show-settings" aria-controls="screen-options-wrap" aria-expanded="false">Screen Options</a>
+			</div>
 				</div>
-			<script type="text/javascript">
-				jQuery('#rs-dismiss-notice').click(function(){
-					var objData = {
-									action:"revslider_ajax_action",
-									client_action: 'dismiss_notice',
-									nonce:'a8ec9b58b3',
-									data:''
-									};
 
-					jQuery.ajax({
-						type:"post",
-						url:ajaxurl,
-						dataType: 'json',
-						data:objData
-					});
-
-					jQuery('.rs-update-notice-wrap').hide();
-				});
-			</script>
-			
 <div class="wrap">
-<table>
-		<tr>
-			<td><br/></td>
-		</tr>
-		<tr>
-			<td><h1>Titre de la page</h1></td>
-		</tr>
-		<tr>
-			<td>REMPLIR ICI</td>
-		</tr>
-</table>
-	<!--INTEGRER ICI LA GOOGLE MAP-->
+		<br/><h1>Titre de la page</h1>
+
+	<div id="dashboard-widgets-wrap" style="height:100%">
+		 <div style="height:630px" id="carte"></div>
+	</div><!-- dashboard-widgets-wrap -->
 
 </div><!-- wrap -->
 
 
-</div><!-- wpbody-content -->
-</div><!-- wpbody -->
-
+<div class="clear"></div></div><!-- wpbody-content -->
+<div class="clear"></div></div><!-- wpbody -->
 <div class="clear"></div></div><div id="wp-responsive-overlay" style="display: none;"></div><!-- wpcontent -->
 
 <div id="wpfooter">
 		<p id="footer-left" class="alignleft">
-			<span id="footer">© All Rights Reserved</span>
-		</p>
+			© Copyrights. ALL RIGHTS RESERVED</p>
 	<div class="clear"></div>
 </div>
-
 	
-<script type="text/javascript">
-/* <![CDATA[ */
-var thickboxL10n = {"next":"Next >","prev":"< Prev","image":"Image","of":"of","close":"Close","noiframes":"This feature requires inline frames. You have iframes disabled or your browser does not support them.","loadingAnimation":"http:\/\/www.hotelmoulin.com\/wp-includes\/js\/thickbox\/loadingAnimation.gif"};var commonL10n = {"warnDelete":"You are about to permanently delete the selected items.\n  'Cancel' to stop, 'OK' to delete."};var wpAjax = {"noPerm":"You do not have permission to do that.","broken":"An unidentified error has occurred."};var quicktagsL10n = {"closeAllOpenTags":"Close all open tags","closeTags":"close tags","enterURL":"Enter the URL","enterImageURL":"Enter the URL of the image","enterImageDescription":"Enter a description of the image","fullscreen":"fullscreen","toggleFullscreen":"Toggle fullscreen mode","textdirection":"text direction","toggleTextdirection":"Toggle Editor Text Direction","dfw":"Distraction-free writing mode"};var adminCommentsL10n = {"hotkeys_highlight_first":"","hotkeys_highlight_last":"","replyApprove":"Approve and Reply","reply":"Reply"};var _wpCustomizeLoaderSettings = {"url":"http:\/\/www.hotelmoulin.com\/wp-admin\/customize.php","isCrossDomain":false,"browser":{"mobile":false,"ios":false},"l10n":{"saveAlert":"The changes you made will be lost if you navigate away from this page."}};var plugininstallL10n = {"plugin_information":"Plugin Information:","ays":"Are you sure you want to install this plugin?"};var heartbeatSettings = {"nonce":"5a5d5bfb96"};var authcheckL10n = {"beforeunload":"Your session has expired. You can log in again from this page or go to the login page.","interval":"180"};/* ]]> */
-</script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=thickbox,hoverIntent,common,admin-bar,jquery-form,wp-ajax-response,jquery-color,wp-lists,quicktags,jquery-query,admin-comments,j&amp;load%5B%5D=query-ui-core,jquery-ui-widget,jquery-ui-mouse,jquery-ui-sortable,postbox,dashboard,customize-base,customize-loader,plugin-insta&amp;load%5B%5D=ll,shortcode,media-upload,svg-painter,heartbeat,wp-auth-check&amp;ver=4.1.5"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/wordpress-seo/js/wp-seo-admin-global.min.js?ver=450bf84a432b37ff9714ba070da35ef7"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/js/icl-admin-notifier.js?ver=d0dccd3d170fb7c50a6818bab3129bbc"></script>
 
-</div>
+<div class="clear"></div></div><!-- wpwrap -->
+<script type="text/javascript">if(typeof wpOnload=='function')wpOnload();</script>
+
+
+<div class="quick-draft-textarea-clone" style="display: none; font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 19.6000003814697px; padding: 6px 7px; white-space: pre-wrap; word-wrap: break-word;"></div><div id="customize-container"></div></body></html>

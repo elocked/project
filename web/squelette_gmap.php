@@ -48,7 +48,6 @@ var ajaxurl = '/wp-admin/admin-ajax.php',
 <div id="adminmenuback"></div>
 <div id="adminmenuwrap">
 <ul id="adminmenu" role="navigation">
-	
 	<li class="wp-first-item wp-has-submenu wp-has-current-submenu wp-menu-open menu-top menu-top-first menu-icon-dashboard menu-top-last" id="menu-dashboard">
 	<a href="index.php" class="wp-first-item wp-has-submenu wp-has-current-submenu wp-menu-open menu-top menu-top-first menu-icon-dashboard menu-top-last"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-dashboard"><br></div><div class="wp-menu-name">Dashboard</div></a>
 		<ul class="wp-submenu wp-submenu-wrap"><li class="wp-submenu-head">Dashboard</li><li class="wp-first-item current"><a href="index.php" class="wp-first-item current">Home</a></li><li><a href="update-core.php">Updates <span class="update-plugins count-11" title="1 WordPress Update, 7 Plugin Updates, 3 Theme Updates"><span class="update-count">11</span></span></a></li></ul></li>
@@ -200,7 +199,7 @@ var ajaxurl = '/wp-admin/admin-ajax.php',
 		</tr>
 </table>
 	<!--INTEGRER ICI LA GOOGLE MAP-->
-
+	<?php include 'PageGMap.php'; ?>
 </div><!-- wrap -->
 
 
