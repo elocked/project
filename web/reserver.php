@@ -1,3 +1,9 @@
+<?php 
+session_start();
+$_SESSION['idPersonne']=1;
+$idPersonne=$_SESSION['idPersonne'];
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
@@ -34,14 +40,6 @@ function errorCallback(error){
 <?php } ?>
 </script>
 
-
-
-
-
-
-
-
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="author" content="E-LOCKED TEAM">
@@ -56,6 +54,8 @@ function errorCallback(error){
     <?php include('GoogleMapAPI.class.php'); ?>
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="content.js"></script>
     <script type="text/javascript">
       function initialiser() {
         <?php
@@ -77,7 +77,7 @@ function errorCallback(error){
 
         <?php
         $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
+        $req = $bdd -> query("SELECT idCadenas,Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
         //$K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
@@ -89,6 +89,19 @@ function errorCallback(error){
                            }
         $req->closecursor();
         ?>
+        
+        
+        function reserver(){
+           alert("Coucou"); } 
+
+        /** $('#rsv').click(function() {
+          // L'URL du fichier dans lequel tu appelles ta fonctio
+          var url = 'content.js';
+          $.post(url, function(data){
+         // Tu affiches le contenu dans ta div
+          $('#resa').html(data);
+           });
+            });**/
 
         function setmarqueur(latitude , longitude){
           
@@ -114,23 +127,26 @@ function errorCallback(error){
             shape: shape
             });
 
+    
+        var content = '<div id="bouton"><input type="button" onClick="reserver();" value="Reserver"> </div> ';
+
         var infowindow = new google.maps.InfoWindow({
-            content: '<a href="reserver.php">reserver</a></br>',
+            content: content ,
             size: new google.maps.Size(100, 100),
-            position: new google.maps.LatLng(latitude,longitude)
-            });
-            google.maps.event.addListener(marqueur, 'click', function(){
+            position: new google.maps.LatLng(latitude,longitude),
+                        });
+        
+        google.maps.event.addListener(marqueur, 'click', function(){
             infowindow.open(carte,marqueur);
             });
 
       }
 
-
+      
 
       }
-      //alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
+      
     </script>
-
 
 
 
@@ -153,7 +169,8 @@ else
 var larg = (window.innerWidth);
 var haut = (window.innerHeight);
 }
-alert("Cette fenêtre fait " + larg + " de large et "+haut+" de haut");
+//alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
+//alert("Cette fenêtre fait " + larg + " de large et "+haut+" de haut");
 </script>
 
 
