@@ -40,6 +40,24 @@ function errorCallback(error){
 <?php } ?>
 </script>
 
+ <?php
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
+              $heure_debut=htmlspecialchars($_POST['heure_debut']);
+              $heure_fin=htmlspecialchars($_POST['heure_fin']);
+              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
+              {
+                $heure = date("H:i");
+                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
+                if($heure_debut <= $heure_suivante){
+                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
+                  $req2->execute(array(
+                  'idPersonne' => $idPersonne,
+                  'idCadenas' => $donnee['idCadenas'],
+                  'heure_debut' => $heure_debut,
+                  'heure_fin' => $heure_fin
+                  ));
+                }}}?>
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="author" content="E-LOCKED TEAM">
@@ -82,29 +100,35 @@ function errorCallback(error){
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>');
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>');
             
          <?php }
           else echo 'Pas de velo disponible </br>';
                            }
         $req->closecursor();
         ?>
-        
-        
-        function reserver(){
-           alert("Coucou"); } 
 
-        /** $('#rsv').click(function() {
-          // L'URL du fichier dans lequel tu appelles ta fonctio
-          var url = 'content.js';
-          $.post(url, function(data){
-         // Tu affiches le contenu dans ta div
-          $('#resa').html(data);
-           });
-            });**/
+        
 
         function setmarqueur(latitude , longitude){
-          
+<?php
+          if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
+              $heure_debut=htmlspecialchars($_POST['heure_debut']);
+              $heure_fin=htmlspecialchars($_POST['heure_fin']);
+              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
+              {
+                $heure = date("H:i");
+                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
+                if($heure_debut <= $heure_suivante){
+                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
+                  $req2->execute(array(
+                  'idPersonne' => $idPersonne,
+                  'idCadenas' => $donnee['idCadenas'],
+                  'heure_debut' => $heure_debut,
+                  'heure_fin' => $heure_fin
+                  ));
+                }}}?>
+                    
           var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
@@ -127,15 +151,20 @@ function errorCallback(error){
             shape: shape
             });
 
-    
-        var content = '<div id="bouton"><input type="button" onClick="reserver();" value="Reserver"> </div> ';
+        function resaform() {
+        document.resaform.submit();
+        }
+        var content ='<form name="resaform" action="content.php"><b>Reservation :</b><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /></td></tr><tr><td><span style="text-decoration:underline;color:blue;cursor:pointer;" onclick="resaform();">Soumettre</span></td></tr></table></form>';
+
+           
 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
             size: new google.maps.Size(100, 100),
             position: new google.maps.LatLng(latitude,longitude),
+            maxWidth: 350
                         });
-        
+       
         google.maps.event.addListener(marqueur, 'click', function(){
             infowindow.open(carte,marqueur);
             });
