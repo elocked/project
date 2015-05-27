@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mer 20 Mai 2015 à 15:19
+-- Généré le :  Mer 27 Mai 2015 à 16:46
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -49,6 +49,24 @@ INSERT INTO `cadenas` (`idCadenas`, `idProprio`, `cleNFC`) VALUES
 (10, 1, '67986'),
 (11, 1, '61286'),
 (12, 1, '65478');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `demande`
+--
+
+CREATE TABLE IF NOT EXISTS `demande` (
+  `id_demande` int(11) NOT NULL AUTO_INCREMENT,
+  `idPersonne` int(11) NOT NULL,
+  `idCadenas` int(11) NOT NULL,
+  `Heure_debut` time DEFAULT NULL,
+  `Heure_fin` time DEFAULT NULL,
+  `Date_demande` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_demande`),
+  KEY `FK_Demande_idPersonne` (`idPersonne`),
+  KEY `FK_Demande_idCadenas` (`idCadenas`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=291 ;
 
 -- --------------------------------------------------------
 
@@ -101,6 +119,22 @@ INSERT INTO `etatcadenas` (`idCadenas`, `Longitude`, `Latitude`, `Dispo`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `notif`
+--
+
+CREATE TABLE IF NOT EXISTS `notif` (
+  `id_notif` int(11) NOT NULL AUTO_INCREMENT,
+  `id_demande` int(11) NOT NULL,
+  `valide` int(2) DEFAULT NULL,
+  `vu` int(2) DEFAULT NULL,
+  `Date_notif` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_notif`),
+  KEY `FK_Notif_id_demande` (`id_demande`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `personne`
 --
 
@@ -144,39 +178,6 @@ CREATE TABLE IF NOT EXISTS `proprietaire` (
 INSERT INTO `proprietaire` (`idProprio`) VALUES
 (1);
 
-
--- -------------------------------------------------------
-
-
-CREATE TABLE IF NOT EXISTS `demande` (
-  `id_demande` int(11) NOT NULL AUTO_INCREMENT,
-  `idPersonne` int(11) NOT NULL,
-  `idCadenas`  int(11) NOT NULL,
-  `Heure_debut` time DEFAULT NULL,
-  `Heure_fin` time DEFAULT NULL,
-  `Date_demande` datetime DEFAULT NULL,
-  PRIMARY KEY (`id_demande`),
-  KEY `FK_Demande_idPersonne` (`idPersonne`),
-  KEY `FK_Demande_idCadenas` (`idCadenas`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- ------------------------------------------------------------
-
-
-CREATE TABLE IF NOT EXISTS `notif` (
-  `id_notif` int(11) NOT NULL AUTO_INCREMENT,
-  `id_demande` int(11) NOT NULL,
-  `valide`  int(2)  DEFAULT NULL,
-  `vu` int(2) DEFAULT NULL,
-  `Date_notif` datetime DEFAULT NULL,
-  PRIMARY KEY (`id_notif`),
-  KEY `FK_Notif_id_demande` (`id_demande`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
-
--- -----------------------------------------------------------------
-
-
 --
 -- Contraintes pour les tables exportées
 --
@@ -186,6 +187,13 @@ CREATE TABLE IF NOT EXISTS `notif` (
 --
 ALTER TABLE `cadenas`
   ADD CONSTRAINT `FK_Cadenas_idProprio` FOREIGN KEY (`idProprio`) REFERENCES `proprietaire` (`idProprio`);
+
+--
+-- Contraintes pour la table `demande`
+--
+ALTER TABLE `demande`
+  ADD CONSTRAINT `FK_Demande_idCadenas` FOREIGN KEY (`idCadenas`) REFERENCES `cadenas` (`idCadenas`),
+  ADD CONSTRAINT `FK_Demande_idPersonne` FOREIGN KEY (`idPersonne`) REFERENCES `personne` (`idPersonne`);
 
 --
 -- Contraintes pour la table `emprunt`
@@ -200,22 +208,16 @@ ALTER TABLE `etatcadenas`
   ADD CONSTRAINT `FK_Cadenas_idCadenas` FOREIGN KEY (`idCadenas`) REFERENCES `cadenas` (`idCadenas`);
 
 --
+-- Contraintes pour la table `notif`
+--
+ALTER TABLE `notif`
+  ADD CONSTRAINT `FK_Notif_id_demande` FOREIGN KEY (`id_demande`) REFERENCES `demande` (`id_demande`);
+
+--
 -- Contraintes pour la table `proprietaire`
 --
 ALTER TABLE `proprietaire`
   ADD CONSTRAINT `FK_Proprietaire_idProprio` FOREIGN KEY (`idProprio`) REFERENCES `personne` (`idPersonne`);
-
-
-
-
-ALTER TABLE `demande`
-  ADD CONSTRAINT `FK_Demande_idPersonne` FOREIGN KEY (`idPersonne`) REFERENCES `personne` (`idPersonne`),
-  ADD CONSTRAINT `FK_Demande_idCadenas` FOREIGN KEY (`idCadenas`) REFERENCES `cadenas` (`idCadenas`);
-
-
-
-ALTER TABLE `notif`
-  ADD CONSTRAINT `FK_Notif_id_demande` FOREIGN KEY (`id_demande`) REFERENCES `demande` (`id_demande`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
