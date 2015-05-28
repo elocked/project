@@ -101,17 +101,8 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
            setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>');
-            
-         <?php }
-          else echo 'Pas de velo disponible </br>';
-                           }
-        $req->closecursor();
-        ?>
 
-        
-
-        function setmarqueur(latitude , longitude){
-<?php
+           <?php
           if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
               $heure_debut=htmlspecialchars($_POST['heure_debut']);
               $heure_fin=htmlspecialchars($_POST['heure_fin']);
@@ -128,6 +119,17 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   'heure_fin' => $heure_fin
                   ));
                 }}}?>
+            
+         <?php }
+          else echo 'Pas de velo disponible </br>';
+                           }
+        $req->closecursor();
+        ?>
+
+        
+
+        function setmarqueur(latitude , longitude){
+
                     
           var image = {
         url: 'image/marqueur.png',
@@ -151,10 +153,8 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
             shape: shape
             });
 
-        function resaform() {
-        document.resaform.submit();
-        }
-        var content ='<form name="resaform" action="content.php"><b>Reservation :</b><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /></td></tr><tr><td><span style="text-decoration:underline;color:blue;cursor:pointer;" onclick="resaform();">Soumettre</span></td></tr></table></form>';
+        
+        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation :</b><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
            
 
