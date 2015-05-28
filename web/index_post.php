@@ -24,12 +24,13 @@ session_start();
     if(isset($mail) AND isset($mdp) AND !empty($mail) AND !empty($mdp))
     {
          
-        $req = $bdd -> query("SELECT prenom, mail, mdp FROM personne WHERE mail ='$mail'") or die('erreur');
+        $req = $bdd -> query("SELECT idPersonne, prenom, mail, mdp FROM personne WHERE mail ='$mail'") or die('erreur');
             while ($donnee = $req -> fetch())
         {
             if ($mail==$donnee['mail'] AND password_verify($mdp,$donnee['mdp']))
             {
                 $_SESSION['prenom'] = $donnee['prenom'];
+                $_SESSION['idPersonne'] = $donnee['idPersonne'];
             }
 
             elseif ($mail!=$donnee['mail'] OR password_verify($mdp,$donnee['mdp'])==false)
@@ -45,7 +46,7 @@ session_start();
     else echo 'Un des champs est vide, veuillez le remplir !';
  
         //redirection
-    header('Location: index.php');
+    header('Location: reserver.php');
     ?>
  
 </html>
