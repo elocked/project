@@ -1,8 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
-
-
 <?php 
 // récupération de la longitude et la latitude de l'utilisateur 
 if(empty($_GET['var1']) AND empty($_GET['var2'])){
@@ -33,11 +31,6 @@ function errorCallback(error){
 };
 <?php } ?>
 </script>
-
-
-
-
-
 
 
 
@@ -130,7 +123,7 @@ function errorCallback(error){
       }
       //alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
     </script>
-
+<link rel="stylesheet" href="stylecss.js" type="text/css" media="all">
 
 
 
