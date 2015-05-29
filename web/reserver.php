@@ -7,6 +7,27 @@ $idPersonne=$_SESSION['idPersonne'];
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
+<?php  
+$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+ //reservation()
+
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
+              $heure_debut=htmlspecialchars($_POST['heure_debut']);
+              $heure_fin=htmlspecialchars($_POST['heure_fin']);
+              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
+              {
+                $heure = date("H:i");
+                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
+                if($heure_debut <= $heure_suivante){
+                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
+                  $req2->execute(array(
+                  'idPersonne' => $idPersonne,
+                  'idCadenas' => $_POST['idCadenas'],
+                  'heure_debut' => $heure_debut,
+                  'heure_fin' => $heure_fin
+                  ));
+                  }           
+              }}?>
 
 
 <?php 
@@ -40,23 +61,6 @@ function errorCallback(error){
 <?php } ?>
 </script>
 
- <?php
-if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
-              $heure_debut=htmlspecialchars($_POST['heure_debut']);
-              $heure_fin=htmlspecialchars($_POST['heure_fin']);
-              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
-              {
-                $heure = date("H:i");
-                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
-                if($heure_debut <= $heure_suivante){
-                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
-                  $req2->execute(array(
-                  'idPersonne' => $idPersonne,
-                  'idCadenas' => $donnee['idCadenas'],
-                  'heure_debut' => $heure_debut,
-                  'heure_fin' => $heure_fin
-                  ));
-                }}}?>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -94,31 +98,13 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        
         $req = $bdd -> query("SELECT idCadenas,Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
-        //$K = new GoogleMapAPI();
+        $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
            setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>');
-
-           <?php
-          if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
-              $heure_debut=htmlspecialchars($_POST['heure_debut']);
-              $heure_fin=htmlspecialchars($_POST['heure_fin']);
-              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
-              {
-                $heure = date("H:i");
-                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
-                if($heure_debut <= $heure_suivante){
-                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
-                  $req2->execute(array(
-                  'idPersonne' => $idPersonne,
-                  'idCadenas' => $donnee['idCadenas'],
-                  'heure_debut' => $heure_debut,
-                  'heure_fin' => $heure_fin
-                  ));
-                }}}?>
             
          <?php }
           else echo 'Pas de velo disponible </br>';
@@ -128,7 +114,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
 
         
 
-        function setmarqueur(latitude , longitude){
+        function setmarqueur(latitude , longitude ,idCadenas){
 
                     
           var image = {
@@ -153,10 +139,9 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
             shape: shape
             });
 
-        
-        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation :</b><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
            
+        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b><?php $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
@@ -164,8 +149,11 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
             position: new google.maps.LatLng(latitude,longitude),
             maxWidth: 350
                         });
+
+         
        
         google.maps.event.addListener(marqueur, 'click', function(){
+        
             infowindow.open(carte,marqueur);
             });
 
