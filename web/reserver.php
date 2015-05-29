@@ -104,7 +104,7 @@ function errorCallback(error){
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>');
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>');
             
          <?php }
           else echo 'Pas de velo disponible </br>';
@@ -114,7 +114,7 @@ function errorCallback(error){
 
         
 
-        function setmarqueur(latitude , longitude ,idCadenas){
+        function setmarqueur(latitude , longitude ,idCadenas, distance){
 
                     
           var image = {
@@ -141,7 +141,7 @@ function errorCallback(error){
 
 
            
-        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b><?php $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
