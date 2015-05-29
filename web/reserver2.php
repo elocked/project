@@ -1,5 +1,35 @@
+﻿<?php 
+session_start();
+$_SESSION['idPersonne']=1;
+$idPersonne=$_SESSION['idPersonne'];
+?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+
+<?php  
+$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+ //reservation()
+
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
+              $heure_debut=htmlspecialchars($_POST['heure_debut']);
+              $heure_fin=htmlspecialchars($_POST['heure_fin']);
+              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
+              {
+                $heure = date("H:i");
+                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
+                if($heure_debut <= $heure_suivante){
+                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
+                  $req2->execute(array(
+                  'idPersonne' => $idPersonne,
+                  'idCadenas' => $_POST['idCadenas'],
+                  'heure_debut' => $heure_debut,
+                  'heure_fin' => $heure_fin
+                  ));
+                  }           
+              }}
+?>
+
 
 <?php 
 // récupération de la longitude et la latitude de l'utilisateur 
@@ -39,7 +69,8 @@ function errorCallback(error){
 	<meta name="keywords" content="lock, e-lock, cadnas, project">
 	<meta name="copyright" content="Tous droits reserves">
 	<meta name="subject" content="Projet E3 Cadenas Connecté">
-	<title>E-LOCKED</title>
+	<title>E-LOCKED</title>	
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet" href="stylecss.css" type="text/css" media="all">
 <link rel="stylesheet" id="toolset-font-awesome-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/font-awesome.min.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
@@ -57,6 +88,8 @@ function errorCallback(error){
     <?php include('GoogleMapAPI.class.php'); ?>
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="content.js"></script>
     <script type="text/javascript">
       function initialiser() {
         <?php
@@ -77,7 +110,6 @@ function errorCallback(error){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
         //$K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
