@@ -1,6 +1,7 @@
 
 <?php
 session_start();
+if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
 ?>
 
 <!DOCTYPE html> 
@@ -95,7 +96,11 @@ apres la ligne<br/>
 				<!--PARTIE CENTRALE A COMPLETER POUR CHAQUE FEUILLE-->
 				ICI !!! <br/>
 
-				  <form action='index_post.php' method="POST">
+				 		
+				<?php   
+						if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;}
+
+						else {?><form action='index_post.php' method="POST">
        				 <p>
        				<label>Mail : <input type="email" name="mail"/></label><br/>
         			<br/>
@@ -103,13 +108,15 @@ apres la ligne<br/>
         			<br/>
         	        <p><input type="submit" name="valider" value="Envoyer" /></p> 
              
-   				 	</form>				
-				<?php   
-						if(isset($_SESSION['prenom'])) { echo 'Bonjour '.$_SESSION['prenom'];}
+   				 	</form>		 
+							<?php echo 'Veuillez vous identifier, si ce n\'est pas déjà fait, dirigez vous sur ce lien : <a href=\formulaire.php >Inscription';}?></a><br/>
 
-						else echo 'Veuillez vous identifier, si ce n\'est pas déjà fait, dirigez vous sur ce lien : <a href=\formulaire.php >Inscription';?></a><br/>
+						
+					<form action='index_post.php' method="POST">
+					<p><input type="submit" name="deconnecter" value="Deconnecter"/><input type="hidden" name="deco" value="deco"></p>
+					</form>	
 
-					<p><input type="submit" name="deconnecter" value="Déconnecter" onclick="<?php session_destroy();?>"/></p>
+
 
 
 			</td>

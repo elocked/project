@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
 session_start();
 $_SESSION['idPersonne']=1;
 $idPersonne=$_SESSION['idPersonne'];
@@ -189,31 +189,29 @@ function errorCallback(error){
 	<div id="wpwrap">
 
 		<div id="adminmenuwrap">
-
 			<ul id="adminmenu" role="navigation">
 				<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true">
 					<div class="separator"></div></li>
 					<li class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" id="menu-posts">
-					<a href="profil.php" class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div><div class="wp-menu-name">Mon Profil</div></a>
-					<ul class="wp-submenu wp-submenu-wrap"></ul>
+						<a href="profil.php" class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" aria-haspopup="true">
+						<div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div><div class="wp-menu-name">Mon Profil</div></a>
+						<ul class="wp-submenu wp-submenu-wrap"></ul>
 					</li>
-				<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
-					<a href="velos.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-media"><br></div><div class="wp-menu-name">Mes Velos</div></a>
-					<ul class="wp-submenu wp-submenu-wrap"></ul>
-				</li>
-				<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
-					<a href="GoogleMap.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
-					<ul class="wp-submenu wp-submenu-wrap"></ul>
-				</li>
-				<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
-					<a href="#" class="wp-not-current-submenu menu-top menu-icon-comments"><div class="wp-menu-arrow"></div><div class="wp-menu-image dashicons-before dashicons-admin-comments"><br/></div><div class="wp-menu-name">Notification <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div></a>
-				</li>
+					<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
+						<a href="velos.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-media"><br></div><div class="wp-menu-name">Mes Velos</div></a>
+						<ul class="wp-submenu wp-submenu-wrap"></ul>
+					</li>
+					<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
+						<a href="GoogleMap.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
+						<ul class="wp-submenu wp-submenu-wrap"></ul>
+					</li>
+					<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
+						<a href="#" class="wp-not-current-submenu menu-top menu-icon-comments"><div class="wp-menu-arrow"></div><div class="wp-menu-image dashicons-before dashicons-admin-comments"><br/></div><div class="wp-menu-name">Notification <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div></a>
+					</li>
 				<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" id="toplevel_page_wpcf7"><a href="contact.php" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-email"><br></div><div class="wp-menu-name">Contact</div></a>
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
 				</li>
-			</ul>
-
-	
+			</ul>	
 		</div>
 <div id="wpcontent">
 			<div id="wpadminbar" class="" role="navigation">

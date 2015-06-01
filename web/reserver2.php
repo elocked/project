@@ -1,11 +1,12 @@
-<?php 
+﻿<?php 
 session_start();
 $_SESSION['idPersonne']=1;
 $idPersonne=$_SESSION['idPersonne'];
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
  //reservation()
@@ -29,6 +30,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
               }}
 ?>
 
+
 <?php 
 // récupération de la longitude et la latitude de l'utilisateur 
 if(empty($_GET['var1']) AND empty($_GET['var2'])){
@@ -41,7 +43,7 @@ else
    
 function successCallback(position){
   var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
-  top.document.location = "visionnage.php?var1="+latuser+"&var2="+lonuser; 
+  top.document.location = "reserver2.php?var1="+latuser+"&var2="+lonuser; 
 };  
  
 function errorCallback(error){
@@ -64,26 +66,22 @@ function errorCallback(error){
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="author" content="E-LOCKED TEAM">
 	<meta name="description" content="E-LOCKED PROJECT">
-	<meta name="keywords" content="lock, e-lock, cadenas, project">
+	<meta name="keywords" content="lock, e-lock, cadnas, project">
 	<meta name="copyright" content="Tous droits reserves">
 	<meta name="subject" content="Projet E3 Cadenas Connecté">
 	<title>E-LOCKED</title>	
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<link rel="stylesheet" type="text/css" href="stylecss.css">
-<link rel="stylesheet" href="http://www.hotelmoulin.com/wp-admin/load-styles.php?c=1&amp;dir=ltr&amp;load=dashicons,admin-bar,wp-admin,buttons,wp-auth-check&amp;ver=4.1.5" type="text/css" media="all">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="stylecss.css" type="text/css" media="all">
 <link rel="stylesheet" id="toolset-font-awesome-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/font-awesome.min.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
-<link rel="stylesheet" id="thickbox-css" href="http://www.hotelmoulin.com/wp-includes/js/thickbox/thickbox.css?ver=9c87c8c05733cefe4a108603b9c0994b" type="text/css" media="all">
-<link rel="stylesheet" id="wpml-tm-styles-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-translation-management/res/css/style.css?ver=378c91f4296676045fa2ab20ec5fb7bc" type="text/css" media="all">
-<link rel="stylesheet" id="wpml-tm-queue-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-translation-management/res/css/translations-queue.css?ver=378c91f4296676045fa2ab20ec5fb7bc" type="text/css" media="all">
-<link rel="stylesheet" id="installer-admin-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/inc/installer/res/css/admin.css?ver=cdc8b6532f5c06e7f8306b5e9178d8cd" type="text/css" media="all">
-<link rel="stylesheet" id="open-sans-css" href="//fonts.googleapis.com/css?ver=a21ee7abb643eea5891a2a5dde24c135" type="text/css" media="all">
 <link rel="stylesheet" id="colors-css" href="?ver=e8125d7eca939a7bde4880755f8f0229" type="text/css" media="all">
 <!--[if lte IE 7]>
-<link rel='stylesheet' id='ie-css'  href='http://www.hotelmoulin.com/wp-admin/css/ie.min.css?ver=9c87c8c05733cefe4a108603b9c0994b' type='text/css' media='all' />
+<link rel='stylesheet' id='ie-css'  href='stylecss2.css' type='text/css' media='all' />
 <![endif]-->
 <link rel="stylesheet" id="sitepress-style-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/style.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
 <link rel="stylesheet" id="translate-taxonomy-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/taxonomy-translation.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
 <link rel="stylesheet" id="wpml-sticky-links-css-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-sticky-links/res/css/management.css?ver=bbec7b9ac1c4a402d497d61991fa148c" type="text/css" media="all">
+
 
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <!-- Inclusion de l'API Google MAPS -->
@@ -91,6 +89,7 @@ function errorCallback(error){
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="content.js"></script>
     <script type="text/javascript">
       function initialiser() {
         <?php
@@ -111,12 +110,13 @@ function errorCallback(error){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        $req = $bdd -> query("SELECT idCadenas,Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
+ 
+        $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
         $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>');
+			setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>');
             
          <?php }
           else echo 'Pas de velo disponible </br>';
@@ -125,7 +125,8 @@ function errorCallback(error){
         ?>
 
         function setmarqueur(latitude , longitude ,idCadenas, distance){
-          
+
+                    
           var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
@@ -148,31 +149,34 @@ function errorCallback(error){
             shape: shape
             });
 
-		var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
-			
+        var content ='<form name="resaform" action="reserver2.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+
         var infowindow = new google.maps.InfoWindow({
             content: content,
             size: new google.maps.Size(100, 100),
-            position: new google.maps.LatLng(latitude,longitude)
-            });
-            google.maps.event.addListener(marqueur, 'click', function(){
+            position: new google.maps.LatLng(latitude,longitude),
+            maxWidth: 350
+                        });
+
+         
+       
+        google.maps.event.addListener(marqueur, 'click', function(){
+        
             infowindow.open(carte,marqueur);
             });
 
       }
 
-
+      
 
       }
+      
     </script>
 
 </head>
 
 
 <body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu" onload="initialiser()">
-	<style type="text/css"></style>
-	
-	<!-- Script de récupération de la résolution du body -->
 	<script type="text/javascript">
 	if (document.body)
 		{
@@ -191,8 +195,7 @@ function errorCallback(error){
 		<div id="adminmenuwrap">
 
 			<ul id="adminmenu" role="navigation">
-				<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true">
-					<div class="separator"></div></li>
+				<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true"><div class="separator"></div></li>
 					<li class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" id="menu-posts">
 					<a href="profil.php" class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div><div class="wp-menu-name">Mon Profil</div></a>
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
@@ -215,9 +218,18 @@ function errorCallback(error){
 
 	
 		</div>
-<div id="wpcontent">
+		<div id="wpcontent">
 			<div id="wpadminbar" class="" role="navigation">
 				<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+					<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+						<li id="wp-admin-bar-menu-toggle"><a class="ab-item" href="#" aria-expanded="false"><span class="ab-icon"></span><span class="screen-reader-text">Menu</span></a></li>
+						<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item" aria-haspopup="true" href="http://www.hotelmoulin.com/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+						<li id="wp-admin-bar-about"><a class="ab-item" href="http://www.hotelmoulin.com/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+						<li id="wp-admin-bar-wporg"><a class="ab-item" href="https://wordpress.org/">WordPress.org</a></li>
+						<li id="wp-admin-bar-documentation"><a class="ab-item" href="http://codex.wordpress.org/">Documentation</a></li>
+						<li id="wp-admin-bar-support-forums"><a class="ab-item" href="https://wordpress.org/support/">Support Forums</a>		</li>
+						<li id="wp-admin-bar-feedback"><a class="ab-item" href="https://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+					</ul>
 					<ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
 						<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" title="My Account">Bonjour, E-Lockers<img alt="" src="image/photo_pers.jpg" class="avatar avatar-26 photo" height="26" width="26"></a><div class="ab-sub-wrapper"></div></li>
 					</ul>			
@@ -227,34 +239,17 @@ function errorCallback(error){
 				<div id="wpbody-content" aria-label="Main content" tabindex="0" style="overflow: hidden;">
 					<div class="wrap">
 						<br/><h1>Titre de la page</h1>
+					</div><!-- wrap -->
+<!------------------------------------------------------------PARTIE CENTRALE POUR LES CONTENUS A MODIFIER POUR CHAQUE PAGE---------------------------------------------------------------------------->
+					<div id="carte"></div>
+<!----------------------------------------------------------FIN PARTIE CENTRALE POUR LES CONTENUS A MODIFIER POUR CHAQUE PAGE-------------------------------------------------------------------------->
+				</div><!-- wpbody-content -->
+			</div><!-- wpbody -->
+		</div><!-- wpcontent -->
 
-	<div id="dashboard-widgets-wrap">
-		 <div id="carte"></div>
-	</div><!-- dashboard-widgets-wrap -->
-
-</div><!-- wrap -->
-
-
-<div class="clear"></div></div><!-- wpbody-content -->
-<div class="clear"></div></div><!-- wpbody -->
-<div class="clear"></div></div><div id="wp-responsive-overlay" style="display: none;"></div><!-- wpcontent -->
-
-<div id="wpfooter">
-		<p id="footer-left" class="alignleft">
-			© Copyrights. ALL RIGHTS RESERVED</p>
-	<div class="clear"></div>
-</div>
-	
-<script type="text/javascript" src="http://www.hotelmoulin.com/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=thickbox,hoverIntent,common,admin-bar,jquery-form,wp-ajax-response,jquery-color,wp-lists,quicktags,jquery-query,admin-comments,j&amp;load%5B%5D=query-ui-core,jquery-ui-widget,jquery-ui-mouse,jquery-ui-sortable,postbox,dashboard,customize-base,customize-loader,plugin-insta&amp;load%5B%5D=ll,shortcode,media-upload,svg-painter,heartbeat,wp-auth-check&amp;ver=4.1.5"></script>
-<script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/wordpress-seo/js/wp-seo-admin-global.min.js?ver=450bf84a432b37ff9714ba070da35ef7"></script>
-<script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/js/icl-admin-notifier.js?ver=d0dccd3d170fb7c50a6818bab3129bbc"></script>
-
-<div class="clear"></div></div><!-- wpwrap -->
-<script type="text/javascript">if(typeof wpOnload=='function')wpOnload();</script>
-
-
-<div class="quick-draft-textarea-clone" style="display: none; font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 19.6000003814697px; padding: 6px 7px; white-space: pre-wrap; word-wrap: break-word;"></div>
-<div id="customize-container"></div>
+	</div><!-- wpwrap -->
+	<div class="quick-draft-textarea-clone" style="display: none; font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 19.6000003814697px; padding: 6px 7px; white-space: pre-wrap; word-wrap: break-word;"></div>
+	<div id="customize-container"></div>
 
 </body>
 </html>

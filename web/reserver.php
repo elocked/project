@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
 session_start();
 $_SESSION['idPersonne']=1;
 $idPersonne=$_SESSION['idPersonne'];
@@ -6,8 +6,28 @@ $idPersonne=$_SESSION['idPersonne'];
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<?php  
+$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+ //reservation()
 
-
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
+              $heure_debut=htmlspecialchars($_POST['heure_debut']);
+              $heure_fin=htmlspecialchars($_POST['heure_fin']);
+              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
+              {
+                $heure = date("H:i");
+                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
+                if($heure_debut <= $heure_suivante){
+                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
+                  $req2->execute(array(
+                  'idPersonne' => $idPersonne,
+                  'idCadenas' => $_POST['idCadenas'],
+                  'heure_debut' => $heure_debut,
+                  'heure_fin' => $heure_fin
+                  ));
+                  }           
+              }}
+?>
 
 <?php 
 // récupération de la longitude et la latitude de l'utilisateur 
@@ -40,31 +60,13 @@ function errorCallback(error){
 <?php } ?>
 </script>
 
- <?php
-if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
-              $heure_debut=htmlspecialchars($_POST['heure_debut']);
-              $heure_fin=htmlspecialchars($_POST['heure_fin']);
-              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
-              {
-                $heure = date("H:i");
-                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
-                if($heure_debut <= $heure_suivante){
-                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
-                  $req2->execute(array(
-                  'idPersonne' => $idPersonne,
-                  'idCadenas' => $donnee['idCadenas'],
-                  'heure_debut' => $heure_debut,
-                  'heure_fin' => $heure_fin
-                  ));
-                }}}?>
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="author" content="E-LOCKED TEAM">
 <meta name="description" content="E-LOCKED PROJECT">
 <meta name="keywords" content="lock, e-lock, cadnas, project">
 <meta name="copyright" content="Tous droits reserves">
-<meta name="subject" content="Projet E3 Cadenas Connect챕">
+<meta name="subject" content="Projet E3 Cadenas Connecte">
 <title>E-LOCKED</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -94,13 +96,13 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        
         $req = $bdd -> query("SELECT idCadenas,Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
-        //$K = new GoogleMapAPI();
+        $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>');
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>');
             
          <?php }
           else echo 'Pas de velo disponible </br>';
@@ -108,27 +110,8 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
         $req->closecursor();
         ?>
 
-        
-
-        function setmarqueur(latitude , longitude){
-<?php
-          if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
-              $heure_debut=htmlspecialchars($_POST['heure_debut']);
-              $heure_fin=htmlspecialchars($_POST['heure_fin']);
-              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
-              {
-                $heure = date("H:i");
-                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
-                if($heure_debut <= $heure_suivante){
-                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
-                  $req2->execute(array(
-                  'idPersonne' => $idPersonne,
-                  'idCadenas' => $donnee['idCadenas'],
-                  'heure_debut' => $heure_debut,
-                  'heure_fin' => $heure_fin
-                  ));
-                }}}?>
-                    
+        function setmarqueur(latitude , longitude ,idCadenas, distance){
+    
           var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
@@ -150,40 +133,29 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
             icon: image,
             shape: shape
             });
-
-        function resaform() {
-        document.resaform.submit();
-        }
-        var content ='<form name="resaform" action="content.php"><b>Reservation :</b><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /></td></tr><tr><td><span style="text-decoration:underline;color:blue;cursor:pointer;" onclick="resaform();">Soumettre</span></td></tr></table></form>';
-
            
+        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
             size: new google.maps.Size(100, 100),
             position: new google.maps.LatLng(latitude,longitude),
             maxWidth: 350
-                        });
-       
+        });
         google.maps.event.addListener(marqueur, 'click', function(){
+        
             infowindow.open(carte,marqueur);
             });
 
       }
-
-      
-
       }
       
     </script>
 
-
-
 </head>
 
 <body onload="initialiser()">
-<style type="text/css">
-</style>
+<style type="text/css"></style>
 
 <!-- Script de récupération de la résolution du body -->
 <script type="text/javascript">
@@ -192,7 +164,6 @@ if (document.body)
 var larg = (document.body.clientWidth);
 var haut = (document.body.clientHeight);
 }
-
 else
 {
 var larg = (window.innerWidth);
@@ -201,9 +172,6 @@ var haut = (window.innerHeight);
 //alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
 //alert("Cette fenêtre fait " + larg + " de large et "+haut+" de haut");
 </script>
-
-
-
 
 
 
@@ -234,7 +202,7 @@ var haut = (window.innerHeight);
     <tr width="100%" height="100%">     
       <!-- MODIFIER ICI !!!!!!!!!!!!!!!!!!!!!!!!!!!-->
       <td width="100%" height="100%">
-      <div id="carte" style="width:100%; height:500px"></div>
+      <div id="carte" style="width:1920px; height:1280px"></div>
       </td>
     </tr>
   </table>

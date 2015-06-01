@@ -6,10 +6,10 @@ $idPersonne=$_SESSION['idPersonne'];
 
  <?php        
          function reserver(){
-        
+            $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $req1 = $bdd -> query("SELECT idPersonne, idCadenas FROM demande WHERE idPersonne='$idPersonne'");
            while($donnee1=$req1 -> fetch()){
-            if(isset($donnee1['idCadenas']) AND $donnee1['idCadenas']==$donnee['idCadenas']){
+            if(isset($donnee1['idCadenas']) AND $donnee1['idCadenas']==$_POST['idCadenas']){
               echo 'Votre demande à bien été prise en compte';
             }
            elseif(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
@@ -24,7 +24,7 @@ $idPersonne=$_SESSION['idPersonne'];
                   $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
                   $req2->execute(array(
                   'idPersonne' => $idPersonne,
-                  'idCadenas' => $donnee['idCadenas'],
+                  'idCadenas' => $_POST['idCadenas'],
                   'heure_debut' => $heure_debut,
                   'heure_fin' => $heure_fin
                   ));
@@ -45,13 +45,14 @@ $idPersonne=$_SESSION['idPersonne'];
           <?php }
             }   }
 
-
+            //reserver();
+            //header('Location: reserver.php');
             ?>
 
 
-             <?php
+             <?php/*
              $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
+          if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
               $heure_debut=htmlspecialchars($_POST['heure_debut']);
               $heure_fin=htmlspecialchars($_POST['heure_fin']);
               if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
@@ -66,6 +67,22 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   'heure_debut' => $heure_debut,
                   'heure_fin' => $heure_fin
                   ));
-                  echo 'ok';
-                }}}?>
+                  }           
+              }
+              
+          }*/?>
             
+             function verifier(){
+        <?php
+        $req1 = $bdd -> query("SELECT idPersonne, idCadenas FROM demande WHERE idPersonne='$idPersonne'");
+           while($donnee1=$req1 -> fetch()){
+            if(isset($donnee1['idCadenas']) AND $donnee1['idCadenas']==8){?>
+              content ='Votre demande à bien été prise en compte';
+            <?php}
+            else {?>
+              
+                 <?php}
+               }?>
+
+             return content;  
+             }
