@@ -43,7 +43,7 @@ else
    
 function successCallback(position){
   var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
-  top.document.location = "GoogleMap.php?var1="+latuser+"&var2="+lonuser; 
+  top.document.location = "reserver2.php?var1="+latuser+"&var2="+lonuser; 
 };  
  
 function errorCallback(error){
@@ -110,12 +110,13 @@ function errorCallback(error){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
+ 
         $req = $bdd -> query("SELECT Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
-        //$K = new GoogleMapAPI();
+        $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>');
+			setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>');
             
          <?php }
           else echo 'Pas de velo disponible </br>';
@@ -123,8 +124,9 @@ function errorCallback(error){
         $req->closecursor();
         ?>
 
-        function setmarqueur(latitude , longitude){
-          
+        function setmarqueur(latitude , longitude ,idCadenas, distance){
+
+                    
           var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
@@ -147,20 +149,28 @@ function errorCallback(error){
             shape: shape
             });
 
+        var content ='<form name="resaform" action="reserver2.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+
         var infowindow = new google.maps.InfoWindow({
-            content: '<a href="reserver.php">reserver</a></br>',
+            content: content,
             size: new google.maps.Size(100, 100),
-            position: new google.maps.LatLng(latitude,longitude)
-            });
-            google.maps.event.addListener(marqueur, 'click', function(){
+            position: new google.maps.LatLng(latitude,longitude),
+            maxWidth: 350
+                        });
+
+         
+       
+        google.maps.event.addListener(marqueur, 'click', function(){
+        
             infowindow.open(carte,marqueur);
             });
 
       }
 
-
+      
 
       }
+      
     </script>
 
 </head>
