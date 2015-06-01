@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
 session_start();
 $_SESSION['idPersonne']=1;
 $idPersonne=$_SESSION['idPersonne'];
@@ -27,7 +27,8 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   'heure_fin' => $heure_fin
                   ));
                   }           
-              }}?>
+              }}
+?>
 
 
 <?php 
@@ -68,7 +69,7 @@ function errorCallback(error){
 <meta name="description" content="E-LOCKED PROJECT">
 <meta name="keywords" content="lock, e-lock, cadnas, project">
 <meta name="copyright" content="Tous droits reserves">
-<meta name="subject" content="Projet E3 Cadenas Connect챕">
+<meta name="subject" content="Projet E3 Cadenas Connecte">
 <title>E-LOCKED</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
