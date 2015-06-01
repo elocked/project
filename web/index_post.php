@@ -19,6 +19,7 @@ session_start();
     <?php
     $mail=htmlspecialchars($_POST['mail']);
     $mdp=htmlspecialchars($_POST['mdp']);
+    $deco=$_POST['deco'];
     
     $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
     if(isset($mail) AND isset($mdp) AND !empty($mail) AND !empty($mdp))
@@ -43,10 +44,10 @@ session_start();
          
     }
  
-    else echo 'Un des champs est vide, veuillez le remplir !';
+    if(isset($deco))session_destroy();
  
         //redirection
-    header('Location: reserver.php');
+    header('Location: index.php');
     ?>
  
 </html>
