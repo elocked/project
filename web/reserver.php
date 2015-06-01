@@ -222,7 +222,7 @@ var haut = (window.innerHeight);
     <tr width="100%" height="100%">     
       <!-- MODIFIER ICI !!!!!!!!!!!!!!!!!!!!!!!!!!!-->
       <td width="100%" height="100%">
-      <div id="carte" style="width:100%; height:500px"></div>
+      <div id="carte" style="width:1920px; height:1280px"></div>
       </td>
     </tr>
   </table>
