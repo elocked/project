@@ -41,7 +41,7 @@ else
    
 function successCallback(position){
   var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
-  top.document.location = "visionnage.php?var1="+latuser+"&var2="+lonuser; 
+  top.document.location = "onlget_notification.php?var1="+latuser+"&var2="+lonuser; 
 };  
  
 function errorCallback(error){
@@ -170,7 +170,7 @@ function errorCallback(error){
 
 
 <body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu" onload="initialiser()">
-	<style type="text/css"></style>
+
 	
 	<!-- Script de récupération de la résolution du body -->
 	<script type="text/javascript">
@@ -194,7 +194,10 @@ function errorCallback(error){
 					<div class="separator"></div></li>
 					<li class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" id="menu-posts">
 						<a href="profil.php" class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" aria-haspopup="true">
-						<div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div><div class="wp-menu-name">Mon Profil</div></a>
+						<div class="wp-menu-arrow"></div>
+						<div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div>
+						<div class="wp-menu-name">Mon Profil</div>
+						</a>
 						<ul class="wp-submenu wp-submenu-wrap"></ul>
 					</li>
 					<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
@@ -206,7 +209,17 @@ function errorCallback(error){
 						<ul class="wp-submenu wp-submenu-wrap"></ul>
 					</li>
 					<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
-						<a href="#" class="wp-not-current-submenu menu-top menu-icon-comments"><div class="wp-menu-arrow"></div><div class="wp-menu-image dashicons-before dashicons-admin-comments"><br/></div><div class="wp-menu-name">Notification <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div></a>
+						<a href="#" class="wp-not-current-submenu menu-top menu-icon-comments">
+						<div class="wp-menu-arrow"></div>
+						<div class="wp-menu-image dashicons-before dashicons-admin-comments"><br/></div>
+						<div class="wp-menu-name">Notification <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div>
+						</a>
+					
+						<ul class="wp-submenu wp-submenu-wrap">
+							<li class="wp-submenu-head">Media</li>
+							<li class="wp-first-item"><a href="upload.php" class="wp-first-item">Library</a></li>
+							<li><a href="media-new.php">Add New</a></li>
+						</ul>
 					</li>
 				<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" id="toplevel_page_wpcf7"><a href="contact.php" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-email"><br></div><div class="wp-menu-name">Contact</div></a>
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
