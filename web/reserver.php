@@ -6,7 +6,6 @@ $idPersonne=$_SESSION['idPersonne'];
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
@@ -40,7 +39,6 @@ function stars($idCadenas){
 
 ?>
 
-
 <?php 
 // récupération de la longitude et la latitude de l'utilisateur 
 if(empty($_GET['var1']) AND empty($_GET['var2'])){
@@ -71,7 +69,6 @@ function errorCallback(error){
 };
 <?php } ?>
 </script>
-
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -125,10 +122,15 @@ function errorCallback(error){
         $req->closecursor();
         ?>
 
+<<<<<<< HEAD
         
 
         function setmarqueur(latitude , longitude ,idCadenas, distance, note){
 
+=======
+        function setmarqueur(latitude , longitude ,idCadenas, distance){
+    
+>>>>>>> 8485a33e705c57ec5339385eecd61048a314fa54
           var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
@@ -150,38 +152,34 @@ function errorCallback(error){
             icon: image,
             shape: shape
             });
+<<<<<<< HEAD
 
         var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</br><img src="rating/4stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+=======
+           
+        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+>>>>>>> 8485a33e705c57ec5339385eecd61048a314fa54
 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
             size: new google.maps.Size(100, 100),
             position: new google.maps.LatLng(latitude,longitude),
             maxWidth: 350
-                        });
-
-         
-       
+        });
         google.maps.event.addListener(marqueur, 'click', function(){
         
             infowindow.open(carte,marqueur);
             });
 
       }
-
-      
-
       }
       
     </script>
 
-
-
 </head>
 
 <body onload="initialiser()">
-<style type="text/css">
-</style>
+<style type="text/css"></style>
 
 <!-- Script de récupération de la résolution du body -->
 <script type="text/javascript">
@@ -190,7 +188,6 @@ if (document.body)
 var larg = (document.body.clientWidth);
 var haut = (document.body.clientHeight);
 }
-
 else
 {
 var larg = (window.innerWidth);
@@ -199,9 +196,6 @@ var haut = (window.innerHeight);
 //alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
 //alert("Cette fenêtre fait " + larg + " de large et "+haut+" de haut");
 </script>
-
-
-
 
 
 
