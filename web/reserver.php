@@ -9,8 +9,8 @@ $idPersonne=$_SESSION['idPersonne'];
 
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
- //reservation()
 
+ //reservation()
 if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
               $heure_debut=htmlspecialchars($_POST['heure_debut']);
               $heure_fin=htmlspecialchars($_POST['heure_fin']);
@@ -28,6 +28,16 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   ));
                   }           
               }}
+
+
+
+function stars($idCadenas){
+        $req2 = $bdd -> query("SELECT note FROM personne WHERE idpersonne=(SELECT idproprio FROM cadenas WHERE idCadenas='$idCadenas')");
+        while($donnee=$req2 -> fetch()){
+        $n=$donnee['note'];}
+        return $n;}
+
+
 ?>
 
 
@@ -74,7 +84,7 @@ function errorCallback(error){
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <!-- Inclusion de l'API Google MAPS -->
-    <?php include('GoogleMapAPI.class.php'); ?>
+    <?php include('GoogleMapAPI.class.php');?>
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -99,13 +109,15 @@ function errorCallback(error){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        
+       
+
         $req = $bdd -> query("SELECT idCadenas,Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
         $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>');
+
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>');
             
          <?php }
           else echo 'Pas de velo disponible </br>';
@@ -115,9 +127,8 @@ function errorCallback(error){
 
         
 
-        function setmarqueur(latitude , longitude ,idCadenas, distance){
+        function setmarqueur(latitude , longitude ,idCadenas, distance, note){
 
-                    
           var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
@@ -140,9 +151,7 @@ function errorCallback(error){
             shape: shape
             });
 
-
-           
-        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</br><img src="rating/4stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
