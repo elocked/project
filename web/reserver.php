@@ -9,6 +9,8 @@ $idPersonne=$_SESSION['idPersonne'];
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
+include('notifications.php');
+
  //reservation()
 if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
               $heure_debut=htmlspecialchars($_POST['heure_debut']);
@@ -25,6 +27,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   'heure_debut' => $heure_debut,
                   'heure_fin' => $heure_fin
                   ));
+                  insertnotif($bdd,$idPersonne);
                   }           
               }}
 
