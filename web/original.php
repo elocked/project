@@ -25,25 +25,26 @@
 			<div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div>
 			<div class="wp-menu-name">Posts</div>
 		</a>
-		<ul class="wp-submenu wp-submenu-wrap">
-			<li class="wp-submenu-head">Posts</li>
-			<li class="wp-first-item"><a href="edit.php" class="wp-first-item">All Posts</a></li>
-			<li><a href="post-new.php">Add New</a></li>
-			<li><a href="edit-tags.php?taxonomy=category">Categories</a></li>
-			<li><a href="edit-tags.php?taxonomy=post_tag">Tags</a></li>
-		</ul>
+			<ul class="wp-submenu wp-submenu-wrap">
+				<li class="wp-submenu-head">Posts</li>
+				<li class="wp-first-item"><a href="edit.php" class="wp-first-item">All Posts</a></li>
+				<li><a href="post-new.php">Add New</a></li>
+				<li><a href="edit-tags.php?taxonomy=category">Categories</a></li>
+				<li><a href="edit-tags.php?taxonomy=post_tag">Tags</a></li>
+			</ul>
 	</li>
+	
 	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
 		<a href="upload.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" aria-haspopup="true">
 			<div class="wp-menu-arrow"></div>
 			<div class="wp-menu-image dashicons-before dashicons-admin-media"><br></div>
 			<div class="wp-menu-name">Media</div>
 		</a>
-		<ul class="wp-submenu wp-submenu-wrap">
-			<li class="wp-submenu-head">Media</li>
-			<li class="wp-first-item"><a href="upload.php" class="wp-first-item">Library</a></li>
-			<li><a href="media-new.php">Add New</a></li>
-		</ul>
+			<ul class="wp-submenu wp-submenu-wrap">
+				<li class="wp-submenu-head">Media</li>
+				<li class="wp-first-item"><a href="upload.php" class="wp-first-item">Library</a></li>
+				<li><a href="media-new.php">Add New</a></li>
+			</ul>
 	</li>
 	
 	<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
@@ -60,7 +61,14 @@
 	</li>
 	
 	<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
-	<a href="edit-comments.php" class="wp-not-current-submenu menu-top menu-icon-comments"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-comments"><br></div><div class="wp-menu-name">Comments <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div></a></li>
+		<a href="edit-comments.php" class="wp-not-current-submenu menu-top menu-icon-comments">
+			<div class="wp-menu-arrow"></div>
+			<div class="wp-menu-image dashicons-before dashicons-admin-comments"><br></div>
+			<div class="wp-menu-name">Comments <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div>
+		</a>
+		
+	</li>
+	
 	<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" id="toplevel_page_wpcf7"><a href="admin.php?page=wpcf7" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-email"><br></div><div class="wp-menu-name">Contact</div></a>
 	<ul class="wp-submenu wp-submenu-wrap"><li class="wp-submenu-head">Contact</li><li class="wp-first-item"><a href="admin.php?page=wpcf7" class="wp-first-item">Contact Forms</a></li><li><a href="admin.php?page=wpcf7-new">Add New</a></li></ul></li>
 	<li class="wp-not-current-submenu menu-top menu-icon-generic toplevel_page_my-panel" id="toplevel_page_my-panel">

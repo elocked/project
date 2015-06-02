@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 session_start();
 $_SESSION['idPersonne']=1;
 $idPersonne=$_SESSION['idPersonne'];
@@ -6,10 +6,11 @@ $idPersonne=$_SESSION['idPersonne'];
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
  //reservation()
+
 if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
               $heure_debut=htmlspecialchars($_POST['heure_debut']);
               $heure_fin=htmlspecialchars($_POST['heure_fin']);
@@ -26,20 +27,8 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   'heure_fin' => $heure_fin
                   ));
                   }           
-              }}
+              }}?>
 
-
-
-function stars($idCadenas){
-        global $bdd;
-        $req2 = $bdd -> query("SELECT note FROM personne WHERE idpersonne=(SELECT idproprio FROM cadenas WHERE idCadenas='$idCadenas')");
-        while($donnee=$req2 -> fetch()){
-        $n=$donnee['note'];}
-        return $n;
-}
-
-
-?>
 
 <?php 
 // récupération de la longitude et la latitude de l'utilisateur 
@@ -72,18 +61,19 @@ function errorCallback(error){
 <?php } ?>
 </script>
 
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="author" content="E-LOCKED TEAM">
 <meta name="description" content="E-LOCKED PROJECT">
 <meta name="keywords" content="lock, e-lock, cadnas, project">
 <meta name="copyright" content="Tous droits reserves">
-<meta name="subject" content="Projet E3 Cadenas Connecte">
+<meta name="subject" content="Projet E3 Cadenas Connect챕">
 <title>E-LOCKED</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <!-- Inclusion de l'API Google MAPS -->
-    <?php include('GoogleMapAPI.class.php');?>
+    <?php include('GoogleMapAPI.class.php'); ?>
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -108,27 +98,25 @@ function errorCallback(error){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-       
-
+        
         $req = $bdd -> query("SELECT idCadenas,Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
         $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>');
             
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>');
-          
          <?php }
           else echo 'Pas de velo disponible </br>';
                            }
         $req->closecursor();
         ?>
 
-
         
 
-        function setmarqueur(latitude , longitude ,idCadenas, distance, note){
-        //function setmarqueur(latitude , longitude ,idCadenas, distance){
+        function setmarqueur(latitude , longitude ,idCadenas, distance){
+
+                    
           var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
@@ -151,29 +139,39 @@ function errorCallback(error){
             shape: shape
             });
 
-        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
+           
+        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
             size: new google.maps.Size(100, 100),
             position: new google.maps.LatLng(latitude,longitude),
             maxWidth: 350
-        });
+                        });
+
+         
+       
         google.maps.event.addListener(marqueur, 'click', function(){
         
             infowindow.open(carte,marqueur);
             });
 
       }
+
+      
+
       }
       
     </script>
 
+
+
 </head>
 
 <body onload="initialiser()">
-<style type="text/css"></style>
+<style type="text/css">
+</style>
 
 <!-- Script de récupération de la résolution du body -->
 <script type="text/javascript">
@@ -182,6 +180,7 @@ if (document.body)
 var larg = (document.body.clientWidth);
 var haut = (document.body.clientHeight);
 }
+
 else
 {
 var larg = (window.innerWidth);
@@ -190,6 +189,9 @@ var haut = (window.innerHeight);
 //alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
 //alert("Cette fenêtre fait " + larg + " de large et "+haut+" de haut");
 </script>
+
+
+
 
 
 
