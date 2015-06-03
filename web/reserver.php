@@ -27,6 +27,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   'heure_debut' => $heure_debut,
                   'heure_fin' => $heure_fin
                   ));
+                  $req2->closecursor();
                   insertnotif($bdd,$idPersonne);
                   }           
               }}
@@ -38,6 +39,7 @@ function stars($idCadenas){
         $req2 = $bdd -> query("SELECT note FROM personne WHERE idpersonne=(SELECT idproprio FROM cadenas WHERE idCadenas='$idCadenas')");
         while($donnee=$req2 -> fetch()){
         $n=$donnee['note'];}
+        $req2->closecursor();
         return $n;
 }
 
