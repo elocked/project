@@ -1,14 +1,18 @@
-<?php
+<?php/*
 session_start();
 $_SESSION['idPersonne']=1;
-$idPersonne=$_SESSION['idPersonne'];?>
+$idPersonne=$_SESSION['idPersonne'];*/
+
+//include('reserver.php');?>
+
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <?php
-$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); 
+//$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); 
 
 //envoie du message (coté user)
 function insertnotif($bdd,$idpersonne){
@@ -36,12 +40,12 @@ $req = $bdd -> query("SELECT COUNT(n.id_notif) AS nb_notif,n.id_notif, d.idPerso
 					  		ORDER BY n.Date_notif DESC");
 		while($donnee=$req -> fetch()){
 			$personne=$donnee['idPersonne'];
-			echo 'Nb notification : '.$donnee['nb_notif'].'</br>';
+			//echo 'Nb notification : '.$donnee['nb_notif'].'</br>';
 			$req1= $bdd -> query("SELECT nom,prenom FROM personne WHERE idPersonne='$personne'");
 			while($donnee1=$req1 -> fetch()){
 				if(isset($donnee1['nom']) AND isset($donnee1['prenom'])){
 					$time = gmdate('H:i',strtotime($donnee['Heure_fin']) - strtotime($donnee['Heure_debut']));
-					echo 'Le sharelocker '.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' souhaite emprunter votre vélo pour '.$time.' h</br>';
+					//echo 'Le sharelocker '.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' souhaite emprunter votre vélo pour '.$time.' h</br>';
 					valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$time);
 					//refuse($bdd,$donnee['id_notif']);
 				}
@@ -51,7 +55,7 @@ $req = $bdd -> query("SELECT COUNT(n.id_notif) AS nb_notif,n.id_notif, d.idPerso
 		$req->closecursor();
 		$req1->closecursor();
 }
-notifproprio($bdd,$idPersonne);
+//notifproprio($bdd,$idPersonne);
 
 //$id_notif=$donnee['id_notif'] / $idCadenas=$donnee['idCadenas'] / $heure_debut=$donnee['Heure_debut'] / $heure_fin=$donnee['Heure_fin']
 function valide($bdd,$id_notif,$idCadenas,$heure_debut,$heure_fin,$time){
@@ -98,6 +102,9 @@ function notifuser($bdd,$idpersonne){
 	$req1->closecursor();
 }
 
-notifuser($bdd,$idPersonne);
+//notifuser($bdd,$idPersonne);
+
+
+
 
 ?>
