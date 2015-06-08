@@ -1,4 +1,3 @@
-
 <?php 
 //important pour utiliser des variables de SESSION
 session_start();
