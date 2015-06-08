@@ -27,7 +27,9 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
                   'heure_debut' => $heure_debut,
                   'heure_fin' => $heure_fin
                   ));
+                  $req2->closecursor();
                   insertnotif($bdd,$idPersonne);
+                  notifproprio($bdd,$idPersonne);
                   }           
               }}
 
@@ -38,6 +40,7 @@ function stars($idCadenas){
         $req2 = $bdd -> query("SELECT note FROM personne WHERE idpersonne=(SELECT idproprio FROM cadenas WHERE idCadenas='$idCadenas')");
         while($donnee=$req2 -> fetch()){
         $n=$donnee['note'];}
+        $req2->closecursor();
         return $n;
 }
 
@@ -90,7 +93,6 @@ function errorCallback(error){
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script type="text/javascript" src="content.js"></script>
     <script type="text/javascript">
       function initialiser() {
         <?php
@@ -112,36 +114,64 @@ function errorCallback(error){
 
         <?php
        
-
+        //velo de la map
         $req = $bdd -> query("SELECT idCadenas,Latitude, Longitude FROM etatcadenas WHERE Dispo=1 ");
         $K = new GoogleMapAPI();
         while($donnee=$req -> fetch()){
           if($donnee==TRUE and isset($donnee)){?>
             //création du marqueur
-            
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>');
+           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>',0);
           
          <?php }
           else echo 'Pas de velo disponible </br>';
                            }
         $req->closecursor();
-        ?>
 
+          //affiche les vélos emmprunté
+          $date=date("Y-m-d");
+          $emp = $bdd ->query("SELECT e.FinEmprunt, et.Longitude,et.Latitude FROM emprunt AS e
+                  INNER JOIN demande AS d ON e.idCadenas=d.idCadenas
+                  INNER JOIN etatcadenas AS et ON d.idCadenas=et.idCadenas
+                  WHERE d.idPersonne='$idPersonne' AND et.Dispo=0 AND d.Date_demande>'$date' ");
+          while($donnee=$emp -> fetch()){
+          if($donnee['FinEmprunt']>date("H:i:s")){?>
+            //marqueur réservé
+            setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>',0,'<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>',0,1);
+          <?php }}
+          $emp->closecursor();
+        ?>     
 
         
-
-        function setmarqueur(latitude , longitude ,idCadenas, distance, note){
-        //function setmarqueur(latitude , longitude ,idCadenas, distance){
-          var image = {
+        function setmarqueur(latitude , longitude ,idCadenas, distance, note,mode){
+        
+          if(mode==0){
+            var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
-        size: new google.maps.Size(68, 61),
+        size: new google.maps.Size(40, 37),
         // The origin for this image is 0,0.
         origin: new google.maps.Point(0,0),
         // The anchor for this image is the base of the bike at 0,32.
-        anchor: new google.maps.Point(34,61)
+        anchor: new google.maps.Point(20,37)
         };
 
+          var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+          }
+
+          else if(mode==1){
+            var image = {
+        url: 'image/marqueurr.png',
+        // This marker is 68 pixels wide by 61 pixels tall.
+        size: new google.maps.Size(40, 37),
+        // The origin for this image is 0,0.
+        origin: new google.maps.Point(0,0),
+        // The anchor for this image is the base of the bike at 0,32.
+        anchor: new google.maps.Point(20,37)
+        };
+
+        var content ='<b>Le vélo que vous avez réservé : </b>'+distance+' m';
+          }
+          
         var shape = {
         coords: [0 , 0, 68, 45],
         type: 'rect'
@@ -154,9 +184,7 @@ function errorCallback(error){
             shape: shape
             });
 
-        var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
-
-
+        
         var infowindow = new google.maps.InfoWindow({
             content: content ,
             size: new google.maps.Size(100, 100),
@@ -166,9 +194,10 @@ function errorCallback(error){
         google.maps.event.addListener(marqueur, 'click', function(){
         
             infowindow.open(carte,marqueur);
-            });
+            });        
+    }
 
-      }
+
       }
       
     </script>
