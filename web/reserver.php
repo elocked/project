@@ -148,11 +148,11 @@ function errorCallback(error){
             var image = {
         url: 'image/marqueur.png',
         // This marker is 68 pixels wide by 61 pixels tall.
-        size: new google.maps.Size(68, 61),
+        size: new google.maps.Size(40, 37),
         // The origin for this image is 0,0.
         origin: new google.maps.Point(0,0),
         // The anchor for this image is the base of the bike at 0,32.
-        anchor: new google.maps.Point(34,61)
+        anchor: new google.maps.Point(20,37)
         };
 
           var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
@@ -162,11 +162,11 @@ function errorCallback(error){
             var image = {
         url: 'image/marqueurr.png',
         // This marker is 68 pixels wide by 61 pixels tall.
-        size: new google.maps.Size(68, 61),
+        size: new google.maps.Size(40, 37),
         // The origin for this image is 0,0.
         origin: new google.maps.Point(0,0),
         // The anchor for this image is the base of the bike at 0,32.
-        anchor: new google.maps.Point(34,61)
+        anchor: new google.maps.Point(20,37)
         };
 
         var content ='<b>Le vélo que vous avez réservé : </b>'+distance+' m';
