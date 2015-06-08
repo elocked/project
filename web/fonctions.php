@@ -1,6 +1,15 @@
 <?php
+//$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
+function stars($idCadenas){
+        global $bdd;
+        $req2 = $bdd -> query("SELECT note FROM personne WHERE idpersonne=(SELECT idproprio FROM cadenas WHERE idCadenas='$idCadenas')");
+        while($donnee=$req2 -> fetch()){
+        $n=$donnee['note'];}
+        $req2->closecursor();
+        return $n;
+}
 
 function recuperernfc($bdd,$idCadenas){
 	global $bdd;
@@ -10,12 +19,9 @@ function recuperernfc($bdd,$idCadenas){
 	}
 }
 
-function achatcadenas($bdd,$idPersonne){
+function achatcadenas($bdd,$idPersonne,$cleNFC){
 	global $bdd;
-	$cleNFC=1769;
-	$verif=$bdd->query("SELECT idProprio FROM proprietaire WHERE idProprio='$idPersonne'");
-         //vérifie si la personne fait partie de la base proprio et creer le cadenas dans la bdd
-          if($verif -> fetch()){$achat=$bdd-> prepare("INSERT INTO cadenas(idProprio,cleNFC) VALUES (:idProprio,:cleNFC)");
+          if(verifProprio($bdd,$idPersonne)){$achat=$bdd-> prepare("INSERT INTO cadenas(idProprio,cleNFC) VALUES (:idProprio,:cleNFC)");
 		$achat ->execute(array('idProprio'=>$idPersonne,'cleNFC'=>$cleNFC));}
 		//sinon la rajoute et creer le cadenas
 		else {$verif=$bdd-> prepare("INSERT INTO proprietaire(idProprio) VALUES (:idPersonne)");
@@ -36,5 +42,24 @@ function rendDisponible($bdd,$idCadenas,$Latitude,$Longitude){
 	$etat= $bdd -> exec("UPDATE etatcadenas SET Longitude='$Longitude',Latitude='$Latitude', Dispo=1 WHERE idCadenas='$idCadenas'");
 
 }
+function changeEtat($bdd,$idCadenas,$Latitude,$Longitude){
+	global $bdd;
+	$etat= $bdd -> exec("UPDATE etatcadenas SET Longitude='$Longitude',Latitude='$Latitude', Dispo=CASE
+ 										WHEN Dispo=1 THEN 0
+										WHEN Dispo=0 THEN 1
+										END
+										WHERE idCadenas='$idCadenas'");
+}
+
+function verifProprio($bdd,$idPersonne){
+	global $bdd;
+	$verif=$bdd->query("SELECT idProprio FROM proprietaire WHERE idProprio='$idPersonne'");
+         //vérifie si la personne fait partie de la base proprio et creer le cadenas dans la bdd
+     if($verif -> fetch()) $p=TRUE;
+     else $p= FALSE;
+     $verif->closecursor();
+     return $p;
+}
+
 
 ?>
