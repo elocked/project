@@ -98,7 +98,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
 				</li>
 				<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
-					<a href="GoogleMap.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
+					<a href="visionnage.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
 				</li>
 				<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">

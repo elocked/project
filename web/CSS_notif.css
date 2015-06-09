@@ -1,0 +1,10 @@
+#notifications ul li{cursor:pointer}
+#notifications ul li.active{background:rgba(250,215,0,.3);border-color:#fdd700;color:#222}
+#notifications ul li:last-child,header 
+#global-search-results ul li:last-child{margin-bottom:0}header 
+#global-search-results ul li a{display:block;padding:8px;overflow:hidden;color:#555}
+#notifications ul li a.show{display:inline!important}
+#notifications ul li a:first-child{color:#444}
+#notifications ul li a:not(:first-child){font-family:ProximaNovaSB}
+#notifications ul li.no-result,header 
+#global-search-results ul li.no-result{background:0 0;border:0;color:#999;text-transform:none;text-align:center;font-family:ProximaNovaSB;font-size:18px}

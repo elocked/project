@@ -70,7 +70,6 @@ function errorCallback(error){
 	<title>E-LOCKED</title>	
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <link rel="stylesheet" type="text/css" href="stylecss.css">
-<link rel="stylesheet" href="http://www.hotelmoulin.com/wp-admin/load-styles.php?c=1&amp;dir=ltr&amp;load=dashicons,admin-bar,wp-admin,buttons,wp-auth-check&amp;ver=4.1.5" type="text/css" media="all">
 <link rel="stylesheet" id="toolset-font-awesome-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/font-awesome.min.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
 <link rel="stylesheet" id="thickbox-css" href="http://www.hotelmoulin.com/wp-includes/js/thickbox/thickbox.css?ver=9c87c8c05733cefe4a108603b9c0994b" type="text/css" media="all">
 <link rel="stylesheet" id="wpml-tm-styles-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-translation-management/res/css/style.css?ver=378c91f4296676045fa2ab20ec5fb7bc" type="text/css" media="all">
@@ -202,7 +201,7 @@ function errorCallback(error){
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
 				</li>
 				<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
-					<a href="GoogleMap.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
+					<a href="visionnage.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
 				</li>
 				<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
@@ -250,8 +249,6 @@ function errorCallback(error){
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/js/icl-admin-notifier.js?ver=d0dccd3d170fb7c50a6818bab3129bbc"></script>
 
 <div class="clear"></div></div><!-- wpwrap -->
-<script type="text/javascript">if(typeof wpOnload=='function')wpOnload();</script>
-
 
 <div class="quick-draft-textarea-clone" style="display: none; font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 19.6000003814697px; padding: 6px 7px; white-space: pre-wrap; word-wrap: break-word;"></div>
 <div id="customize-container"></div>
