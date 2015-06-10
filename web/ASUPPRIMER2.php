@@ -259,7 +259,8 @@ function errorCallback(error){
 			</div><!-- wpbody-content -->
 				<div class="clear"></div>
 		</div><!-- wpbody -->
-<div class="clear"></div></div><div id="wp-responsive-overlay" style="display: none;"></div><!-- wpcontent -->
+<div class="clear"></div></div>
+<div id="wp-responsive-overlay" style="display: none;"></div><!-- wpcontent -->
 
 <div id="wpfooter">
 		<p id="footer-left" class="alignleft">
