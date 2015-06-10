@@ -1,11 +1,11 @@
-<?php
+<?php 
 session_start();
 if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
  //reservation()
@@ -29,6 +29,37 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
               }}
 ?>
 
+<?php 
+// récupération de la longitude et la latitude de l'utilisateur 
+if(empty($_GET['var1']) AND empty($_GET['var2'])){
+?>
+<script type="text/javascript" >
+if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy : true, timeout:10000, maximumAge:600000});
+else
+  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+   
+function successCallback(position){
+  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
+  top.document.location = "index.php?var1="+latuser+"&var2="+lonuser; 
+};  
+ 
+function errorCallback(error){
+  switch(error.code){
+    case error.PERMISSION_DENIED:
+      alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+      break;      
+    case error.POSITION_UNAVAILABLE:
+      alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+      break;
+    case error.TIMEOUT:
+      alert("Le service n'a pas répondu à temps");
+      break;
+    }
+};
+<?php } ?>
+</script>
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="author" content="E-LOCKED TEAM">
@@ -39,7 +70,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
 	<title>E-LOCKED</title>	
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <link rel="stylesheet" type="text/css" href="stylecss.css">
-<link rel="stylesheet" href="loadstyle.css" type="text/css" media="all">
+<link rel="stylesheet" href="http://www.hotelmoulin.com/wp-admin/load-styles.php?c=1&amp;dir=ltr&amp;load=dashicons,admin-bar,wp-admin,buttons,wp-auth-check&amp;ver=4.1.5" type="text/css" media="all">
 <link rel="stylesheet" id="toolset-font-awesome-css" href="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/css/font-awesome.min.css?ver=d0dccd3d170fb7c50a6818bab3129bbc" type="text/css" media="all">
 <link rel="stylesheet" id="thickbox-css" href="http://www.hotelmoulin.com/wp-includes/js/thickbox/thickbox.css?ver=9c87c8c05733cefe4a108603b9c0994b" type="text/css" media="all">
 <link rel="stylesheet" id="wpml-tm-styles-css" href="http://www.hotelmoulin.com/wp-content/plugins/wpml-translation-management/res/css/style.css?ver=378c91f4296676045fa2ab20ec5fb7bc" type="text/css" media="all">
@@ -117,7 +148,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
             shape: shape
             });
 
-		var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+		var content ='<form name="resaform" action="index.php" method="POST"><b>Reservation : </b>'+distance+' m<table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
 			
         var infowindow = new google.maps.InfoWindow({
             content: content,
@@ -136,72 +167,59 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
     </script>
 
 </head>
-<!-- <script language="javascript">
-jQuery.noConflict();
-(function($) {
-	$(document).ready(function() {
-		$("a#single_image").fancybox();
-		$("a#inline").fancybox({
-			'hideOnContentClick': true
-		});	
-		$("a.group").fancybox({
-			'transitionIn'	:	'elastic',
-			'transitionOut'	:	'elastic',
-			'speedIn'		:	600, 
-			'speedOut'		:	200, 
-			'overlayShow'	:	false
-		});
-	});
-})(jQuery);
-</script> -->
 
-<body>
 
-<div id="wpwrap">
+<body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu" onload="initialiser()">
+	<style type="text/css"></style>
+	
+	<!-- Script de récupération de la résolution du body -->
+	<script type="text/javascript">
+	if (document.body)
+		{
+		var larg = (document.body.clientWidth);
+		var haut = (document.body.clientHeight);
+		}
+		else
+		{
+		var larg = (window.innerWidth);
+		var haut = (window.innerHeight);
+		}
+	</script>
+	
+	<div id="wpwrap">
 
 		<div id="adminmenuwrap">
+
 			<ul id="adminmenu" role="navigation">
 				<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true">
 					<div class="separator"></div></li>
 					<li class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" id="menu-posts">
-						<a href="profil.php" class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" aria-haspopup="true">
-						<div class="wp-menu-arrow"></div>
-						<div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div>
-						<div class="wp-menu-name">Mon Profil</div>
-						</a>
-						<ul class="wp-submenu wp-submenu-wrap"></ul>
+					<a href="profil.php" class="wp-has-submenu wp-not-current-submenu open-if-no-js menu-top menu-icon-post menu-top-first" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-post"><br></div><div class="wp-menu-name">Mon Profil</div></a>
+					<ul class="wp-submenu wp-submenu-wrap"></ul>
 					</li>
-					<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
-						<a href="velos.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-media"><br></div><div class="wp-menu-name">Mes Velos</div></a>
-						<ul class="wp-submenu wp-submenu-wrap"></ul>
-					</li>
-					<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
-						<a href="GoogleMap.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
-						<ul class="wp-submenu wp-submenu-wrap"></ul>
-					</li>
-					<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
-						<a href="#" class="wp-not-current-submenu menu-top menu-icon-comments">
-						<div class="wp-menu-arrow"></div>
-						<div class="wp-menu-image dashicons-before dashicons-admin-comments"><br/></div>
-						<div class="wp-menu-name">Notification <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div>
-						</a>
-					
-						<ul class="wp-submenu wp-submenu-wrap">
-							<li class="wp-submenu-head">Media</li>
-							<li class="wp-first-item"><a href="upload.php" class="wp-first-item">Library</a></li>
-							<li><a href="media-new.php">Add New</a></li>
-						</ul>
-					</li>
+				<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" id="menu-media">
+					<a href="velos.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-media" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-media"><br></div><div class="wp-menu-name">Mes Velos</div></a>
+					<ul class="wp-submenu wp-submenu-wrap"></ul>
+				</li>
+				<li class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" id="menu-pages">
+					<a href="visionnage.php" class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-page" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-admin-page"><br></div><div class="wp-menu-name">Louer un Velo</div></a>
+					<ul class="wp-submenu wp-submenu-wrap"></ul>
+				</li>
+				<li class="wp-not-current-submenu menu-top menu-icon-comments" id="menu-comments">
+					<a href="#" class="wp-not-current-submenu menu-top menu-icon-comments"><div class="wp-menu-arrow"></div><div class="wp-menu-image dashicons-before dashicons-admin-comments"><br/></div><div class="wp-menu-name">Notification <span class="awaiting-mod count-0"><span class="pending-count">0</span></span></div></a>
+				</li>
 				<li class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" id="toplevel_page_wpcf7"><a href="contact.php" class="wp-has-submenu wp-not-current-submenu menu-top toplevel_page_wpcf7" aria-haspopup="true"><div class="wp-menu-arrow"><div></div></div><div class="wp-menu-image dashicons-before dashicons-email"><br></div><div class="wp-menu-name">Contact</div></a>
 					<ul class="wp-submenu wp-submenu-wrap"></ul>
 				</li>
-			</ul>	
+			</ul>
+
+	
 		</div>
 <div id="wpcontent">
 			<div id="wpadminbar" class="" role="navigation">
 				<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
 					<ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
-						<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" title="My Account">Bonjour, E-Lockers<img alt="" src="image/photo_pers.jpg" class="avatar avatar-26 photo" height="26" width="26"></a><div class="ab-sub-wrapper"></div></li>
+						<li id="wp-admin-bar-my-account" class="menupop with-avatar"><a class="ab-item" aria-haspopup="true" title="My Account">Bonjour, <?php echo $prenom; ?><img alt="" src="image/photo_pers.jpg" class="avatar avatar-26 photo" height="26" width="26"></a><div class="ab-sub-wrapper"></div></li>
 					</ul>			
 				</div>
 			</div>
@@ -211,7 +229,7 @@ jQuery.noConflict();
 						<br/><h1>Titre de la page</h1>
 
 	<div id="dashboard-widgets-wrap">
-		 <?php   
+		 		 <?php   
 						if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;}
 
 						else {?><form action='index_post.php' method="POST">
@@ -228,7 +246,7 @@ jQuery.noConflict();
 						
 					<form action='index_post.php' method="POST">
 					<p><input type="submit" name="deconnecter" value="Deconnecter"/><input type="hidden" name="deco" value="deco"></p>
-					</form>	
+					</form>
 	</div><!-- dashboard-widgets-wrap -->
 
 </div><!-- wrap -->
