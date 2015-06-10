@@ -61,26 +61,17 @@ function errorCallback(error){
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <!-- Inclusion de l'API Google MAPS -->
     <?php include('GoogleMapAPI.class.php');?>
-    <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="./css/bootstrap-datetimepicker.css" rel="stylesheet" media="screen">
+   <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="./js/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js"></script>
-    <script type="text/javascript" src="./js/respond.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
     <script type="text/javascript">
     
-      $('#datetime').datetimepicker({
-       todayBtn:"true",
-        format:"yyyy-mm-dd hh:ii", 
-        autoclose:"true",
-        pickerPosition:"bottom-center",
-        startView:"year",
-        minView:"hour",
-        language:"fr"
-        });
+      
 
       function initialiser() {
         <?php
@@ -170,7 +161,7 @@ function errorCallback(error){
                // The anchor for this image is the base of the bike at 0,32.
               anchor: new google.maps.Point(20,37)
               };
-              var content ='<form class="form-horizontal col-lg-4" role="form"><div class="form-group"><label for="datetime">Date Time</label><div class="input-group"><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-time"></span></span><input class="form-control datetime" id="datetime" type="text" value="" readonly></div></div><button type="submit" class="btn btn-default">Submit</button></form>';
+             var content ='<div class="container"><form action="" class="form-horizontal"  role="form"><fieldset><div class="form-group"><label for="dtp_input1" class="col-md-2 control-label">DateTime Picking</label><div class="input-group date form_datetime col-md-10" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy MM dd - HH:ii p" data-link-field="dtp_input1"><input class="form-control" size="10" type="text" value="" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" id="dtp_input1" value="" /><br/></div></fieldset></form></div>';
              /*var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="datetime" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="datetime" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';*/
             break;
 
@@ -240,23 +231,28 @@ function errorCallback(error){
         google.maps.event.addListener(marqueur, 'click', function(){
         
             infowindow.open(carte,marqueur);
+            $('.form_datetime').datetimepicker({
+            language:  'fr',
+            weekStart: 1,
+            todayBtn:  "true",
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+                 });
             });        
+
     }
 
-
+   
+        
       }
-      
+           
     </script>
 
-  <!--<form class="form-horizontal col-lg-4" role="form"><div class="form-group">
-    <label for="datetime">Date Time</label>
-    <div class="input-group">
-      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-time"></span></span>
-      <input class="form-control datetime" id="datetime" type="text" value="" readonly>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>-->
+
+
 
 </head>
 
@@ -265,6 +261,8 @@ function errorCallback(error){
 
 <!-- Script de récupération de la résolution du body -->
 <script type="text/javascript">
+
+
 if (document.body)
 {
 var larg = (document.body.clientWidth);
