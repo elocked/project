@@ -64,6 +64,10 @@
 #wp-auth-check-wrap .wp-auth-fallback-expired{outline:0}
 #wp-auth-check-wrap .wp-auth-fallback{font-size:14px;line-height:21px;padding:0 25px;display:none}
 #wp-auth-check-wrap.fallback .wp-auth-check-close,#wp-auth-check-wrap.fallback .wp-auth-fallback{display:block}
+<<<<<<< HEAD
+#carte {
+	height:630px
+=======
 #carte {height:620px}
 
 #nav{list-style:none;margin: 0px;padding: 0px;}
@@ -145,4 +149,5 @@ border-radius: 9px;
 position: absolute;
 margin-top: 0px;
 font-size: 11px;
+>>>>>>> 7d82648a3ef0a451b9f70c76d546efa511d54ed1
 }
