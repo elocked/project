@@ -64,4 +64,6 @@
 #wp-auth-check-wrap .wp-auth-fallback-expired{outline:0}
 #wp-auth-check-wrap .wp-auth-fallback{font-size:14px;line-height:21px;padding:0 25px;display:none}
 #wp-auth-check-wrap.fallback .wp-auth-check-close,#wp-auth-check-wrap.fallback .wp-auth-fallback{display:block}
-#carte {height:620px}
+#carte {
+	height:630px
+}
