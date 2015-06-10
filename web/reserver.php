@@ -1,6 +1,6 @@
 ﻿<?php 
 session_start();
-$_SESSION['idPersonne']=1;
+$_SESSION['idPersonne']=2;
 $idPersonne=$_SESSION['idPersonne'];
 ?>
 
@@ -12,31 +12,8 @@ $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_E
 include('notifications.php');
 include('fonctions.php');
 
- //reservation()
-if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']) ){
-              $heure_debut=htmlspecialchars($_POST['heure_debut']);
-              $heure_fin=htmlspecialchars($_POST['heure_fin']);
-              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
-              {
-                $heure = date("H:i");
-                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
-                if($heure_debut <= $heure_suivante){
-                  $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
-                  $req2->execute(array(
-                  'idPersonne' => $idPersonne,
-                  'idCadenas' => $_POST['idCadenas'],
-                  'heure_debut' => $heure_debut,
-                  'heure_fin' => $heure_fin
-                  ));
-                  $req2->closecursor();
-                  insertnotif($bdd,$idPersonne);
-                  notifproprio($bdd,1);
-                  }           
-              }}
-
-
-
-
+//reservation
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']))reservation($bdd,$idPersonne);
 
 
 ?>
@@ -84,10 +61,27 @@ function errorCallback(error){
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <!-- Inclusion de l'API Google MAPS -->
     <?php include('GoogleMapAPI.class.php');?>
+    <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./css/bootstrap-datetimepicker.css" rel="stylesheet" media="screen">
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js"></script>
+    <script type="text/javascript" src="./js/respond.min.js"></script>
     <script type="text/javascript">
+    
+      $('#datetime').datetimepicker({
+       todayBtn:"true",
+        format:"yyyy-mm-dd hh:ii", 
+        autoclose:"true",
+        pickerPosition:"bottom-center",
+        startView:"year",
+        minView:"hour",
+        language:"fr"
+        });
+
       function initialiser() {
         <?php
         $latuser=htmlspecialchars($_GET['var1']);
@@ -176,8 +170,8 @@ function errorCallback(error){
                // The anchor for this image is the base of the bike at 0,32.
               anchor: new google.maps.Point(20,37)
               };
-
-              var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="time" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="time" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';
+              var content ='<form class="form-horizontal col-lg-4" role="form"><div class="form-group"><label for="datetime">Date Time</label><div class="input-group"><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-time"></span></span><input class="form-control datetime" id="datetime" type="text" value="" readonly></div></div><button type="submit" class="btn btn-default">Submit</button></form>';
+             /*var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="datetime" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="datetime" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';*/
             break;
 
             case 1:
@@ -253,6 +247,16 @@ function errorCallback(error){
       }
       
     </script>
+
+  <!--<form class="form-horizontal col-lg-4" role="form"><div class="form-group">
+    <label for="datetime">Date Time</label>
+    <div class="input-group">
+      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-time"></span></span>
+      <input class="form-control datetime" id="datetime" type="text" value="" readonly>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>-->
 
 </head>
 
