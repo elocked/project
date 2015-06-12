@@ -61,26 +61,33 @@ function errorCallback(error){
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <!-- Inclusion de l'API Google MAPS -->
     <?php include('GoogleMapAPI.class.php');?>
-    <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="./css/bootstrap-datetimepicker.css" rel="stylesheet" media="screen">
+   <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="./js/bootstrap-datetimepicker.min.js"></script>
-    <script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js"></script>
-    <script type="text/javascript" src="./js/respond.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
     <script type="text/javascript">
-    
-      $('#datetime').datetimepicker({
-       todayBtn:"true",
-        format:"yyyy-mm-dd hh:ii", 
-        autoclose:"true",
-        pickerPosition:"bottom-center",
-        startView:"year",
-        minView:"hour",
-        language:"fr"
-        });
+    //fonction date aujourd'hui, retourne : yyyy-mm-dd HH:ii
+    function today(){
+    var today = new Date();
+    var month = today.getMonth()+1;
+    var minutes = today.getMinutes();
+    var hours = today.getHours();
+    var jour = today.getDate();
+    if(month<10){month="0"+month;}
+    if(minutes<10){minutes="0"+minutes;}
+    if(jour<10){jour="0"+jour;}
+    if(hours<10){hours="0"+hours;}
+    return today.getFullYear()+"-"+month+"-"+jour+" "+hours+":"+minutes; }
+
+    function hoursone(){
+      var date = new Date();
+      var hours = date.getHours()+1;
+      if(hours<10){hours="0"+hours;}
+      return hours;}
 
       function initialiser() {
         <?php
@@ -170,7 +177,8 @@ function errorCallback(error){
                // The anchor for this image is the base of the bike at 0,32.
               anchor: new google.maps.Point(20,37)
               };
-              var content ='<form class="form-horizontal col-lg-4" role="form"><div class="form-group"><label for="datetime">Date Time</label><div class="input-group"><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-time"></span></span><input class="form-control datetime" id="datetime" type="text" value="" readonly></div></div><button type="submit" class="btn btn-default">Submit</button></form>';
+
+             var content ='<div class="container"><form action="reserver.php" class="form-horizontal"  method="POST"><fieldset><div class="form-group"><b>Reservation :</b>&nbsp;'+distance+' m<img src="rating/'+note+'stars.gif" ALIGN="right" /></div><label for="heure_debut" class="col-md-2 control-label">De : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_debut"><input class="form-control" size="10" type="text" value="" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" id="heure_debut" value="" /><br/><label for="heure_fin" class="col-md-2 control-label">A : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_fin"><input class="form-control" size="10" type="text" value="" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" id="heure_fin" value="" /><input type="hidden" name="idCadenas" value='+idCadenas+'><br/></div></fieldset></br><p style="text-align: center;"><input type="submit" class="btn btn-default" value="Réserver" /></p></form></div>';
              /*var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="datetime" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="datetime" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';*/
             break;
 
@@ -229,34 +237,40 @@ function errorCallback(error){
             icon: image,
             shape: shape
             });
-
-        
+ 
         var infowindow = new google.maps.InfoWindow({
             content: content ,
             size: new google.maps.Size(100, 100),
             position: new google.maps.LatLng(latitude,longitude),
             maxWidth: 350
         });
-        google.maps.event.addListener(marqueur, 'click', function(){
-        
-            infowindow.open(carte,marqueur);
-            });        
+        google.maps.event.addListener(marqueur, 'click', function(){   
+         if (typeof( window.infoopened ) != 'undefined') infoopened.close();
+          infowindow.open(carte,marqueur);
+          infoopened = infowindow;
+
+            var hours = hoursone();
+           $('.form_datetime').datetimepicker({
+              language: "fr",
+              pickerPosition:"bottom-left",
+              format: "yyyy-mm-dd hh:ii",
+              todayBtn: 1,
+              autoclose :1,
+              hourMax : hours
+            });
+            });
+               
+
     }
 
-
+   
+        
       }
-      
+           
     </script>
 
-  <!--<form class="form-horizontal col-lg-4" role="form"><div class="form-group">
-    <label for="datetime">Date Time</label>
-    <div class="input-group">
-      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span><span class="glyphicon glyphicon-time"></span></span>
-      <input class="form-control datetime" id="datetime" type="text" value="" readonly>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>-->
+
+
 
 </head>
 
@@ -265,6 +279,8 @@ function errorCallback(error){
 
 <!-- Script de récupération de la résolution du body -->
 <script type="text/javascript">
+
+
 if (document.body)
 {
 var larg = (document.body.clientWidth);

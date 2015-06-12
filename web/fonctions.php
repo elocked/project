@@ -98,3 +98,4 @@ function verifProprio($bdd,$idPersonne){
 
 
 ?>
+
