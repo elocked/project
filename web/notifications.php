@@ -12,7 +12,7 @@ $idPersonne=$_SESSION['idPersonne'];*/
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <?php
-//$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); 
+$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); 
 
 //envoie du message (coté user)
 function insertnotif($bdd,$idPersonne){
@@ -33,20 +33,19 @@ $req1 = $bdd ->prepare('INSERT INTO `notif`(`id_demande`, `vu`, `Date_notif`) VA
 //reception message (proprio) , $idpersonne est le proprio / COUNT(n.id-notif)
 function notifproprio($bdd,$idPersonne){
 global $bdd;
-$req = $bdd -> query("SELECT COUNT(n.id_notif) AS nb_notif,n.id_notif, d.idPersonne,d.idCadenas,d.Heure_debut,d.Heure_fin FROM notif AS n
+$req = $bdd -> query("SELECT n.id_notif, d.idPersonne,d.idCadenas,d.Heure_debut,d.Heure_fin FROM notif AS n
 					  		INNER JOIN demande AS d ON n.id_demande=d.id_demande
 					  		INNER JOIN cadenas AS c ON d.idCadenas=c.idCadenas
 					  		WHERE c.idProprio='$idPersonne' AND n.vu=0 
 					  		ORDER BY n.Date_notif DESC");
 		while($donnee=$req -> fetch()){
 			$personne=$donnee['idPersonne'];
-			//echo 'Nb notification : '.$donnee['nb_notif'].'</br>';
 			$req1= $bdd -> query("SELECT nom,prenom FROM personne WHERE idPersonne='$personne'");
 			while($donnee1=$req1 -> fetch()){
 				if(isset($donnee1['nom']) AND isset($donnee1['prenom'])){
 					$time = gmdate('H:i',strtotime($donnee['Heure_fin']) - strtotime($donnee['Heure_debut']));
 					//echo 'Le sharelocker '.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' souhaite emprunter votre vélo pour '.$time.' h</br>';
-					valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$time,$personne);
+					//valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$time,$personne);
 					//refuse($bdd,$donnee['id_notif']);
 				}
 				else echo 'Pas de notifications</br>';
@@ -56,6 +55,20 @@ $req = $bdd -> query("SELECT COUNT(n.id_notif) AS nb_notif,n.id_notif, d.idPerso
 		$req1->closecursor();
 }
 //notifproprio($bdd,$idPersonne);
+
+function nbrnotifProprio($bdd,$idPersonne){
+global $bdd;
+$req = $bdd -> query("SELECT COUNT(n.id_notif) AS nb_notif FROM notif AS n
+					  		INNER JOIN demande AS d ON n.id_demande=d.id_demande
+					  		INNER JOIN cadenas AS c ON d.idCadenas=c.idCadenas
+					  		WHERE c.idProprio='$idPersonne' AND n.vu=0 ");
+if($donnee=$req -> fetch()) $n =$donnee['nb_notif'];
+$req->closecursor();
+return $n;
+}
+//echo nbrnotifProprio($bdd,$idPersonne);
+
+
 
 //$id_notif=$donnee['id_notif'] / $idCadenas=$donnee['idCadenas'] / $heure_debut=$donnee['Heure_debut'] / $heure_fin=$donnee['Heure_fin']
 function valide($bdd,$id_notif,$idCadenas,$heure_debut,$heure_fin,$time,$personne){
@@ -93,25 +106,39 @@ function notifuser($bdd,$idPersonne){
 	$req = $bdd ->query("SELECT COUNT(id_notif) AS nb_notif FROM notif AS n 
 								INNER JOIN demande AS d ON n.id_demande=d.id_demande
 								WHERE d.idPersonne='$idPersonne' AND n.valide=0");
-	while($donnee=$req -> fetch()){
-		if($donnee['nb_notif']!=0)
+		if($donnee=$req -> fetch())
 			{echo 'Vous avez '.$donnee['nb_notif'].' demande(s) non validée(s)</br>';}
-	}
 	$req->closecursor();
 
 	$req1 = $bdd ->query("SELECT COUNT(e.idCadenas) AS nb_cadenas FROM emprunt AS e
 									INNER JOIN demande AS d ON e.idCadenas=d.idCadenas
 									INNER JOIN notif AS n ON n.id_demande=d.id_demande
 									WHERE d.idPersonne='$idPersonne' AND n.valide=1 ");
-		while($donnee=$req1 -> fetch()){
-			if($donnee['nb_cadenas']!=0){echo 'Vous avez '.$donnee['nb_cadenas'].' demande(s) validée(s)</br>';}
-		}
+		
+	if($donnee=$req1 -> fetch()){echo 'Vous avez '.$donnee['nb_cadenas'].' demande(s) validée(s)</br>';}
 	$req1->closecursor();
-}
+	}
 
 //notifuser($bdd,$idPersonne);
 
+function nbrnotifUser($bdd,$idPersonne){
+		global $bdd;
+	$req = $bdd ->query("SELECT COUNT(id_notif) AS nb_notif FROM notif AS n 
+								INNER JOIN demande AS d ON n.id_demande=d.id_demande
+								WHERE d.idPersonne='$idPersonne' AND n.valide=0");
+		if($donnee=$req -> fetch()) $n=$donnee['nb_notif'];
+	$req->closecursor();
 
+	$req1 = $bdd ->query("SELECT COUNT(e.idCadenas) AS nb_cadenas FROM emprunt AS e
+									INNER JOIN demande AS d ON e.idCadenas=d.idCadenas
+									INNER JOIN notif AS n ON n.id_demande=d.id_demande
+									WHERE d.idPersonne='$idPersonne' AND n.valide=1 ");
+		
+	if($donnee=$req1 -> fetch()) $p=$donnee['nb_cadenas'];
+	$req1->closecursor();	
+	return $n+$p;
+}
+//echo nbrnotifUser($bdd,$idPersonne);
 
 
 ?>

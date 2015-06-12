@@ -5,11 +5,11 @@ function reservation($bdd,$idPersonne){
 			global $bdd;
               $heure_debut=htmlspecialchars($_POST['heure_debut']);
               $heure_fin=htmlspecialchars($_POST['heure_fin']);
-              if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
-              {
+              //if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
+              //{
                 $heure = date("H:i");
                 $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
-                if($heure_debut <= $heure_suivante){
+                //if($heure_debut <= $heure_suivante){
                   $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
                   $req2->execute(array(
                   'idPersonne' => $idPersonne,
@@ -20,8 +20,8 @@ function reservation($bdd,$idPersonne){
                   $req2->closecursor();
                   insertnotif($bdd,$idPersonne);
                   notifproprio($bdd,1);
-                  }           
-              }
+                 // }           
+              //}
           }
 
 function stars($idCadenas){
