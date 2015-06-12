@@ -57,7 +57,6 @@ class DB_Functions {
             return false;
         }
     }
-
     /**
      * Check user is existed or not
      */
@@ -72,8 +71,17 @@ class DB_Functions {
             return false;
         }
     }
-    
-
+	function verifProprio($idPersonne){
+		$result=mysql_query("SELECT idProprio FROM proprietaire WHERE idProprio='$idPersonne'");
+		//vérifie si la personne fait partie de la base proprio et creer le cadenas dans la bdd
+     	if($result){
+			// User is a owner
+			return true;
+		} else {
+			// User is not a owner
+			return false;
+		}
+	}
 }
 
 ?>
