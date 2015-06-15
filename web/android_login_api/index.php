@@ -32,9 +32,11 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
         if ($user != false) {
             // user found
             $response["error"] = FALSE;
+			$response["user"]["uid"] = $user["idPersonne"];
             $response["user"]["firstName"] = $user["prenom"];
 			$response["user"]["lastName"] = $user["nom"];
             $response["user"]["email"] = $user["mail"];
+			$response["user"]["creditCardNumber"]= $user["numCB"];
 			$response["user"]["phoneNumber"]= $user["numtel"];
             $response["user"]["created_at"] = $user["DateCrea"];
             echo json_encode($response);
