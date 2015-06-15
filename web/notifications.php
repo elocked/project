@@ -12,7 +12,7 @@ $idPersonne=$_SESSION['idPersonne'];*/
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <?php
-$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); 
+//$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); 
 
 //envoie du message (coté user)
 function insertnotif($bdd,$idPersonne){
@@ -43,9 +43,8 @@ $req = $bdd -> query("SELECT n.id_notif, d.idPersonne,d.idCadenas,d.Heure_debut,
 			$req1= $bdd -> query("SELECT nom,prenom FROM personne WHERE idPersonne='$personne'");
 			while($donnee1=$req1 -> fetch()){
 				if(isset($donnee1['nom']) AND isset($donnee1['prenom'])){
-					$time = gmdate('H:i',strtotime($donnee['Heure_fin']) - strtotime($donnee['Heure_debut']));
-					//echo 'Le sharelocker '.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' souhaite emprunter votre vélo pour '.$time.' h</br>';
-					//valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$time,$personne);
+					echo 'Le sharelocker '.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' souhaite emprunter votre vélo pour '.tempEmprunt($donnee['Heure_debut'],$donnee['Heure_fin']).'</br>';
+					//valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$personne);
 					//refuse($bdd,$donnee['id_notif']);
 				}
 				else echo 'Pas de notifications</br>';
@@ -71,15 +70,14 @@ return $n;
 
 
 //$id_notif=$donnee['id_notif'] / $idCadenas=$donnee['idCadenas'] / $heure_debut=$donnee['Heure_debut'] / $heure_fin=$donnee['Heure_fin']
-function valide($bdd,$id_notif,$idCadenas,$heure_debut,$heure_fin,$time,$personne){
+function valide($bdd,$id_notif,$idCadenas,$heure_debut,$heure_fin,$personne){
 	global $bdd;
 	$notif = $bdd -> exec("UPDATE notif SET vu=1, valide=1 WHERE id_notif='$id_notif' ");
 	$etat= $bdd -> exec("UPDATE etatcadenas SET Dispo=0 WHERE idCadenas='$idCadenas'");
-	$emprunt= $bdd -> prepare('INSERT INTO `emprunt`(`DebutEmprunt`, `FinEmprunt`, `Duree`, `idCadenas`,`idPersonne`) VALUES (:date_debut,:date_fin,:duree,:idCadenas,:idPersonne)');
+	$emprunt= $bdd -> prepare('INSERT INTO `emprunt`(`DebutEmprunt`, `FinEmprunt`,`idCadenas`,`idPersonne`) VALUES (:date_debut,:date_fin,:idCadenas,:idPersonne)');
 		$emprunt ->execute(array(
         'date_debut' =>$heure_debut,
         'date_fin' => $heure_fin,
-        'duree' => $time,
         'idCadenas' =>$idCadenas,
         'idPersonne' =>$personne
                  ));
@@ -140,5 +138,13 @@ function nbrnotifUser($bdd,$idPersonne){
 }
 //echo nbrnotifUser($bdd,$idPersonne);
 
+function tempEmprunt($h1,$h2){
+$date1=new DateTime($h1);
+$date2=new DateTime($h2);
+$daten=$date1->diff($date2);
+return $daten->format('%a jour(s), %H heure(s) et %I minute(s) ');
+}
+//echo tempEmprunt($h1,$h2);
 
 ?>
+

@@ -97,5 +97,7 @@ function verifProprio($bdd,$idPersonne){
 }
 
 
+
+
 ?>
 
