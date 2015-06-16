@@ -1,7 +1,11 @@
 <?php 
 session_start();
-if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
+if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];
+$idPersonne = $_SESSION['idPersonne'];
+}
 ?>
+<?php include('notifications.php');?>
+<?php include('fonctions.php');?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
@@ -20,14 +24,7 @@ if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
 	<title>E-LOCKED</title>	
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="stylecss.css">
-<link rel="stylesheet" type="text/css" href="css.css">
-<link rel="stylesheet" id="toolset-font-awesome-css" type="text/css" media="all">
-<link rel="stylesheet" id="thickbox-css" type="text/css" media="all">
-<link rel="stylesheet" id="wpml-tm-styles-css" type="text/css" media="all">
-<link rel="stylesheet" id="wpml-tm-queue-css" type="text/css" media="all">
-<link rel="stylesheet" id="installer-admin-css" type="text/css" media="all">
-<link rel="stylesheet" id="open-sans-css" type="text/css" media="all">
-<link rel="stylesheet" id="colors-css"  type="text/css" media="all">
+
 <!--[if lte IE 7]>
 <link rel='stylesheet' id='ie-css'  href='http://www.hotelmoulin.com/wp-admin/css/ie.min.css?ver=9c87c8c05733cefe4a108603b9c0994b' type='text/css' media='all' />
 <![endif]-->
@@ -113,14 +110,15 @@ if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
       }
       }
     </script>
-<script type="text/javascript" src="http://www.hotelmoulin.com/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=thickbox,hoverIntent,common,admin-bar,jquery-form,wp-ajax-response,jquery-color,wp-lists,quicktags,jquery-query,admin-comments,j&amp;load%5B%5D=query-ui-core,jquery-ui-widget,jquery-ui-mouse,jquery-ui-sortable,postbox,dashboard,customize-base,customize-loader,plugin-insta&amp;load%5B%5D=ll,shortcode,media-upload,svg-painter,heartbeat,wp-auth-check&amp;ver=4.1.5"></script>
+	<script type="text/javascript" src="http://www.hotelmoulin.com/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=thickbox,hoverIntent,common,admin-bar,jquery-form,wp-ajax-response,jquery-color,wp-lists,quicktags,jquery-query,admin-comments,j&amp;load%5B%5D=query-ui-core,jquery-ui-widget,jquery-ui-mouse,jquery-ui-sortable,postbox,dashboard,customize-base,customize-loader,plugin-insta&amp;load%5B%5D=ll,shortcode,media-upload,svg-painter,heartbeat,wp-auth-check&amp;ver=4.1.5"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/wordpress-seo/js/wp-seo-admin-global.min.js?ver=450bf84a432b37ff9714ba070da35ef7"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/js/icl-admin-notifier.js?ver=d0dccd3d170fb7c50a6818bab3129bbc"></script>
 <script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/common.js"></script>
 <script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/util.js"></script>
 <script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/stats.js"></script>
 <script type="text/javascript" src="jquery.js"></script>
-
+<script src="http://s.codepen.io/assets/libs/modernizr.js" type="text/javascript"></script>
+<script type="text/javascript" src="fondation.js"></script>
 </head>
 
 
@@ -191,13 +189,12 @@ if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
 						<a class="ab-item" aria-haspopup="true" href="#">Connecte-Toi ! </a>
 							<div class="ab-sub-wrapper" style="width:350px; padding-left: 10px;">
 							<ul id="wp-admin-bar-site-name-default" class="ab-submenu">
-								<?php   
+<?php   
 									if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;
-									echo '<form action="index_post.php" method="POST">
+									echo'<form action="index_post.php" method="POST">
 									<p><input type="submit" name="deconnecter" value="Deconnecter"/>
 									<input type="hidden" name="deco" value="deco"></p>
-									</form>';
-									}
+									</form>';}
 									else {?><form action='index_post.php' method="POST">
 									<p>
 									<label>Mail : <input type="email" name="mail"style="margin-left: 56px;"/></label>
@@ -208,136 +205,27 @@ if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
 							
 									</form>		 
 									<?php echo 'si vous n\'etes pas inscrit :<a href=\formulaire.php>Inscription';}?></a>
-			
-						
-									
 							</ul>
 							</div>
 					</li>
-					
-					<li id="wp-admin-bar-wp-logo" class="menupop" style="margin-left: 31.781;"><a class="ab-item" aria-haspopup="true" href="http://www.hotelmoulin.com/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a>
-						<div class="ab-sub-wrapper">
-							<ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
-								<li id="wp-admin-bar-about">
-								<a class="ab-item" href="http://www.hotelmoulin.com/wp-admin/about.php">About WordPress</a>		
-								</li>
-							</ul>
-							<ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
-								<li id="wp-admin-bar-wporg">
-								<a class="ab-item" href="https://wordpress.org/">WordPress.org</a>
-								</li>
-								<li id="wp-admin-bar-documentation">
-								<a class="ab-item" href="http://codex.wordpress.org/">Documentation</a>		
-								</li>
-								<li id="wp-admin-bar-support-forums">
-								<a class="ab-item" href="https://wordpress.org/support/">Support Forums</a>		
-								</li>
-								<li id="wp-admin-bar-feedback">
-								<a class="ab-item" href="https://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		
-								</li>
-							</ul>
-						</div>
-					</li>
-					
 					<li id="wp-admin-bar-updates">
-
+						
 						<span class="ab-icon"></span>
 						<span href="#" id="notificationLink2">Notif★Notif★<span id="notification_count2">4</span></span>
 							<div id="notificationContainer2">
 							<div id="notificationTitle">Notif♥</div>
 							<div id="notificationsBodyBody" class="notifications">
+								<div class="contain">  
+								<ul id="notificationMenu" class="notifications">
 								<div class="contain">
-    <a href="#" class="button notificationicon on">Check Notifications</a>
-  
     <ul id="notificationMenu" class="notifications">
-      <li class="titlebar">
-        <span class="title">Notifications</span>
-        <span class="settings"><i class="icon-cog"></i>
-        </span>
-      </li>
       <div class="notifbox">
-        <li class=" notif unread">
-          <a href="#">
-            <div class="imageblock"> 
-              <img src="https://si0.twimg.com/profile_images/3186728694/7a0e012910e06dd1476c5edac8b9a28d_bigger.jpeg" class="notifimage"  />
-            </div> 
-            <div class="messageblock">
-              <div class="message">This guy <strong>Jonesy</strong> has just built a tower.
-              </div>
-              <div class="messageinfo">
-                <i class="icon-trophy"></i>2 hours ago
-              </div>
-            </div>
-          </a>
-        </li>
-        <li class=" notif unread">
-          <a href="#">
-            <div class="imageblock">
-              <img src="https://si0.twimg.com/profile_images/712543138/Self-Portrait-in-Stripes_bigger.jpg" class="notifimage"  />
-            </div> 
-            <div class="messageblock">
-              <div class="message">
-                <strong>Pete Nawara</strong> want's to drink beer with you
-              </div>
-              <div class="messageaction">
-                <a class="button tiny success">accept</a> 
-                <a class="button tiny alert">decline</a>
-              </div>
-              <div class="messageinfo">
-                <i class="icon-flag"></i>3 hour ago
-              </div>
-            </div>
-          </a>
-        </li>
-        <li class=" notif">
-          <a href="#">
-            <div class="imageblock"><img src="https://si0.twimg.com/profile_images/3312733808/5caeaec6d93114657c40fb257f933d28_bigger.jpeg" class="notifimage" />
-            </div> 
-            <div class="messageblock">
-              <div class="message"><strong>Gary LaPlante</strong> has talked some trash: "<em>Buncha bitches.</em>
-              </div>
-              <div class="messageinfo">
-                <i class="icon-comment"></i>4 hours ago
-              </div>
-            </div>
-          </a>
-        </li>
-        <li class=" notif">
-          <a href="#">
-            <div class="imageblock"><img src="https://si0.twimg.com/profile_images/378800000168755934/c05afa029d7e42c59e7cca0ea0564a86_bigger.jpeg" class="notifimage" /></div> 
-            <div class="messageblock">
-              <div class="message"><strong>Jason Nawara</strong> is probably playing <strong>Smite</strong> right now.
-              </div>
-              <div class="messageinfo"><i class="icon-trophy"></i>Yesterday</div>
-            </div>
-          </a>
-        </li>
-        <li class=" notif">
-          <a href="#">
-            <div class="imageblock"><img src="https://si0.twimg.com/sticky/default_profile_images/default_profile_2_bigger.png" class="notifimage"  />
-            </div> 
-            <div class="messageblock">
-              <div class="message"><strong>Danny DK12</strong> got a sweet fade!</div>
-              
-              <div class="messageinfo"><i class="icon-flag"></i>Yesterday</div>
-            </div>
-          </a>
-        </li>
-        <li class=" notif">
-          <a href="#">
-            <div class="imageblock"><img src="https://si0.twimg.com/profile_images/1091562021/me-small_bigger.png" class="notifimage"  /></div> 
-            <div class="messageblock">
-              <div class="message"><strong>Roidberg</strong> left you a comment: "<em>Hey buddy! Nice toenails!"</em></div>
-              <div class="messageinfo"><i class="icon-comment"></i>2 hours ago</div>
-            </div>
-          </a>
-        </li>
+	  <?php notifproprio($bdd,$idPersonne); ?>
       </div>
-      <li class="seeall">
-        <a>See All</a>
-      </li>
     </ul>
   </div>
+								</ul>
+							</div>
 							</div>
 							<div id="notificationFooterFooter"><a href="#">See All</a></div>
 							</div>
@@ -373,10 +261,10 @@ if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
 											//Document Click hiding the popup 
 										$(document).click(function()
 										{
-										$("#notificationContainer").hide();
+										$("#notificationContainer2").hide();
 										});
 												//Popup on click
-										$("#notificationContainer").click(function()
+										$("#notificationContainer2").click(function()
 										{
 										return false;
 										});
@@ -395,7 +283,7 @@ if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];}
 -->
 					<br/><h1>Titre de la page</h1>
 					<div id="dashboard-widgets-wrap">
-						<h1>Hello World !</h1>
+						Hello World !
 					</div><!-- dashboard-widgets-wrap -->
 				</div><!-- wrap -->
 				<div class="clear"></div>
