@@ -13,7 +13,7 @@ include('notifications.php');
 include('fonctions.php');
 
 //reservation
-if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin']))echo $_POST['heure_debut'];//reservation($bdd,$idPersonne);
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd,$idPersonne);
 
 
 
@@ -106,41 +106,45 @@ function errorCallback(error){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        /////////////////////////////////////////////////////////////////////////
-        //velo de la map
-        /////////////////////////////////////////////////////////////////////////
-        $req = $bdd -> query("SELECT et.idCadenas,et.Latitude, et.Longitude FROM etatcadenas AS et 
-                                      INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas
-                                      WHERE c.idProprio!='$idPersonne' AND Dispo=1 ");
+        
         $K = new GoogleMapAPI();
-        while($donnee=$req -> fetch()){
-          if($donnee==TRUE and isset($donnee)){?>
-            //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>',0);
-              
-         <?php }
-          else echo 'Pas de velo disponible </br>';  }
-        $req->closecursor();
-
+        
           //////////////////////////////////////////////////////////////////////
           //affiche les vélos emmpruntés
           /////////////////////////////////////////////////////////////////////
-          $date=date("Y-m-d");
+          if(verifEmprunt($bdd,$idPersonne,date("Y-m-d H:i:s"))){
           $emp = $bdd ->query("SELECT e.FinEmprunt, et.Longitude,et.Latitude FROM emprunt AS e
-                  INNER JOIN demande AS d ON e.idCadenas=d.idCadenas
-                  INNER JOIN etatcadenas AS et ON d.idCadenas=et.idCadenas
-                  WHERE d.idPersonne='$idPersonne' AND et.Dispo=0 AND d.Date_demande>'$date' ");
+                  INNER JOIN etatcadenas AS et ON e.idCadenas=et.idCadenas
+                  WHERE e.idPersonne='$idPersonne' AND et.Dispo=0");
           while($donnee=$emp -> fetch()){
-          if($donnee['FinEmprunt']>date("H:i:s")){?>
+          if($donnee['FinEmprunt']>date("Y-m-d H:i:s")){?>
             //marqueur réservé
             setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>',0,'<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>',0,1);
 
           <?php }}
-          $emp->closecursor();
+          $emp->closecursor();}
 
-        //////////////////////////////////////////////////////////////////////////
-        //affiche les vélos du propriétaire
-        /////////////////////////////////////////////////////////////////////////
+          else{
+          /////////////////////////////////////////////////////////////////////////
+          //velo de la map
+          ////////////////////////////////////////////////////////////////////////
+                $req = $bdd -> query("SELECT et.idCadenas,et.Latitude, et.Longitude FROM etatcadenas AS et 
+                                      INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas
+                                      WHERE c.idProprio!='$idPersonne' AND Dispo=1 ");
+                while($donnee=$req -> fetch()){
+               if($donnee==TRUE and isset($donnee)){?>
+               //création du marqueur
+                setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>',0);
+              
+              <?php }
+               else echo 'Pas de velo disponible </br>';  }
+              $req->closecursor();
+
+           }
+
+          //////////////////////////////////////////////////////////////////////////
+          //affiche les vélos du propriétaire
+          /////////////////////////////////////////////////////////////////////////
         if(verifProprio($bdd,$idPersonne)){
          $vp = $bdd ->query("SELECT et.Dispo, et.idCadenas, et.Latitude, et.Longitude FROM etatcadenas AS et 
                                       INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas
@@ -176,7 +180,7 @@ function errorCallback(error){
               anchor: new google.maps.Point(20,37)
               };
 
-             var content ='<form  action="reserver.php" class="form-horizontal"  method="POST"><div class="container"><fieldset><div class="form-group"><b>Reservation :</b>&nbsp;'+distance+' m<img src="rating/'+note+'stars.gif" ALIGN="right" /></div><label for="heure_debut" class="col-md-2 control-label">De : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_debut" id="heure_debut" value=""><input class="form-control" size="10" type="text" value='+today()+' ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><br/><label for="heure_fin" class="col-md-2 control-label">Au : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_fin" id="heure_fin" value =""><input class="form-control" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" name="idCadenas" value='+idCadenas+'><br/></div></fieldset></br><p style="text-align: center;"><input type="submit" class="btn btn-default" value="Réserver" /></p></form></div>';
+             var content ='<form  action="reserver.php" class="form-horizontal"  method="POST"><div class="container"><fieldset><div class="form-group"><b>Reservation :</b>&nbsp;'+distance+' m<img src="rating/'+note+'stars.gif" ALIGN="right" /></div><label for="heure_debut" class="col-md-2 control-label">De : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_debut" id="heure_debut" value=""><input class="form-control" name="heure_debut" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><br/></br><label for="heure_fin" class="col-md-2 control-label">Au : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_fin" id="heure_fin" value =""><input class="form-control" name="heure_fin" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" name="idCadenas" value='+idCadenas+'><br/></div></fieldset></br><p style="text-align: center;"><input type="submit" class="btn btn-default" value="Réserver" /></p></form></div>';
              /*var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="datetime" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="datetime" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';*/
             break;
 

@@ -74,11 +74,36 @@ class DB_Functions {
 	function verifProprio($idPersonne){
 		$result=mysql_query("SELECT idProprio FROM proprietaire WHERE idProprio='$idPersonne'");
 		//vérifie si la personne fait partie de la base proprio et creer le cadenas dans la bdd
-     	if($result){
+     	if(mysql_fetch_object($result)){
 			// User is a owner
 			return true;
 		} else {
 			// User is not a owner
+			return false;
+		}
+	}
+	function changeState($idCadenas){
+		$dispo=mysql_query("SELECT Dispo FROM etatcadenas WHERE idCadenas='$idCadenas'");
+		$row = mysql_fetch_array($dispo) ;
+		if($row){
+			if($row['Dispo']=='1'){
+				$result = mysql_query("UPDATE etatcadenas SET Dispo = '0' WHERE idCadenas = '$idCadenas'");
+				if($result){
+					return true;
+				} else {
+					return false;
+				}
+			}
+			else {
+				$result = mysql_query("UPDATE etatcadenas SET Dispo = '1' WHERE idCadenas = '$idCadenas'");
+				if($result){
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+		else {
 			return false;
 		}
 	}
