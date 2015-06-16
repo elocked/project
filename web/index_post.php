@@ -61,7 +61,7 @@ session_start();
     if(isset($deco))session_destroy();
  
     //Charge la page index.php
-    header('Location: index.php');
+    header('Location: visionnage.php');
     ?>
  
 </html>

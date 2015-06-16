@@ -56,15 +56,10 @@ function errorCallback(error){
 	<meta name="copyright" content="Tous droits reserves">
 	<meta name="subject" content="Projet E3 Cadenas Connecté">
 	<title>E-LOCKED</title>	
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<link rel="stylesheet" type="text/css" href="stylecss.css">
-<link rel="stylesheet" id="toolset-font-awesome-css" type="text/css" media="all">
-<link rel="stylesheet" id="thickbox-css" type="text/css" media="all">
-<link rel="stylesheet" id="wpml-tm-styles-css" type="text/css" media="all">
-<link rel="stylesheet" id="wpml-tm-queue-css" type="text/css" media="all">
-<link rel="stylesheet" id="installer-admin-css" type="text/css" media="all">
-<link rel="stylesheet" id="open-sans-css" type="text/css" media="all">
-<link rel="stylesheet" id="colors-css"  type="text/css" media="all">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+<link href="stylecss.css" rel="stylesheet" media="all" >
+
 <!--[if lte IE 7]>
 <link rel='stylesheet' id='ie-css'  href='http://www.hotelmoulin.com/wp-admin/css/ie.min.css?ver=9c87c8c05733cefe4a108603b9c0994b' type='text/css' media='all' />
 <![endif]-->
@@ -72,11 +67,10 @@ function errorCallback(error){
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <!-- Inclusion de l'API Google MAPS -->
     <?php include('GoogleMapAPI.class.php'); ?>
-	<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-    <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
+	    <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
+    <?php '<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">'?>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="./js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
@@ -440,7 +434,6 @@ function errorCallback(error){
 				<div class="wrap">
 						</br>
 							<ul id="nav">
-							<script type="text/javascript" src="jquery.js"></script>
 									<script type="text/javascript">
 										$(document).ready(function()
 										{

@@ -171,13 +171,13 @@ function errorCallback(error){
           switch(mode){
             case 0:
               var image = {
-              url: 'image/marqueur.png',
-              // This marker is 68 pixels wide by 61 pixels tall.
-              size: new google.maps.Size(40, 37),
-               // The origin for this image is 0,0.
+              url: 'image/holyblue.png',
+               // This marker is 68 pixels wide by 61 pixels tall.
+              size: new google.maps.Size(37, 40),
+              // The origin for this image is 0,0.
               origin: new google.maps.Point(0,0),
-               // The anchor for this image is the base of the bike at 0,32.
-              anchor: new google.maps.Point(20,37)
+              // The anchor for this image is the base of the bike at 0,32.
+              anchor: new google.maps.Point(18.5,40)
               };
 
              var content ='<form  action="reserver.php" class="form-horizontal"  method="POST"><div class="container"><fieldset><div class="form-group"><b>Reservation :</b>&nbsp;'+distance+' m<img src="rating/'+note+'stars.gif" ALIGN="right" /></div><label for="heure_debut" class="col-md-2 control-label">De : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_debut" id="heure_debut" value=""><input class="form-control" name="heure_debut" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><br/></br><label for="heure_fin" class="col-md-2 control-label">Au : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_fin" id="heure_fin" value =""><input class="form-control" name="heure_fin" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" name="idCadenas" value='+idCadenas+'><br/></div></fieldset></br><p style="text-align: center;"><input type="submit" class="btn btn-default" value="Réserver" /></p></form></div>';
@@ -186,13 +186,13 @@ function errorCallback(error){
 
             case 1:
              var image = {
-              url: 'image/marqueurr.png',
+              url: 'image/tarlouz.png',
               // This marker is 68 pixels wide by 61 pixels tall.
-              size: new google.maps.Size(40, 37),
+              size: new google.maps.Size(37, 40),
               // The origin for this image is 0,0.
               origin: new google.maps.Point(0,0),
               // The anchor for this image is the base of the bike at 0,32.
-              anchor: new google.maps.Point(20,37)
+              anchor: new google.maps.Point(18.5,40)
               };
 
              var content ='<b>Le vélo que vous avez réservé : </b>'+distance+' m';
@@ -200,27 +200,28 @@ function errorCallback(error){
 
             case 2:
             var image = {
-              url: 'image/marqueurg.png',
-              // This marker is 68 pixels wide by 61 pixels tall.
-              size: new google.maps.Size(40, 37),
+              url: 'image/lagreen.png',
+               // This marker is 68 pixels wide by 61 pixels tall.
+              size: new google.maps.Size(37, 40),
               // The origin for this image is 0,0.
               origin: new google.maps.Point(0,0),
               // The anchor for this image is the base of the bike at 0,32.
-              anchor: new google.maps.Point(20,37)
+              anchor: new google.maps.Point(18.5,40)
               };
+
 
               var content ='<b>Votre vélo : </b>'+distance+' m';
             break;
 
             case 3:
             var image = {
-              url: 'image/marqueurg.png',
-              // This marker is 68 pixels wide by 61 pixels tall.
-              size: new google.maps.Size(40, 37),
+              url: 'image/lagreen.png',
+               // This marker is 68 pixels wide by 61 pixels tall.
+              size: new google.maps.Size(37, 40),
               // The origin for this image is 0,0.
               origin: new google.maps.Point(0,0),
               // The anchor for this image is the base of the bike at 0,32.
-              anchor: new google.maps.Point(20,37)
+              anchor: new google.maps.Point(18.5,40)
               };
 
               var content ='<b>Ce vélo est acctuellement réservé </b>';
@@ -229,7 +230,7 @@ function errorCallback(error){
           }
           
         var shape = {
-        coords: [0 , 0, 40, 37],
+        coords: [0 , 0, 37, 40],
         type: 'rect'
         };
         
