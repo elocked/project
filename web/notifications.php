@@ -46,7 +46,7 @@ $req = $bdd -> query("SELECT n.id_notif, d.idPersonne,d.idCadenas,d.Heure_debut,
 				if(isset($donnee1['nom']) AND isset($donnee1['prenom'])){
 					echo 'Le sharelocker '.'<b>'.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' </b>souhaite emprunter votre vélo pour '.tempEmprunt($donnee['Heure_debut'],$donnee['Heure_fin']).'</br>';
 					echo '_______________________________________________________________________________________________________';
-					//valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$personne);
+					valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$personne);
 					//refuse($bdd,$donnee['id_notif']);
 				}
 				else echo 'Pas de notifications</br>';
