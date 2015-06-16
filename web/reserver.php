@@ -106,41 +106,45 @@ function errorCallback(error){
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        /////////////////////////////////////////////////////////////////////////
-        //velo de la map
-        /////////////////////////////////////////////////////////////////////////
-        $req = $bdd -> query("SELECT et.idCadenas,et.Latitude, et.Longitude FROM etatcadenas AS et 
-                                      INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas
-                                      WHERE c.idProprio!='$idPersonne' AND Dispo=1 ");
+        
         $K = new GoogleMapAPI();
-        while($donnee=$req -> fetch()){
-          if($donnee==TRUE and isset($donnee)){?>
-            //création du marqueur
-           setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>',0);
-              
-         <?php }
-          else echo 'Pas de velo disponible </br>';  }
-        $req->closecursor();
-
+        
           //////////////////////////////////////////////////////////////////////
           //affiche les vélos emmpruntés
           /////////////////////////////////////////////////////////////////////
-          $date=date("Y-m-d");
+          if(verifEmprunt($bdd,$idPersonne,date("Y-m-d H:i:s"))){
           $emp = $bdd ->query("SELECT e.FinEmprunt, et.Longitude,et.Latitude FROM emprunt AS e
-                  INNER JOIN demande AS d ON e.idCadenas=d.idCadenas
-                  INNER JOIN etatcadenas AS et ON d.idCadenas=et.idCadenas
-                  WHERE d.idPersonne='$idPersonne' AND et.Dispo=0 AND d.Date_demande>'$date' ");
+                  INNER JOIN etatcadenas AS et ON e.idCadenas=et.idCadenas
+                  WHERE e.idPersonne='$idPersonne' AND et.Dispo=0");
           while($donnee=$emp -> fetch()){
-          if($donnee['FinEmprunt']>date("H:i:s")){?>
+          if($donnee['FinEmprunt']>date("Y-m-d H:i:s")){?>
             //marqueur réservé
             setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>',0,'<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>',0,1);
 
           <?php }}
-          $emp->closecursor();
+          $emp->closecursor();}
 
-        //////////////////////////////////////////////////////////////////////////
-        //affiche les vélos du propriétaire
-        /////////////////////////////////////////////////////////////////////////
+          else{
+          /////////////////////////////////////////////////////////////////////////
+          //velo de la map
+          ////////////////////////////////////////////////////////////////////////
+                $req = $bdd -> query("SELECT et.idCadenas,et.Latitude, et.Longitude FROM etatcadenas AS et 
+                                      INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas
+                                      WHERE c.idProprio!='$idPersonne' AND Dispo=1 ");
+                while($donnee=$req -> fetch()){
+               if($donnee==TRUE and isset($donnee)){?>
+               //création du marqueur
+                setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>',0);
+              
+              <?php }
+               else echo 'Pas de velo disponible </br>';  }
+              $req->closecursor();
+
+           }
+
+          //////////////////////////////////////////////////////////////////////////
+          //affiche les vélos du propriétaire
+          /////////////////////////////////////////////////////////////////////////
         if(verifProprio($bdd,$idPersonne)){
          $vp = $bdd ->query("SELECT et.Dispo, et.idCadenas, et.Latitude, et.Longitude FROM etatcadenas AS et 
                                       INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas

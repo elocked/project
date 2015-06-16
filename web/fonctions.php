@@ -7,8 +7,8 @@ function reservation($bdd,$idPersonne){
               $heure_fin=htmlspecialchars($_POST['heure_fin']);
               //if(preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_debut) AND preg_match('#^[0-9]{2}\:[0-9]{2}$#', $heure_fin))
               //{
-                $heure = date("H:i");
-                $heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
+                //$heure = date("H:i");
+                //$heure_suivante=date("H:i", strtotime($heure." + 1 hours"));
                 //if($heure_debut <= $heure_suivante){
                   $req2 = $bdd ->prepare('INSERT INTO `demande`(`idPersonne`, `idCadenas`, `Heure_debut`, `Heure_fin`, `Date_demande`) VALUES (:idPersonne, :idCadenas, :heure_debut, :heure_fin ,NOW())');
                   $req2->execute(array(
@@ -47,7 +47,7 @@ function deverouillage($bdd,$idPersonne){
 								INNER JOIN demande AS d ON e.idCadenas=d.idCadenas
 								WHERE d.idPersonne='$idPersonne'");
 	while($donnee=$dev -> fetch()){
-		if($donnee['DebutEmprunt']<=date("H:i:s") AND $donnee['FinEmprunt']>=date("H:i:s")){
+		if($donnee['DebutEmprunt']<=date("Y-m-d H:i:s") AND $donnee['FinEmprunt']>=date("Y-m-d H:i:s")){
 			recuperernfc($bdd,$donnee['idCadenas']);}
 	}
 }
@@ -97,6 +97,12 @@ function verifProprio($bdd,$idPersonne){
 }
 
 
+function verifEmprunt($bdd,$idPersonne,$date){
+global $bdd;
+$req=$bdd ->query("SELECT idEmprunt FROM emprunt WHERE idPersonne='$idPersonne' AND FinEmprunt>'$date'");
+if($req->fetch()) return true;
+else return false;
+}
 
 
 ?>
