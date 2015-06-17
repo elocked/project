@@ -107,6 +107,35 @@ class DB_Functions {
 			return false;
 		}
 	}
+	function locToCome($uid){
+		$date = date("Y-m-d H:i:s");
+		$query = mysql_query("SELECT *FROM emprunt WHERE idPersonne='$uid' AND DebutEmprunt > '$date'");
+		if(mysql_fetch_array($query)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	function locPast($uid){
+		$date = date("Y-m-d H:i:s");
+		$query = mysql_query("SELECT *FROM emprunt WHERE idPersonne='$uid' AND FinEmprunt < '$date'");
+		if(mysql_fetch_array($query)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	function loc($uid){
+		$date = date("Y-m-d H:i:s");
+		$query = mysql_query("SELECT *FROM emprunt WHERE idPersonne='$uid' AND DebutEmprunt < '$date' AND FinEmprunt > '$date'");
+		if(mysql_fetch_array($query)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }
-
 ?>

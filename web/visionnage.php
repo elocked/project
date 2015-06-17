@@ -9,8 +9,12 @@ $idPersonne = $_SESSION['idPersonne'];
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
 include('notifications.php');
 include('fonctions.php');
+
+//reservation
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd,$idPersonne);
 ?>
 
 <?php 
@@ -52,7 +56,9 @@ function errorCallback(error){
 	<meta name="copyright" content="Tous droits reserves">
 	<meta name="subject" content="Projet E3 Cadenas Connecté">
 	<title>E-LOCKED</title>	
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
 <link href="stylecss.css" rel="stylesheet" media="all" >
 
 <!--[if lte IE 7]>
@@ -60,10 +66,12 @@ function errorCallback(error){
 <![endif]-->
 
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
 	<script type="text/javascript">
 		/* <![CDATA[ */
 		var thickboxL10n = {"next":"Next >","prev":"< Prev","image":"Image","of":"of","close":"Close","noiframes":"This feature requires inline frames. You have iframes disabled or your browser does not support them.","loadingAnimation":"http:\/\/www.hotelmoulin.com\/wp-includes\/js\/thickbox\/loadingAnimation.gif"};var commonL10n = {"warnDelete":"You are about to permanently delete the selected items.\n  'Cancel' to stop, 'OK' to delete."};var wpAjax = {"noPerm":"You do not have permission to do that.","broken":"An unidentified error has occurred."};var quicktagsL10n = {"closeAllOpenTags":"Close all open tags","closeTags":"close tags","enterURL":"Enter the URL","enterImageURL":"Enter the URL of the image","enterImageDescription":"Enter a description of the image","fullscreen":"fullscreen","toggleFullscreen":"Toggle fullscreen mode","textdirection":"text direction","toggleTextdirection":"Toggle Editor Text Direction","dfw":"Distraction-free writing mode"};var adminCommentsL10n = {"hotkeys_highlight_first":"","hotkeys_highlight_last":"","replyApprove":"Approve and Reply","reply":"Reply"};var _wpCustomizeLoaderSettings = {"url":"http:\/\/www.hotelmoulin.com\/wp-admin\/customize.php","isCrossDomain":false,"browser":{"mobile":false,"ios":false},"l10n":{"saveAlert":"The changes you made will be lost if you navigate away from this page."}};var plugininstallL10n = {"plugin_information":"Plugin Information:","ays":"Are you sure you want to install this plugin?"};var heartbeatSettings = {"nonce":"5a711e7353"};var authcheckL10n = {"beforeunload":"Your session has expired. You can log in again from this page or go to the login page.","interval":"180"};/* ]]> */
 	</script>
+    
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=thickbox,hoverIntent,common,admin-bar,jquery-form,wp-ajax-response,jquery-color,wp-lists,quicktags,jquery-query,admin-comments,j&amp;load%5B%5D=query-ui-core,jquery-ui-widget,jquery-ui-mouse,jquery-ui-sortable,postbox,dashboard,customize-base,customize-loader,plugin-insta&amp;load%5B%5D=ll,shortcode,media-upload,svg-painter,heartbeat,wp-auth-check&amp;ver=4.1.5"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/wordpress-seo/js/wp-seo-admin-global.min.js?ver=450bf84a432b37ff9714ba070da35ef7"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/js/icl-admin-notifier.js?ver=d0dccd3d170fb7c50a6818bab3129bbc"></script>
@@ -74,7 +82,7 @@ function errorCallback(error){
 </head>
 
 
-<body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu" onload="initialiser()">
+<body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu">
 <div id="wpwrap">
 	<div id="adminmenuback"></div>
 		<div id="adminmenuwrap">
@@ -227,7 +235,7 @@ function errorCallback(error){
 							</ul>
 -->
 					<div id="dashboard-widgets-wrap">
-						</br> <?php include('head.php') ?> 
+						</br> <?php include('carte.php') ?> 
 					</div><!-- dashboard-widgets-wrap -->
 				</div><!-- wrap -->
 				<div class="clear"></div>

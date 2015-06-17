@@ -119,7 +119,7 @@ $idPersonne = $_SESSION['idPersonne'];
 </head>
 
 
-<body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu" onload="initialiser()">
+<body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu">
 <div id="wpwrap">
 	<div id="adminmenuback"></div>
 		<div id="adminmenuwrap">
@@ -281,6 +281,7 @@ $idPersonne = $_SESSION['idPersonne'];
 					<br/><h1>Titre de la page</h1>
 					<div id="dashboard-widgets-wrap">
 						Hello World !
+						<?php include('carte.php') ?> 
 					</div><!-- dashboard-widgets-wrap -->
 				</div><!-- wrap -->
 				<div class="clear"></div>
