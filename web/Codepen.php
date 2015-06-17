@@ -146,56 +146,25 @@ $idPersonne = $_SESSION['idPersonne'];
 							<div id="notificationTitle">Notif♥</div>
 							<div id="notificationsBodyBody" class="notifications">
 								<div class="contain">  
-								<ul id="notificationMenu" class="notifications">
-								<div class="contain">
-								<ul id="notificationMenu" class="notifications">
-								<div class="notifbox">
-								<?php notifproprio($bdd,$idPersonne); ?>
+									<ul id="notificationMenu" class="notifications">
+										<div class="contain">
+											<ul id="notificationMenu" class="notifications">
+												<div class="notifbox">
+													<?php notifproprio($bdd,$idPersonne); ?>
+												</div>
+											</ul>
+										</div>
+									</ul>
 								</div>
-								</ul>
-								</div>
-								</ul>
-							</div>
 							</div>
 							<div id="notificationFooterFooter"><a href="#">See All</a></div>
 							</div>
 
-					</li>
-					<li id="wp-admin-bar-site-name">
-						<span class="ab-item"></span>
-						<span href="#" id="Connex">Connexion</span>
-							<div id="ConnexContainer">
-								<div id="notificationTitle">Connecte-Toi</div>
-								<div id="notificationsBodyBody" class="notifications">
-									<div class="contain">  
-										<?php   
-									if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;
-									echo'<form action="index_post.php" method="POST">
-									<p><input type="submit" name="deconnecter" value="Deconnecter"/>
-									<input type="hidden" name="deco" value="deco"></p>
-									</form>';}
-									else {?><form action='index_post.php' method="POST">
-									<p>
-									<label>Mail : <input type="email" name="mail"style="margin-left: 56px;"/></label>
-									<br/>
-									<label>Mot de passe : <input type="password" name="mdp" /></label>
-									<br/>
-									<p><input type="submit" name="valider" value="Envoyer" /></p> 
-							
-									</form>		 
-									<?php echo 'si vous n\'etes pas inscrit :<a href=\formulaire.php>Inscription';}?></a>
-									</div>
-								</div>
-								<div id="notificationFooterFooter"><a href="#">See All</a></div>
-							</div>
-
-					</li>
-					
+					</li>					
 				</ul>
-				
-			<ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
-				<li id="wp-admin-bar-site-name">
-						<span class="ab-item" id="Connex">Connexion</span>
+				<ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+					<li id="wp-admin-bar-site-name">
+						<div id="adroite"><span class="ab-item" id="Connex" href="#">Connexion</span></div>
 							<div id="ConnexContainer">
 								<div id="notificationTitle">Connecte-Toi</div>
 								<div id="notificationsBodyBody" class="notifications">
@@ -207,7 +176,7 @@ $idPersonne = $_SESSION['idPersonne'];
 									<input type="hidden" name="deco" value="deco"></p>
 									</form>';}
 									else {?><form action='index_post.php' method="POST">
-									<p>
+									<p></br>
 									<label>Mail : <input type="email" name="mail"style="margin-left: 56px;"/></label>
 									<br/>
 									<label>Mot de passe : <input type="password" name="mdp" /></label>
@@ -218,11 +187,9 @@ $idPersonne = $_SESSION['idPersonne'];
 									<?php echo 'si vous n\'etes pas inscrit :<a href=\formulaire.php>Inscription';}?></a>
 									</div>
 								</div>
-								<div id="notificationFooterFooter"><a href="#">See All</a></div>
 							</div>
-
-					</li>
-			</ul>			
+					</li>				
+				</ul>			
 		</div>
 	</div>		
 		<div id="wpbody">
@@ -253,6 +220,15 @@ $idPersonne = $_SESSION['idPersonne'];
 											$("#Connex").click(function()
 											{
 												$("#ConnexContainer").fadeToggle(300);
+												return false;
+											});
+											$(document).click(function()
+											{
+												$("#ConnexContainer").hide();
+											});
+												//Popup on click
+											$("#ConnexContainer2").click(function()
+											{
 												return false;
 											});
 										});
