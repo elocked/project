@@ -1,19 +1,35 @@
-<?php /*
-session_start();
-if(!empty($_SESSION['idPersonne'])){$prenom=$_SESSION['prenom'];
-$idPersonne = $_SESSION['idPersonne'];
-}*/
-//$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-//include('notifications.php');
-//include('fonctions.php');
-
-//reservation
-if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd,$idPersonne);
-
+<?php 
+// récupération de la longitude et la latitude de l'utilisateur 
+if(empty($_GET['var1']) AND empty($_GET['var2'])){
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<script type="text/javascript" >
+if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy : true, timeout:10000, maximumAge:600000});
+else
+  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+   
+function successCallback(position){
+  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
+  top.document.location = "head.php?var1="+latuser+"&var2="+lonuser; 
+};  
+ 
+function errorCallback(error){
+  switch(error.code){
+    case error.PERMISSION_DENIED:
+      alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+      break;      
+    case error.POSITION_UNAVAILABLE:
+      alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+      break;
+    case error.TIMEOUT:
+      alert("Le service n'a pas répondu à temps");
+      break;
+    }
+};
+<?php } ?>
+</script>
+
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <?php include('GoogleMapAPI.class.php');?>
@@ -22,7 +38,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/bootstrap.js"></script>
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
     <script type="text/javascript">
@@ -138,7 +154,7 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd
               anchor: new google.maps.Point(18.5,40)
               };
 
-             var content ='<form  action="reserver.php" class="form-horizontal"  method="POST"><div class="container"><fieldset><div class="form-group"><b>Reservation :</b>&nbsp;'+distance+' m<img src="rating/'+note+'stars.gif" ALIGN="right" /></div><label for="heure_debut" class="col-md-2 control-label">De : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_debut" id="heure_debut" value=""><input class="form-control" name="heure_debut" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><br/></br><label for="heure_fin" class="col-md-2 control-label">Au : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_fin" id="heure_fin" value =""><input class="form-control" name="heure_fin" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" name="idCadenas" value='+idCadenas+'><br/></div></fieldset></br><p style="text-align: center;"><input type="submit" class="btn btn-default" value="Réserver" /></p></form></div>';
+             var content ='<form  action="visionnage.php" class="form-horizontal"  method="POST"><div class="container"><fieldset><div class="form-group"><b>Reservation :</b>&nbsp;'+distance+' m<img src="rating/'+note+'stars.gif" ALIGN="right" /></div><label for="heure_debut" class="col-md-2 control-label">De : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_debut" id="heure_debut" value=""><input class="form-control" name="heure_debut" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><br/></br><label for="heure_fin" class="col-md-2 control-label">Au : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_fin" id="heure_fin" value =""><input class="form-control" name="heure_fin" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" name="idCadenas" value='+idCadenas+'><br/></div></fieldset></br><p style="text-align: center;"><input type="submit" class="btn btn-default" value="Réserver" /></p></form></div>';
              /*var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="datetime" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="datetime" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';*/
             break;
 
@@ -224,9 +240,12 @@ if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd
                
 
     }
-
-   
-        
       }
-           
     </script>
+	
+	<script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/common.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/util.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/stats.js"></script>
+	<body onload="initialiser()">
+	<div style="height:1500px" id="carte"></div>
+	</body>

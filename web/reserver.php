@@ -1,7 +1,11 @@
 ﻿<?php 
-session_start();
+/*session_start();
 $_SESSION['idPersonne']=1;
-$idPersonne=$_SESSION['idPersonne'];
+$idPersonne=$_SESSION['idPersonne'];*/
+session_start();
+if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];
+$idPersonne = $_SESSION['idPersonne'];
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -62,11 +66,14 @@ function errorCallback(error){
    <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    	<script type="text/javascript" src="http://www.hotelmoulin.com/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=thickbox,hoverIntent,common,admin-bar,jquery-form,wp-ajax-response,jquery-color,wp-lists,quicktags,jquery-query,admin-comments,j&amp;load%5B%5D=query-ui-core,jquery-ui-widget,jquery-ui-mouse,jquery-ui-sortable,postbox,dashboard,customize-base,customize-loader,plugin-insta&amp;load%5B%5D=ll,shortcode,media-upload,svg-painter,heartbeat,wp-auth-check&amp;ver=4.1.5"></script>
+		<script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/wordpress-seo/js/wp-seo-admin-global.min.js?ver=450bf84a432b37ff9714ba070da35ef7"></script>
+		<script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/js/icl-admin-notifier.js?ver=d0dccd3d170fb7c50a6818bab3129bbc"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./js/bootstrap.min.js"></script>
-<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
     <script type="text/javascript">
     //fonction date aujourd'hui, retourne : yyyy-mm-dd HH:ii
     function today(){
