@@ -15,7 +15,7 @@ require_once 'include/db_connect.php';
 $db = new DB_CONNECT();
 
 // check for post data
-if(isset($_POST["uid"]))
+if(isset($_POST['uid']) && $_POST['uid']!='')
 {
 	//get user ID
 	$uid = $_POST["uid"];
