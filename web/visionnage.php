@@ -9,8 +9,12 @@ $idPersonne = $_SESSION['idPersonne'];
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <?php  
 $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
 include('notifications.php');
 include('fonctions.php');
+
+//reservation
+if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd,$idPersonne);
 ?>
 
 <?php 
@@ -54,17 +58,231 @@ function errorCallback(error){
 	<title>E-LOCKED</title>	
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
-  <link href="stylecss.css" rel="stylesheet" media="all" >
+<link href="stylecss.css" rel="stylesheet" media="all" >
 
 <!--[if lte IE 7]>
 <link rel='stylesheet' id='ie-css'  href='http://www.hotelmoulin.com/wp-admin/css/ie.min.css?ver=9c87c8c05733cefe4a108603b9c0994b' type='text/css' media='all' />
 <![endif]-->
 
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-   <?php include('head.php') ?> 
-		<!--[CDATA[ */
+    <!-- Inclusion de l'API Google MAPS -->
+    <?php include('GoogleMapAPI.class.php'); ?>
+	    <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
+    <?php '<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">'?>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+	<script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="./js/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+		/* <![CDATA[ */
 			var thickboxL10n = {"next":"Next >","prev":"< Prev","image":"Image","of":"of","close":"Close","noiframes":"This feature requires inline frames. You have iframes disabled or your browser does not support them.","loadingAnimation":"http:\/\/www.hotelmoulin.com\/wp-includes\/js\/thickbox\/loadingAnimation.gif"};var commonL10n = {"warnDelete":"You are about to permanently delete the selected items.\n  'Cancel' to stop, 'OK' to delete."};var wpAjax = {"noPerm":"You do not have permission to do that.","broken":"An unidentified error has occurred."};var quicktagsL10n = {"closeAllOpenTags":"Close all open tags","closeTags":"close tags","enterURL":"Enter the URL","enterImageURL":"Enter the URL of the image","enterImageDescription":"Enter a description of the image","fullscreen":"fullscreen","toggleFullscreen":"Toggle fullscreen mode","textdirection":"text direction","toggleTextdirection":"Toggle Editor Text Direction","dfw":"Distraction-free writing mode"};var adminCommentsL10n = {"hotkeys_highlight_first":"","hotkeys_highlight_last":"","replyApprove":"Approve and Reply","reply":"Reply"};var _wpCustomizeLoaderSettings = {"url":"http:\/\/www.hotelmoulin.com\/wp-admin\/customize.php","isCrossDomain":false,"browser":{"mobile":false,"ios":false},"l10n":{"saveAlert":"The changes you made will be lost if you navigate away from this page."}};var plugininstallL10n = {"plugin_information":"Plugin Information:","ays":"Are you sure you want to install this plugin?"};var heartbeatSettings = {"nonce":"5a711e7353"};var authcheckL10n = {"beforeunload":"Your session has expired. You can log in again from this page or go to the login page.","interval":"180"};/* ]]> */
-	   -->
+	</script>
+    <script type="text/javascript">
+    //fonction date aujourd'hui, retourne : yyyy-mm-dd HH:ii
+    function today(){
+    var today = new Date();
+    var month = today.getMonth()+1;
+    var minutes = today.getMinutes();
+    var hours = today.getHours();
+    var jour = today.getDate();
+    if(month<10){month="0"+month;}
+    if(minutes<10){minutes="0"+minutes;}
+    if(jour<10){jour="0"+jour;}
+    if(hours<10){hours="0"+hours;}
+    return today.getFullYear()+"-"+month+"-"+jour+" "+hours+":"+minutes; }
+
+    function hoursone(){
+      var date = new Date();
+      var hours = date.getHours()+1;
+      if(hours<10){hours="0"+hours;}
+      return hours;}
+
+      function initialiser() {
+        <?php
+        $latuser=htmlspecialchars($_GET['var1']);
+        $lonuser=htmlspecialchars($_GET['var2']);
+        ?>
+        var latlng = new google.maps.LatLng('<?php echo $latuser ;?>','<?php echo $lonuser; ?>');
+        //objet contenant des propriétés avec des identificateurs prédéfinis dans Google Maps permettant
+        //de définir des options d'affichage de notre carte
+        var options = {
+          center: latlng,
+          zoom: 16,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        //constructeur de la carte qui prend en paramêtre le conteneur HTML
+        //dans lequel la carte doit s'afficher et les options
+        var carte = new google.maps.Map(document.getElementById("carte"), options);
+
+        <?php
+        
+        $K = new GoogleMapAPI();
+        
+          //////////////////////////////////////////////////////////////////////
+          //affiche les vélos emmpruntés
+          /////////////////////////////////////////////////////////////////////
+          if(verifEmprunt($bdd,$idPersonne,date("Y-m-d H:i:s"))){
+          $emp = $bdd ->query("SELECT e.FinEmprunt, et.Longitude,et.Latitude FROM emprunt AS e
+                  INNER JOIN etatcadenas AS et ON e.idCadenas=et.idCadenas
+                  WHERE e.idPersonne='$idPersonne' AND et.Dispo=0");
+          while($donnee=$emp -> fetch()){
+          if($donnee['FinEmprunt']>date("Y-m-d H:i:s")){?>
+            //marqueur réservé
+            setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>',0,'<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>',0,1);
+
+          <?php }}
+          $emp->closecursor();}
+
+          else{
+          /////////////////////////////////////////////////////////////////////////
+          //velo de la map
+          ////////////////////////////////////////////////////////////////////////
+                $req = $bdd -> query("SELECT et.idCadenas,et.Latitude, et.Longitude FROM etatcadenas AS et 
+                                      INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas
+                                      WHERE c.idProprio!='$idPersonne' AND Dispo=1 ");
+                while($donnee=$req -> fetch()){
+               if($donnee==TRUE and isset($donnee)){?>
+               //création du marqueur
+                setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>','<?php echo stars($donnee['idCadenas'])?>',0);
+              
+              <?php }
+               else echo 'Pas de velo disponible </br>';  }
+              $req->closecursor();
+
+           }
+
+          //////////////////////////////////////////////////////////////////////////
+          //affiche les vélos du propriétaire
+          /////////////////////////////////////////////////////////////////////////
+        if(verifProprio($bdd,$idPersonne)){
+         $vp = $bdd ->query("SELECT et.Dispo, et.idCadenas, et.Latitude, et.Longitude FROM etatcadenas AS et 
+                                      INNER JOIN cadenas AS c ON et.idCadenas=c.idCadenas
+                                      WHERE c.idProprio='$idPersonne'");
+          while($donnee=$vp -> fetch()){
+            if($donnee['Dispo']==1){?>
+              //marqueur proprio disponible
+              setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>','<?php echo $donnee['idCadenas'];?>','<?php echo $K->geoGetDistanceInKM($donnee['Latitude'],$donnee['Longitude'],$latuser, $lonuser)?>',0,2);
+
+           <?php }
+            else{?>
+              //marqueur proprio indisponible
+              setmarqueur('<?php echo $donnee['Latitude'];?>','<?php echo $donnee['Longitude'];?>',0,0,0,3);
+              
+            <?php }      }
+          $vp->closecursor();
+        }
+
+        ?>
+        ///////////////////////////////////////////////////////////////////////////
+        function setmarqueur(latitude ,longitude ,idCadenas, distance, note, mode){
+        
+
+          switch(mode){
+            case 0:
+              var image = {
+              url: 'image/marqueur.png',
+              // This marker is 68 pixels wide by 61 pixels tall.
+              size: new google.maps.Size(40, 37),
+               // The origin for this image is 0,0.
+              origin: new google.maps.Point(0,0),
+               // The anchor for this image is the base of the bike at 0,32.
+              anchor: new google.maps.Point(20,37)
+              };
+
+             var content ='<form  action="visionnage.php" class="form-horizontal"  method="POST"><div class="container"><fieldset><div class="form-group"><b>Reservation :</b>&nbsp;'+distance+' m<img src="rating/'+note+'stars.gif" ALIGN="right" /></div><label for="heure_debut" class="col-md-2 control-label">De : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_debut" id="heure_debut" value=""><input class="form-control" name="heure_debut" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><br/></br><label for="heure_fin" class="col-md-2 control-label">Au : </label><div class="input-group date form_datetime col-md-10" data-date='+today()+' data-date-format="yyyy mm dd - hh:ii " data-link-field="heure_fin" id="heure_fin" value =""><input class="form-control" name="heure_fin" size="10" type="text" value="" ><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span></div><input type="hidden" name="idCadenas" value='+idCadenas+'><br/></div></fieldset></br><p style="text-align: center;"><input type="submit" class="btn btn-default" value="Réserver" /></p></form></div>';
+             /*var content ='<form name="resaform" action="reserver.php" method="POST"><b>Reservation : </b>'+distance+' m</div></br><img src="rating/'+note+'stars.gif" /></div></br><table><tr><td>Heure debut&nbsp;:</td><td><input type="datetime" name="heure_debut" /></td></tr><tr><td>Heure fin&nbsp;:</td><td><input type="datetime" name="heure_fin" /><input type="hidden" name="idCadenas" value='+idCadenas+'></td></tr><tr><td><input type="submit" name="valider" value="Envoyer" /></form>';*/
+            break;
+
+            case 1:
+             var image = {
+              url: 'image/marqueurr.png',
+              // This marker is 68 pixels wide by 61 pixels tall.
+              size: new google.maps.Size(40, 37),
+              // The origin for this image is 0,0.
+              origin: new google.maps.Point(0,0),
+              // The anchor for this image is the base of the bike at 0,32.
+              anchor: new google.maps.Point(20,37)
+              };
+
+             var content ='<b>Le vélo que vous avez réservé : </b>'+distance+' m';
+            break;
+
+            case 2:
+            var image = {
+              url: 'image/marqueurg.png',
+              // This marker is 68 pixels wide by 61 pixels tall.
+              size: new google.maps.Size(40, 37),
+              // The origin for this image is 0,0.
+              origin: new google.maps.Point(0,0),
+              // The anchor for this image is the base of the bike at 0,32.
+              anchor: new google.maps.Point(20,37)
+              };
+
+              var content ='<b>Votre vélo : </b>'+distance+' m';
+            break;
+
+            case 3:
+            var image = {
+              url: 'image/marqueurg.png',
+              // This marker is 68 pixels wide by 61 pixels tall.
+              size: new google.maps.Size(40, 37),
+              // The origin for this image is 0,0.
+              origin: new google.maps.Point(0,0),
+              // The anchor for this image is the base of the bike at 0,32.
+              anchor: new google.maps.Point(20,37)
+              };
+
+              var content ='<b>Ce vélo est acctuellement réservé </b>';
+            break;
+
+          }
+          
+        var shape = {
+        coords: [0 , 0, 40, 37],
+        type: 'rect'
+        };
+        
+        var marqueur = new google.maps.Marker({
+            position: new google.maps.LatLng(latitude,longitude),
+            map: carte,
+            icon: image,
+            shape: shape
+            });
+ 
+        var infowindow = new google.maps.InfoWindow({
+            content: content ,
+            size: new google.maps.Size(100, 100),
+            position: new google.maps.LatLng(latitude,longitude),
+            maxWidth: 350
+        });
+        google.maps.event.addListener(marqueur, 'click', function(){   
+         if (typeof( window.infoopened ) != 'undefined') infoopened.close();
+          infowindow.open(carte,marqueur);
+          infoopened = infowindow;
+
+            var hours = hoursone();
+           $('.form_datetime').datetimepicker({
+              language: "fr",
+              pickerPosition:"bottom-left",
+              format: "yyyy-mm-dd hh:ii",
+              todayBtn: 1,
+              autoclose :1,
+              hourMax : hours,
+              minView : "hour"
+            });
+            });
+               
+
+    }
+
+   
+        
+      }
+           
+    </script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=thickbox,hoverIntent,common,admin-bar,jquery-form,wp-ajax-response,jquery-color,wp-lists,quicktags,jquery-query,admin-comments,j&amp;load%5B%5D=query-ui-core,jquery-ui-widget,jquery-ui-mouse,jquery-ui-sortable,postbox,dashboard,customize-base,customize-loader,plugin-insta&amp;load%5B%5D=ll,shortcode,media-upload,svg-painter,heartbeat,wp-auth-check&amp;ver=4.1.5"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/wordpress-seo/js/wp-seo-admin-global.min.js?ver=450bf84a432b37ff9714ba070da35ef7"></script>
 <script type="text/javascript" src="http://www.hotelmoulin.com/wp-content/plugins/sitepress-multilingual-cms/res/js/icl-admin-notifier.js?ver=d0dccd3d170fb7c50a6818bab3129bbc"></script>

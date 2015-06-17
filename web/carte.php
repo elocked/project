@@ -1,23 +1,58 @@
-<?php /*
-session_start();
-if(!empty($_SESSION['idPersonne'])){$prenom=$_SESSION['prenom'];
-$idPersonne = $_SESSION['idPersonne'];
-}*/
+<?php 
+//session_start();
+//$_SESSION['idPersonne']=1;
+//$idPersonne=$_SESSION['idPersonne'];
+?>
+
+
+<?php  
 //$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
 //include('notifications.php');
 //include('fonctions.php');
 
-//reservation
 
-
+/*
+// récupération de la longitude et la latitude de l'utilisateur 
+if(empty($_GET['var1']) AND empty($_GET['var2'])){
 ?>
+<script type="text/javascript" >
+if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy : true, timeout:10000, maximumAge:600000});
+else
+  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+   
+function successCallback(position){
+  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
+  top.document.location = "carte.php?var1="+latuser+"&var2="+lonuser; 
+};  
+ 
+function errorCallback(error){
+  switch(error.code){
+    case error.PERMISSION_DENIED:
+      alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+      break;      
+    case error.POSITION_UNAVAILABLE:
+      alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+      break;
+    case error.TIMEOUT:
+      alert("Le service n'a pas répondu à temps");
+      break;
+    }
+};
+<?php } ?>
+</script>
+*/?>
+<head>
 
-<?php include('GoogleMapAPI.class.php');?>
-<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <!-- Inclusion de l'API Google MAPS -->
+    <?php include('GoogleMapAPI.class.php');?>
+   <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
-   
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="./js/jquery-1.8.3.min.js" charset="UTF-8"></script>
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
@@ -61,7 +96,7 @@ $idPersonne = $_SESSION['idPersonne'];
         var carte = new google.maps.Map(document.getElementById("carte"), options);
 
         <?php
-        echo "hello";
+        
         $K = new GoogleMapAPI();
         
           //////////////////////////////////////////////////////////////////////
@@ -227,3 +262,18 @@ $idPersonne = $_SESSION['idPersonne'];
       }
            
     </script>
+
+
+
+
+</head>
+
+<body onload="initialiser()">
+
+
+
+
+      <div id="carte" style="width:1920px; height:1280px"></div>
+     
+</body>
+</html>
