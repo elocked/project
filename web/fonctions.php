@@ -104,6 +104,18 @@ if($req->fetch()) return true;
 else return false;
 }
 
+function countuser($bdd){
+	global $bdd;
+	$req= $bdd ->query("SELECT COUNT(idPersonne) AS nbUser FROM personne");
+	$donnee=$req->fetch();
+	return $donnee['nbUser']; 
+}
+ function countcadenas($bdd){
+ 	global $bdd;
+ 	$req=$bdd ->query("SELECT COUNT(idCadenas) AS nbCadenas FROM cadenas");
+ 	$donnee=$req->fetch();
+ 	return $donnee['nbCadenas'];
+ }
 
 ?>
 
