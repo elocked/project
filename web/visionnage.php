@@ -1,6 +1,8 @@
 <?php 
 session_start();
-if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];
+$_SESSION['idPersonne']=NULL;
+$_SESSION['prenom'] = "";
+if(!empty($_SESSION['idPersonne'])){$prenom=$_SESSION['prenom'];
 $idPersonne = $_SESSION['idPersonne'];
 }
 ?>
@@ -150,7 +152,7 @@ function errorCallback(error){
 							<div class="ab-sub-wrapper" style="width:350px; padding-left: 10px;">
 							<ul id="wp-admin-bar-site-name-default" class="ab-submenu">
 								<?php   
-									if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;
+									if(isset($idPersonne)AND !empty($idPersonne)) { echo 'Bonjour '.$prenom;
 									echo '<form action="index_post.php" method="POST">
 									<p><input type="submit" name="deconnecter" value="Deconnecter"/>
 									<input type="hidden" name="deco" value="deco"></p>
@@ -235,7 +237,14 @@ function errorCallback(error){
 							</ul>
 -->
 					<div id="dashboard-widgets-wrap">
+<<<<<<< HEAD
 						</br> <?php include('carte.php') ?> 
+=======
+						</br> <?php
+						if(isset($idPersonne) AND !empty($idPersonne)) include('carte.php');
+						else echo '<p id="noconnect"><b>Vous n\'êtes pas connecté</b></p><p id="nbruser" >Aujourd\'hui '.countuser($bdd).' Sherlockers sont inscrits<br />et '.countcadenas($bdd).' vélos sont en services</p><br />
+							<form action="formulaire.php" id="inscription" method="POST"><input type="submit" name="inscription" value="S\'inscrire" /></form>';?>
+>>>>>>> 141b6cc83ff7e2c292c9eed93fa4d2fb618bea9a
 					</div><!-- dashboard-widgets-wrap -->
 				</div><!-- wrap -->
 				<div class="clear"></div>
