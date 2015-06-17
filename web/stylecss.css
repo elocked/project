@@ -64,11 +64,11 @@
 #wp-auth-check-wrap .wp-auth-fallback-expired{outline:0}
 #wp-auth-check-wrap .wp-auth-fallback{font-size:14px;line-height:21px;padding:0 25px;display:none}
 #wp-auth-check-wrap.fallback .wp-auth-check-close,#wp-auth-check-wrap.fallback .wp-auth-fallback{display:block}
-<<<<<<< HEAD
-#carte {
-	height:630px
-=======
-#carte {height:620px}
+
+/*--------------------------------------------------------------------------------------------*/
+
+
+#carte {height:780px}
 
 #nav{list-style:none;margin: 0px;padding: 0px;}
 #nav li {
@@ -79,54 +79,55 @@ font-weight:bold;
 }
 #nav li a{color:#333333;text-decoration:none}
 #nav li a:hover{color:#006699;text-decoration:none}
+}
 #notification_li
 {
 position:relative
 }
-#notificationContainer 
+#notificationContainer2 
 {
 background-color: #fff;
 border: 1px solid rgba(100, 100, 100, .4);
 -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
 overflow: visible;
 position: absolute;
-top: 30px;
-margin-left: -170px;
+top: 40px;
+margin-left: -10px;
 width: 400px;
-z-index: -1;
-display: none; // Enable this after jquery implementation 
+z-index: 1;
+display: none;
 }
-// Popup Arrow
 
-#notificationContainer:before {
+#notificationContainer2:before {
 content: '';
 display: block;
 position: absolute;
-width: 0;
-height: 0;
 color: transparent;
 border: 10px solid black;
 border-color: transparent transparent white;
 margin-top: -20px;
-margin-left: 188px;
+margin-left: 10px;
+top: -4px;
+left: 4px
 }
 #notificationTitle
 {
 font-weight: bold;
 padding: 8px;
 font-size: 13px;
+color: #000000
 background-color: #ffffff;
 position: fixed;
-z-index: 1000;
+z-index: 100000000;
 width: 384px;
 border-bottom: 1px solid #dddddd;
 }
-#notificationsBody
+#notificationsBodyBody
 {
-padding: 33px 0px 0px 0px !important;
+padding: 40px 0px 0px 0px !important;
 min-height:300px;
 }
-#notificationFooterno
+#notificationFooterFooter
 {
 background-color: #e9eaed;
 text-align: center;
@@ -136,18 +137,35 @@ font-size: 12px;
 border-top: 1px solid #dddddd;
 }
 
-#notification_count 
+#notification_count2
+{
+padding: 0px 7px 0px 7px;
+background: #cc0000;
+color: #ffffff;
+font-weight: bold;
+margin-left: 0px;
+border-radius: 9px;
+-moz-border-radius: 9px; 
+-webkit-border-radius: 9px;
+position: absolute;
+font-size: 11px;
+}
+
+#notification_counter
 {
 padding: 3px 7px 3px 7px;
 background: #cc0000;
 color: #ffffff;
 font-weight: bold;
-margin-left: 5px;
+margin-left: 3px
 border-radius: 9px;
 -moz-border-radius: 9px; 
 -webkit-border-radius: 9px;
-position: absolute;
-margin-top: 0px;
 font-size: 11px;
->>>>>>> 7d82648a3ef0a451b9f70c76d546efa511d54ed1
 }
+
+#contain
+{
+color : #222222
+}
+

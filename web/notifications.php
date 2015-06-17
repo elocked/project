@@ -3,7 +3,8 @@ session_start();
 $_SESSION['idPersonne']=1;
 $idPersonne=$_SESSION['idPersonne'];*/
 
-//include('reserver.php');?>
+//include('reserver.php');
+include('fonctions.php');?>
 
 
 
@@ -43,15 +44,17 @@ $req = $bdd -> query("SELECT n.id_notif, d.idPersonne,d.idCadenas,d.Heure_debut,
 			$req1= $bdd -> query("SELECT nom,prenom FROM personne WHERE idPersonne='$personne'");
 			while($donnee1=$req1 -> fetch()){
 				if(isset($donnee1['nom']) AND isset($donnee1['prenom'])){
-					echo 'Le sharelocker '.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' souhaite emprunter votre vélo pour '.tempEmprunt($donnee['Heure_debut'],$donnee['Heure_fin']).'</br>';
-					//valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$personne);
+					echo 'Le sharelocker '.'<b>'.ucfirst($donnee1['nom']).' '.ucfirst($donnee1['prenom']).' </b>souhaite emprunter votre vélo pour '.tempEmprunt($donnee['Heure_debut'],$donnee['Heure_fin']).'</br>';
+					echo '_______________________________________________________________________________________________________';
+					valide($bdd,$donnee['id_notif'],$donnee['idCadenas'],$donnee['Heure_debut'],$donnee['Heure_fin'],$personne);
 					//refuse($bdd,$donnee['id_notif']);
 				}
 				else echo 'Pas de notifications</br>';
 			}
+			$req1->closecursor();
 		}
 		$req->closecursor();
-		$req1->closecursor();
+		
 }
 //notifproprio($bdd,$idPersonne);
 
@@ -82,6 +85,7 @@ function valide($bdd,$id_notif,$idCadenas,$heure_debut,$heure_fin,$personne){
         'idPersonne' =>$personne
                  ));
 	$emprunt->closecursor();
+	annuleDemande($bdd,$personne,$idCadenas,$heure_fin);
 }
 
 
@@ -95,13 +99,14 @@ function deleteDemande($bdd,$idPersonne){
 	$date_hier=date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s")." - 1 day"));
 	$del = $bdd -> exec("DELETE FROM demande WHERE date_demande <'$date_hier' AND idPersonne='$idPersonne'");
 }
+//deleteDemande($bdd,$idPersonne);
 
 function notifuser($bdd,$idPersonne){
 	global $bdd;
 	$date_hier=date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s")." - 1 day"));
 	$del= $bdd-> exec("DELETE FROM notif WHERE Date_notif <'$date_hier' AND vu=1");
 	$del = $bdd -> exec("DELETE FROM demande WHERE date_demande <'$date_hier' AND idPersonne='$idPersonne'");
-	$req = $bdd ->query("SELECT COUNT(id_notif) AS nb_notif FROM notif AS n 
+	/*$req = $bdd ->query("SELECT COUNT(id_notif) AS nb_notif FROM notif AS n 
 								INNER JOIN demande AS d ON n.id_demande=d.id_demande
 								WHERE d.idPersonne='$idPersonne' AND n.valide=0");
 		if($donnee=$req -> fetch())
@@ -114,27 +119,18 @@ function notifuser($bdd,$idPersonne){
 									WHERE d.idPersonne='$idPersonne' AND n.valide=1 ");
 		
 	if($donnee=$req1 -> fetch()){echo 'Vous avez '.$donnee['nb_cadenas'].' demande(s) validée(s)</br>';}
-	$req1->closecursor();
+	$req1->closecursor();*/
 	}
 
 //notifuser($bdd,$idPersonne);
 
-function nbrnotifUser($bdd,$idPersonne){
+function nbrnotifUser($bdd,$idPersonne,$date){
 		global $bdd;
-	$req = $bdd ->query("SELECT COUNT(id_notif) AS nb_notif FROM notif AS n 
-								INNER JOIN demande AS d ON n.id_demande=d.id_demande
-								WHERE d.idPersonne='$idPersonne' AND n.valide=0");
-		if($donnee=$req -> fetch()) $n=$donnee['nb_notif'];
-	$req->closecursor();
-
-	$req1 = $bdd ->query("SELECT COUNT(e.idCadenas) AS nb_cadenas FROM emprunt AS e
-									INNER JOIN demande AS d ON e.idCadenas=d.idCadenas
-									INNER JOIN notif AS n ON n.id_demande=d.id_demande
-									WHERE d.idPersonne='$idPersonne' AND n.valide=1 ");
-		
+	$req1 = $bdd ->query("SELECT COUNT(e.idCadenas) AS nb_cadenas FROM emprunt
+									WHERE idPersonne='$idPersonne' AND FinEmprunt>'$date'");
 	if($donnee=$req1 -> fetch()) $p=$donnee['nb_cadenas'];
 	$req1->closecursor();	
-	return $n+$p;
+	return $p;
 }
 //echo nbrnotifUser($bdd,$idPersonne);
 
@@ -146,5 +142,18 @@ return $daten->format('%a jour(s), %H heure(s) et %I minute(s) ');
 }
 //echo tempEmprunt($h1,$h2);
 
+function annuleDemande($bdd,$idPersonne,$idCadenas,$heure_fin){
+global $bdd;
+$req = $bdd ->query("SELECT id_demande,Heure_debut FROM demande WHERE idPersonne ='$idPersonne' OR idCadenas='$idCadenas'");
+while($donnee=$req->fetch()){
+  if($donnee['Heure_debut']<$heure_fin){
+  $demande=$donnee['id_demande'];
+$del= $bdd-> exec("DELETE FROM notif WHERE id_notif ='$demande'");
+}}
+if($req->fetch()){
+$del1= $bdd -> exec("DELETE FROM demande WHERE idPersonne ='$idPersonne' AND Heure_debut<'$heure_fin'");
+}
+$req ->closecursor();
+}
 ?>
 

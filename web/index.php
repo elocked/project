@@ -238,7 +238,11 @@ var thickboxL10n = {"next":"Next >","prev":"< Prev","image":"Image","of":"of","c
 							<div class="ab-sub-wrapper" style="width:350px; padding-left: 10px;">
 							<ul id="wp-admin-bar-site-name-default" class="ab-submenu">
 								<?php   
-									if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;}
+									if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;
+									echo'<form action="index_post.php" method="POST">
+									<p><input type="submit" name="deconnecter" value="Deconnecter"/>
+									<input type="hidden" name="deco" value="deco"></p>
+									</form>';}
 									else {?><form action='index_post.php' method="POST">
 									<p>
 									<label>Mail : <input type="email" name="mail"style="margin-left: 56px;"/></label>
@@ -249,12 +253,6 @@ var thickboxL10n = {"next":"Next >","prev":"< Prev","image":"Image","of":"of","c
 							
 									</form>		 
 									<?php echo 'si vous n\'etes pas inscrit :<a href=\formulaire.php>Inscription';}?></a>
-			
-						
-									<form action='index_post.php' method="POST">
-									<p><input type="submit" name="deconnecter" value="Deconnecter"/>
-									<input type="hidden" name="deco" value="deco"></p>
-									</form>
 							</ul>
 							</div>
 					</li>

@@ -30,20 +30,20 @@ display: none;
 content: '';
 display: block;
 position: absolute;
-width: 0;
-height: 0;
 color: transparent;
 border: 10px solid black;
 border-color: transparent transparent white;
 margin-top: -20px;
 margin-left: 10px;
-top: 4px
+top: -4px;
+left: 4px
 }
 #notificationTitle
 {
 font-weight: bold;
 padding: 8px;
 font-size: 13px;
+color: #000000
 background-color: #ffffff;
 position: fixed;
 z-index: 100000000;
@@ -52,7 +52,7 @@ border-bottom: 1px solid #dddddd;
 }
 #notificationsBodyBody
 {
-padding: 33px 0px 0px 0px !important;
+padding: 40px 0px 0px 0px !important;
 min-height:300px;
 }
 #notificationFooterFooter
@@ -67,11 +67,11 @@ border-top: 1px solid #dddddd;
 
 #notification_count2
 {
-padding: 3px 7px 3px 7px;
+padding: 0px 7px 0px 7px;
 background: #cc0000;
 color: #ffffff;
 font-weight: bold;
-margin-left: 150px;
+margin-left: 0px;
 border-radius: 9px;
 -moz-border-radius: 9px; 
 -webkit-border-radius: 9px;

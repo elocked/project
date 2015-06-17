@@ -1,65 +1,23 @@
-﻿<?php 
+<?php /*
 session_start();
-$_SESSION['idPersonne']=1;
-$idPersonne=$_SESSION['idPersonne'];
-?>
+if(!empty($_SESSION['idPersonne'])){$prenom=$_SESSION['prenom'];
+$idPersonne = $_SESSION['idPersonne'];
+}*/
+//$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-<?php  
-$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
-include('notifications.php');
-include('fonctions.php');
+//include('notifications.php');
+//include('fonctions.php');
 
 //reservation
 if(isset($_POST['heure_debut']) AND isset($_POST['heure_fin'])) reservation($bdd,$idPersonne);
 
-
-
-// récupération de la longitude et la latitude de l'utilisateur 
-if(empty($_GET['var1']) AND empty($_GET['var2'])){
 ?>
-<script type="text/javascript" >
-if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy : true, timeout:10000, maximumAge:600000});
-else
-  alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
-   
-function successCallback(position){
-  var latuser = position.coords.latitude; var lonuser = position.coords.longitude; //degree decimal
-  top.document.location = "reserver.php?var1="+latuser+"&var2="+lonuser; 
-};  
- 
-function errorCallback(error){
-  switch(error.code){
-    case error.PERMISSION_DENIED:
-      alert("L'utilisateur n'a pas autorisé l'accès à sa position");
-      break;      
-    case error.POSITION_UNAVAILABLE:
-      alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
-      break;
-    case error.TIMEOUT:
-      alert("Le service n'a pas répondu à temps");
-      break;
-    }
-};
-<?php } ?>
-</script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
-<head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="author" content="E-LOCKED TEAM">
-<meta name="description" content="E-LOCKED PROJECT">
-<meta name="keywords" content="lock, e-lock, cadnas, project">
-<meta name="copyright" content="Tous droits reserves">
-<meta name="subject" content="Projet E3 Cadenas Connecte">
-<title>E-LOCKED</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <!-- Inclusion de l'API Google MAPS -->
-    <?php include('GoogleMapAPI.class.php');?>
-   <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+<?php include('GoogleMapAPI.class.php');?>
+<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="./css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <!-- Le paramètre "sensor" indique si cette application utilise détecteur pour déterminer la position de l'utilisateur -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -272,89 +230,3 @@ function errorCallback(error){
       }
            
     </script>
-
-
-
-
-</head>
-
-<body onload="initialiser()">
-<style type="text/css"></style>
-
-<!-- Script de récupération de la résolution du body -->
-<script type="text/javascript">
-
-
-if (document.body)
-{
-var larg = (document.body.clientWidth);
-var haut = (document.body.clientHeight);
-}
-else
-{
-var larg = (window.innerWidth);
-var haut = (window.innerHeight);
-}
-//alert("La résolution de votre écran est : "+screen.width+" x "+screen.height+"\n\n");
-//alert("Cette fenêtre fait " + larg + " de large et "+haut+" de haut");
-</script>
-
-
-
-<table border="0" cellpadding="0" cellspacing="0" width="964" align="center">
-<tr>
-  <td valign="top" align="center">
-    <img src="image/logo.jpg"/>
-    <div style="margin:5px 0px 20px 0px">
-  <table border="0">
-    <tr>
-      <td><a class="rollover" href="presentation.htm"><img src="image/pres1.jpg" border="0"><!-- <img src="image/pres1-1.png" border="0" class="rollover"> --></a></td>
-      <td><a class="rollover" href="preter.htm"><img src="image/preter.jpg" border="0"><!--img src="../new_menu/2-1.png" border="0" class="rollover"--></a></td>
-      <td><a class="rollover" href="emprunter.htm"><img src="image/emprunter.jpg" border="0"><!--img src="../new_menu/3-1.png" border="0" class="rollover"--></a></td>  
-      <td><a class="rollover" href="contact.htm"><img src="image/contact.jpg" border="0"><!--img src="../new_menu/3-1.png" border="0" class="rollover"--></a></td>
-    </tr>
-  </table>
-</div>  </td>
-</tr>
-</table>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-  <tr>
-    <td height="1" bgcolor="fedcba"></td>
-  </tr>
-</table>
-
-<table border="0" cellpadding="0" cellspacing="0" width="100%" height="2px" align="center" style="background:url(/image/bg_sub.jpg) top left no-repeat;">
-  <table border="0" cellpadding="100%" cellspacing="100%" width="100%" height="100%" style="margin-top:31px;">
-    <tr width="100%" height="100%">     
-      <!-- MODIFIER ICI !!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-      <td width="100%" height="100%">
-      <div id="carte" style="width:1920px; height:1280px"></div>
-      </td>
-    </tr>
-  </table>
-<tr>
-  
-  <td width="20"></td></tr>
-</table>
-<td width="100%">
-        <HR width="100%" align=left color="abcdef">
-        <table border="0" cellpadding="0" cellspacing="0" width="674" style="margin-left:20px;"></table>
-    </tbody></table>
-
-        <table border="0" cellpadding="0" cellspacing="0">
-        <tbody><tr>
-          <td height="20">ou</td></tr>
-        </tbody></table>
-      </td>
-    </tr>
-    </tbody></table>
-  </td>
-<table border="0" cellpadding="0" cellspacing="0" width="964" align="left">
-<tr>
-  <td width="434"><a href="index.htm"><img src="image/logo.jpg" border="0" alt="logo"></a></td>
-  <td width="530" align="right" valign="top"></td>
-</tr>
-</table>
-
-</body>
-</html>
