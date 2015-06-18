@@ -1,7 +1,7 @@
 <?php 
 session_start();
-//$_SESSION['idPersonne']=2;
-//$_SESSION['prenom']="nelson";
+$_SESSION['idPersonne']=2;
+$_SESSION['prenom']="nelson";
 if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];
 $idPersonne = $_SESSION['idPersonne'];
 }
@@ -49,12 +49,31 @@ $idPersonne = $_SESSION['idPersonne'];
 	<script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/util.js"></script>
 	<script type="text/javascript" charset="UTF-8" src="http://maps.gstatic.com/maps-api-v3/api/js/21/2/intl/fr_ALL/stats.js"></script>
 	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript">$(document).ready(function()
+										{
+											$("#MenuOnClick").click(function()
+											{
+												$(".AffichageOnClick").fadeToggle(300);
+												return false;
+											});
+											$(document).click(function()
+											{
+												$(".AffichageOnClick").hide();
+											});
+												//Popup on click
+											$(".AffichageOnClick").click(function()
+											{
+												return false;
+											});
+										});
+	</script>
 </head>
 
 
 <body class="wp-admin wp-core-ui js  index-php auto-fold admin-bar branch-4-1 version-4-1-5 admin-color-fresh locale-en-us customize-support svg sticky-menu" onload="initialiser()">
 <div id="wpwrap">
 	<div id="adminmenuback"></div>
+		<div class="AffichageOnClick">
 		<div id="adminmenuwrap">
 			<ul id="adminmenu" role="navigation">
 				<li class="wp-not-current-submenu wp-menu-separator" aria-hidden="true">
@@ -110,33 +129,40 @@ $idPersonne = $_SESSION['idPersonne'];
 				</li>
 			</ul>
 		</div>
-
-<div id="wpcontent">
+		</div>
+	<div id="wpcontent">
+	<ul id="adroite">
+		<li id="wp-admin-bar-site-name">
+			<span class="ab-item" id="Connex">Connexion</span>
+			<div id="ConnexContainer">
+				<div id="notificationTitle">Connecte-Toi</div></br>
+				<div id="notificationsBodyBody" class="notifications">
+					<div class="contain">  
+						<?php   
+						if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;
+						echo'<form action="index_post.php" method="POST">
+						<p><input type="submit" name="deconnecter" value="Deconnecter"/>
+						<input type="hidden" name="deco" value="deco"></p>
+						</form>';}
+						else {?><form action='index_post.php' method="POST">
+						<p></br>
+						<label>Mail : <input type="email" name="mail"style="margin-left: 56px;"/></label>
+						<br/>
+						<label>Mot de passe : <input type="password" name="mdp" /></label>
+						<br/>
+						<p><input type="submit" name="valider" value="Envoyer" /></p> 
+						</form>		 
+						<?php echo 'si vous n\'etes pas inscrit :<a href=\formulaire.php>Inscription';}?></a>
+					</div>
+				</div>
+			</div>
+		</li>				
+	</ul>
 	<div id="wpadminbar" class="" role="navigation">
 		<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
-				<ul id="wp-admin-bar-root-default" class="ab-top-menu">		
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">	
 					<li id="wp-admin-bar-site-name" class="menupop">
-						<a class="ab-item" aria-haspopup="true" href="#">Connecte-Toi ! </a>
-							<div class="ab-sub-wrapper" style="width:350px; padding-left: 10px;">
-							<ul id="wp-admin-bar-site-name-default" class="ab-submenu">
-									<?php   
-									if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;
-									echo'<form action="index_post.php" method="POST">
-									<p><input type="submit" name="deconnecter" value="Deconnecter"/>
-									<input type="hidden" name="deco" value="deco"></p>
-									</form>';}
-									else {?><form action='index_post.php' method="POST">
-									<p>
-									<label>Mail : <input type="email" name="mail"style="margin-left: 56px;"/></label>
-									<br/>
-									<label>Mot de passe : <input type="password" name="mdp" /></label>
-									<br/>
-									<p><input type="submit" name="valider" value="Envoyer" /></p> 
-							
-									</form>		 
-									<?php echo 'si vous n\'etes pas inscrit :<a href=\formulaire.php>Inscription';}?></a>
-							</ul>
-							</div>
+						<a class="ab-item" id="MenuOnClick">MENU</a>
 					</li>
 					<li id="wp-admin-bar-updates">
 						
@@ -162,34 +188,7 @@ $idPersonne = $_SESSION['idPersonne'];
 
 					</li>					
 				</ul>
-				<ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
-					<li id="wp-admin-bar-site-name">
-						<div id="adroite"><span class="ab-item" id="Connex" href="#">Connexion</span></div>
-							<div id="ConnexContainer">
-								<div id="notificationTitle">Connecte-Toi</div>
-								<div id="notificationsBodyBody" class="notifications">
-									<div class="contain">  
-										<?php   
-									if(isset($prenom)AND !empty($prenom)) { echo 'Bonjour '.$prenom;
-									echo'<form action="index_post.php" method="POST">
-									<p><input type="submit" name="deconnecter" value="Deconnecter"/>
-									<input type="hidden" name="deco" value="deco"></p>
-									</form>';}
-									else {?><form action='index_post.php' method="POST">
-									<p></br>
-									<label>Mail : <input type="email" name="mail"style="margin-left: 56px;"/></label>
-									<br/>
-									<label>Mot de passe : <input type="password" name="mdp" /></label>
-									<br/>
-									<p><input type="submit" name="valider" value="Envoyer" /></p> 
 							
-									</form>		 
-									<?php echo 'si vous n\'etes pas inscrit :<a href=\formulaire.php>Inscription';}?></a>
-									</div>
-								</div>
-							</div>
-					</li>				
-				</ul>			
 		</div>
 	</div>		
 		<div id="wpbody">
@@ -217,6 +216,7 @@ $idPersonne = $_SESSION['idPersonne'];
 											{
 												return false;
 											});
+											
 											$("#Connex").click(function()
 											{
 												$("#ConnexContainer").fadeToggle(300);
@@ -227,7 +227,7 @@ $idPersonne = $_SESSION['idPersonne'];
 												$("#ConnexContainer").hide();
 											});
 												//Popup on click
-											$("#ConnexContainer2").click(function()
+											$("#ConnexContainer").click(function()
 											{
 												return false;
 											});

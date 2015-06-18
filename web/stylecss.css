@@ -98,7 +98,7 @@ width: 400px;
 z-index: 1;
 display: none;
 }
-#ConnexContainer2 
+#ConnexContainer
 {
 background-color: #fff;
 border: 1px solid rgba(100, 100, 100, .4);
@@ -110,6 +110,11 @@ right:0px;
 margin-left: -10px;
 width: 400px;
 z-index: 1;
+display: none;
+}
+.AffichageOnClick
+{
+overflow: visible;
 display: none;
 }
 #notificationContainer2:before {
@@ -124,7 +129,19 @@ margin-left: 10px;
 top: -4px;
 left: 4px
 }
-#ConnexContainer2:before {
+#ConnexContainer:before {
+content: '';
+display: block;
+position: absolute;
+color: transparent;
+border: 10px solid black;
+border-color: transparent transparent white;
+margin-top: -20px;
+margin-left: 10px;
+top: -4px;
+left: 4px
+}
+.AffichageOnClick:before {
 content: '';
 display: block;
 position: absolute;
@@ -199,8 +216,16 @@ font-size: 11px;
 color : #222222
 }
 
-#adroite
+#Connex
 {
 right:0px;
-text-align : right
+text-align : right;
+color: white;
+}
+
+#adroite
+{
+position:absolute;
+right:0px;
+z-index:99999999999999;
 }

@@ -1,15 +1,18 @@
-<?php 
+<?php
 //session_start();
 //$_SESSION['idPersonne']=1;
-//$idPersonne=$_SESSION['idPersonne'];
+$idPersonne=$_SESSION['idPersonne'];
+if(!empty($_SESSION['prenom'])){$prenom=$_SESSION['prenom'];
+$idPersonne = $_SESSION['idPersonne'];
+}
 ?>
 
 
 <?php  
-//$bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+// $bdd = new PDO('mysql:host=localhost;dbname=elocked','root','',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-//include('notifications.php');
-//include('fonctions.php');
+// include('notifications.php');
+// include('fonctions.php');
 
 
 /*
